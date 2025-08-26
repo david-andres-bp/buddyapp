@@ -1,0 +1,428 @@
+Project Blueprint: CodePress Platform
+This document outlines the complete architectural and strategic plan for building the CodePress social networking platform. It covers the core engine and the three primary application themes: ConnectSphere (a lightweight social media site), HeartBeat (an activity-based dating app), and Serendipity (a traditional dating site).
+
+1. Core Platform Architecture
+The foundation of the project is a modular and scalable engine designed to support various social networking models through a powerful theming system.
+
+Framework: CodeIgniter 4. Chosen for its modern features, performance, and robust MVC architecture.
+
+Authentication: CodeIgniter Shield. The official authentication package will handle all user registration, login, session management, and access control, ensuring a secure and reliable foundation.
+
+Database: MySQL/MariaDB. A relational database is used to manage the complex relationships inherent in a social network.
+
+2. Database Schema
+The database is structured to support all planned features, from user profiles to group memberships and private messaging. The schema is managed via CodeIgniter's Migrations for version control and easy updates.
+
+Core User & Authentication Tables (Managed by Shield)
+Table
+
+Column
+
+Data Type
+
+Notes
+
+users
+
+id
+
+INT UNSIGNED
+
+Primary Key, Auto-increment
+
+
+
+username
+
+VARCHAR(30)
+
+Unique, nullable
+
+
+
+active
+
+TINYINT(1)
+
+1 for active/verified
+
+
+
+created_at
+
+DATETIME
+
+Timestamp of registration
+
+auth_identities
+
+id
+
+INT UNSIGNED
+
+Primary Key
+
+
+
+user_id
+
+INT UNSIGNED
+
+Foreign Key to users.id
+
+
+
+type
+
+VARCHAR(255)
+
+e.g., 'email_password'
+
+
+
+secret
+
+VARCHAR(255)
+
+Email address
+
+
+
+secret2
+
+VARCHAR(255)
+
+Hashed password
+
+Custom Platform Tables
+Table
+
+Column
+
+Data Type
+
+Notes
+
+user_meta
+
+id
+
+BIGINT UNSIGNED
+
+Primary Key
+
+
+
+user_id
+
+INT UNSIGNED
+
+Foreign Key to users.id
+
+
+
+meta_key
+
+VARCHAR(255)
+
+e.g., 'bio', 'location'
+
+
+
+meta_value
+
+TEXT
+
+The value of the field
+
+activity
+
+id
+
+BIGINT UNSIGNED
+
+Primary Key
+
+
+
+user_id
+
+INT UNSIGNED
+
+Foreign Key to users.id
+
+
+
+component
+
+VARCHAR(50)
+
+e.g., 'groups', 'profiles'
+
+
+
+type
+
+VARCHAR(50)
+
+e.g., 'new_group', 'joined_group'
+
+
+
+content
+
+TEXT
+
+The rendered HTML of the item
+
+
+
+created_at
+
+TIMESTAMP
+
+
+
+groups
+
+id
+
+BIGINT UNSIGNED
+
+Primary Key
+
+
+
+creator_id
+
+INT UNSIGNED
+
+Foreign Key to users.id
+
+
+
+name
+
+VARCHAR(255)
+
+
+
+
+
+slug
+
+VARCHAR(255)
+
+Unique
+
+
+
+description
+
+TEXT
+
+
+
+
+
+status
+
+VARCHAR(20)
+
+'public', 'private', 'hidden'
+
+group_members
+
+id
+
+BIGINT UNSIGNED
+
+Primary Key
+
+
+
+group_id
+
+BIGINT UNSIGNED
+
+Foreign Key to groups.id
+
+
+
+user_id
+
+INT UNSIGNED
+
+Foreign Key to users.id
+
+
+
+role
+
+VARCHAR(20)
+
+'member', 'mod', 'admin'
+
+friends / connections
+
+id
+
+BIGINT UNSIGNED
+
+Primary Key
+
+
+
+initiator_user_id
+
+INT UNSIGNED
+
+Foreign Key to users.id
+
+
+
+friend_user_id
+
+INT UNSIGNED
+
+Foreign Key to users.id
+
+
+
+status
+
+VARCHAR(20)
+
+'pending', 'accepted'
+
+messages_threads
+
+id
+
+BIGINT UNSIGNED
+
+Primary Key
+
+
+
+subject
+
+VARCHAR(255)
+
+
+
+messages
+
+id
+
+BIGINT UNSIGNED
+
+Primary Key
+
+
+
+thread_id
+
+BIGINT UNSIGNED
+
+Foreign Key to messages_threads.id
+
+
+
+sender_id
+
+INT UNSIGNED
+
+Foreign Key to users.id
+
+
+
+message
+
+TEXT
+
+
+
+messages_recipients
+
+id
+
+BIGINT UNSIGNED
+
+Primary Key
+
+
+
+thread_id
+
+BIGINT UNSIGNED
+
+Foreign Key to messages_threads.id
+
+
+
+user_id
+
+INT UNSIGNED
+
+Foreign Key to users.id
+
+
+
+is_read
+
+TINYINT(1)
+
+
+
+Feature-Specific Tables: Additional tables like pinned_users will be created as needed by specific themes.
+
+3. Theming Engine
+The platform's key innovation is its ability to radically change its appearance and functionality via themes, allowing it to function as different types of social apps.
+
+View Overrides: The system will use a theme-first approach. When rendering a view, it will first look for the template file in the active theme's directory (public/themes/active-theme/Views/) before falling back to the default application views (app/Views/).
+
+Theme Configuration: Each theme will contain a theme.json file defining its metadata (name, author, etc.) and the application modes it supports.
+
+4. Theme Vision 1: "ConnectSphere" (Lightweight Social Media)
+This theme creates a fast-paced social network focused on public conversation and content sharing.
+
+Primary Goal: To facilitate a dynamic public square where users can follow accounts and engage with a real-time feed.
+
+Core Feature: The Global Activity Feed.
+
+Key Interactions: Follow/Unfollow, Like, Comment, Share.
+
+Unique Feature: Pinned Profiles. Users can pin their favorite accounts to a dedicated list in their sidebar for quick access, allowing them to instantly filter the main feed to see only posts from that specific user.
+
+UI/UX: A clean, multi-column layout on desktop that prioritizes information density and fast browsing.
+
+5. Theme Vision 2: "HeartBeat" (Activity-Based Dating App)
+This theme transforms the platform into a modern dating app focused on authentic connections through shared lifestyles.
+
+Primary Goal: To facilitate meaningful one-on-one connections based on demonstrated personality and interests.
+
+Core Feature: The AI-Powered Discover Page.
+
+Key Interactions: Like, Connect (mutual match system), Message, Send Gift.
+
+Unique Feature: AI Personality Engine.
+
+Users are encouraged to post frequent activities with rich media (photos, videos, links).
+
+A backend AI service analyzes the content of these posts to assign personality tags (e.g., "Adventurous," "Creative," "Foodie").
+
+These tags are aggregated to build an authentic, activity-based profile, which is then used to categorize users on the Discover page.
+
+UI/UX: A visual, personal, and mobile-first design. The interface uses a vibrant, energetic color palette ("Sunset Glow") and organizes the Discover page into swipe-able carousels for each personality category, making exploration fun and intuitive.
+
+6. Theme Vision 3: "Serendipity" (Traditional Dating Site)
+This theme creates a sophisticated and trustworthy dating experience for users seeking serious, long-term relationships.
+
+Primary Goal: To facilitate deep, meaningful connections through detailed profiles and deliberate user choice.
+
+Core Feature: A powerful Discover Page with robust Search and Filtering capabilities (age, location, relationship intent, etc.).
+
+Key Interactions: Connections (a mutual, accepted request), Messages, Feeds, and Profile viewing.
+
+UI/UX: An elegant and classic design that promotes a sense of quality and seriousness. The interface uses an information-rich layout, particularly on profile pages, to allow users to learn about potential matches in detail. The "Love and Excitement" color palette (Ruby Red, Blush Pink) is used to create a romantic and passionate atmosphere.

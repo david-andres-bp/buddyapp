@@ -1,0 +1,60 @@
+Theme Documentation: HeartBeat
+This document outlines the branding, UI/UX philosophy, and feature set for the HeartBeat theme, an activity-based dating application built on the CodePress platform.
+
+1. Brand Vision & Identity
+The HeartBeat theme is designed to feel energetic, modern, and authentic. It targets users who are tired of static profiles and want to connect with others based on shared lifestyles and real-time activities.
+
+Brand Story: "Your Story Starts Here." The brand emphasizes that connections are built on shared moments and experiences, not just a curated bio. It's about showing who you are, not just telling.
+
+Tone & Voice: The language is optimistic, vibrant, and encouraging. It prompts users to "share their vibe" and "find their adventure," creating a fun and low-pressure environment.
+
+Color Palette: "Sunset Glow"
+
+Vibrant Coral (#FF6B6B): The primary color, representing energy, passion, and excitement. It's used for key calls-to-action.
+
+Rich Indigo (#4F46E5): A strong contrasting color that feels modern, trustworthy, and exciting.
+
+Sunny Yellow (#FFD166): An accent color used for highlights and buttons that need to pop, adding a "zesty" feel.
+
+Off-White & Near-Black: Provides a clean, bright canvas that makes the colors stand out and ensures maximum readability.
+
+Typography:
+
+Lora: An elegant serif font for major headlines, giving the brand a touch of storytelling and sophistication.
+
+Inter: A clean, modern sans-serif for all body text and UI elements, prioritizing clarity and readability.
+
+2. Core User Experience & Features
+The user experience is built around the activity feed as the primary driver of interaction and matching. The goal is to make the app feel alive and dynamic.
+
+Discover Page:
+
+Purpose: This is the main dashboard for finding potential matches. It's designed to be a place of exploration and inspiration.
+
+Key Feature: An Activity Composer is placed at the top, encouraging users to post updates with photos and videos as their primary action.
+
+Layout: The page is organized into horizontal, swipe-able carousels. Each carousel represents an AI-generated personality category (e.g., "For the Adventurous," "Fellow Foodies"). This allows users to browse potential matches based on lifestyle archetypes.
+
+Profile Page:
+
+Purpose: To serve as a "living bio." While it contains basic information, the main focus is on a user's chronological feed of posted activities. This allows others to see their personality in action.
+
+Layout: A visually-driven page with a large cover photo and prominent profile picture. The action bar (Like, Connect, Message, Send Gift) is immediately accessible. The majority of the page is dedicated to the user's activity feed.
+
+Unique Feature: AI Personality Engine
+
+This is the core differentiator of the HeartBeat theme.
+
+When a user posts an activity, the text and any hashtags are sent to a backend AI service.
+
+The AI analyzes the content and assigns relevant, predefined personality tags (e.g., "Adventurous," "Creative," "Sporty").
+
+These tags are aggregated over time, building an authentic personality profile that is used to categorize the user on the Discover page. This system rewards active users with better visibility and more compatible matches.
+
+Key Interactions:
+
+Connections: A mutual match system. Both users must express interest (e.g., "Connect") before they can message each other.
+
+Activity Feed: Users post their own activities and can view the feeds of individual profiles they are interested in.
+
+Messages: A standard, private one-on-one messaging system for communicating with connections.

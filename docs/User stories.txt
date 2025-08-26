@@ -1,0 +1,276 @@
+User Stories: CodePress Platform Themes
+This document provides detailed user stories for the three primary application themes, derived from the Project Blueprint. These stories are designed to guide the development process by focusing on user goals and motivations.
+
+Theme 1: "ConnectSphere" (Lightweight Social Media)
+User Registration & Profile Management
+As a new user, I want to register for an account using my email and a password, so that I can join the community.
+
+Acceptance Criteria:
+
+Given I am on the registration page, I see fields for email, username, and password.
+
+When I submit the form with valid data, my account is created.
+
+When I submit with an email that is already in use, I see a clear error message.
+
+Upon successful registration, I am automatically logged in and redirected to the main feed.
+
+As a registered user, I want to create and edit my profile with a picture, bio, and username, so that I can express my identity to others.
+
+Acceptance Criteria:
+
+Given I am on my account page, I can upload a profile picture.
+
+When I update my bio and username and save, the changes are reflected on my public profile.
+
+When I try to save a username that is already taken, I see an error message.
+
+As a registered user, I want to log in and out securely, so that I can protect my account.
+
+Acceptance Criteria:
+
+Given I am logged out, I can log in with my correct credentials.
+
+When I enter incorrect credentials, I see an error message.
+
+When I am logged in, I can click a "Logout" button to end my session.
+
+Activity Feed & Content
+As a user, I want to view a central activity feed that shows posts from everyone I follow, so that I can stay updated on their activities.
+
+Acceptance Criteria:
+
+Given I am on the home page, I see a chronologically sorted list of posts.
+
+The feed only contains posts from users I am currently following.
+
+As a user, I want to create a new post with text, so that I can share my thoughts with my followers.
+
+Acceptance Criteria:
+
+Given I am on the home page, I see a composer to write a new post.
+
+When I submit a post, it appears at the top of my own profile feed and in the feeds of my followers.
+
+As a user, I want to like and comment on posts in my feed, so that I can interact with content I find interesting.
+
+Acceptance Criteria:
+
+Given I see a post, I can click a "Like" button, and the like count increases.
+
+When I click the "Like" button again, my like is removed, and the count decreases.
+
+When I submit a comment on a post, it appears below the post.
+
+As a user, I want to share a post from another user, so that my own followers can see it.
+
+Acceptance Criteria:
+
+Given I see a post, I can click a "Share" button.
+
+When I share a post, it appears in my followers' feeds attributed to me and the original author.
+
+Connections & Following
+As a user, I want to search for and view other users' profiles, so that I can find people to connect with.
+
+Acceptance Criteria:
+
+Given I am on another user's profile, I can see their bio, picture, and posts.
+
+When I am on another user's profile, I see a "Follow" or "Unfollow" button.
+
+As a user, I want to follow and unfollow other users, so that I can customize the content in my activity feed.
+
+Acceptance Criteria:
+
+When I click "Follow" on a user's profile, their posts start appearing in my feed.
+
+When I click "Unfollow," their posts no longer appear in my feed.
+
+Unique Feature: Pinned Profiles
+As a user, I want to pin a profile from someone I follow, so that their profile appears in a dedicated list on my sidebar for quick access.
+
+Acceptance Criteria:
+
+Given I am on the profile of a user I follow, I see a "Pin" icon.
+
+When I click the "Pin" icon, that user's avatar and name appear in my "Pinned Profiles" list.
+
+As a user, I want to click on a pinned profile in my sidebar, so that the main activity feed is filtered to show only posts from that specific user.
+
+Acceptance Criteria:
+
+Given I have pinned users, clicking on one of them reloads the main feed.
+
+The reloaded feed only contains posts from the selected pinned user.
+
+A "Show All" or similar link is visible to clear the filter.
+
+As a user, I want to unpin a profile, so that I can manage my list of favorites.
+
+Acceptance Criteria:
+
+Given I have pinned a user, I see an "Unpin" option on their profile.
+
+When I unpin a user, they are removed from my "Pinned Profiles" list.
+
+Theme 2: "HeartBeat" (Activity-Based Dating App)
+User Onboarding & Profile
+As a new user, I want to sign up for a dating profile, so that I can start finding matches.
+
+Acceptance Criteria:
+
+Given I am on the registration page, I can create an account with my email.
+
+Upon successful registration, I am guided to build my initial profile.
+
+As a user, I want to build my profile with photos and basic information, so that I can make a good first impression.
+
+Acceptance Criteria:
+
+Given I am on my profile edit page, I can upload multiple photos.
+
+I can fill in basic fields like my name, age, and location.
+
+Unique Feature: AI Personality Engine & Activities
+As a user, I want to post an "activity" update with text, photos, videos, or links, so that I can showcase my personality and lifestyle.
+
+Acceptance Criteria:
+
+Given I am on the Discover page, I see a composer for a new activity.
+
+I can write text and attach at least one photo to my post.
+
+When I submit the activity, it appears on my own profile feed.
+
+As the AI system, I want to analyze the content of a new activity post, so that I can assign relevant personality tags (e.g., "Adventurous," "Foodie") to the user's profile.
+
+Acceptance Criteria:
+
+Given a new activity is posted, its text and hashtags are sent for analysis.
+
+The analysis returns one or more tags from a predefined list.
+
+The user's profile data is updated to reflect the new tags.
+
+As a user, I want my profile to display the top personality tags that the AI has assigned to me, so that others can quickly understand my vibe.
+
+Acceptance Criteria:
+
+Given I view a profile, I can see up to three AI-generated tags displayed prominently.
+
+Discover & Matching
+As a user, I want to browse a "Discover" page organized into categories based on AI-generated personality tags, so that I can easily find people with compatible lifestyles.
+
+Acceptance Criteria:
+
+Given I am on the Discover page, I see horizontally scrolling carousels for different personality types.
+
+Each carousel contains profile cards of users who match that personality tag.
+
+As a user, I want to view the full profile of another person, including their feed of past activities, so that I can learn more about them before connecting.
+
+Acceptance Criteria:
+
+When I click a profile card, I am taken to their full profile page.
+
+The profile page displays their photos, bio, and a feed of their recent activities.
+
+As a user, I want to send a "Connection" request to someone I'm interested in.
+
+Acceptance Criteria:
+
+Given I am on a user's profile, I can click a "Connect" button.
+
+The other user receives a notification about my connection request.
+
+As a user, I only want to be able to message someone after we have mutually connected, so that I can avoid unsolicited messages.
+
+Acceptance Criteria:
+
+Given I have not mutually connected with a user, the "Message" button is disabled.
+
+When a user accepts my connection request, the "Message" button becomes active on their profile.
+
+Interactions
+As a user, I want to send a private message to one of my connections, so that we can get to know each other better.
+
+Acceptance Criteria:
+
+Given I am on a connection's profile, I can click "Message" to open a chat window.
+
+When I send a message, it appears in the chat window, and the recipient is notified.
+
+As a user, I want to send a virtual "Gift" to another user, so that I can make a memorable impression.
+
+Acceptance Criteria:
+
+Given I am on a user's profile, I can click the "Send Gift" button.
+
+A menu of virtual gifts appears, and I can select one to send.
+
+The recipient is notified that they have received a gift from me.
+
+Theme 3: "Serendipity" (Traditional Dating Site)
+User Onboarding & Detailed Profiles
+As a new user, I want to register and create a highly detailed profile, including fields for occupation, relationship goals, height, etc., so that I can attract serious and compatible matches.
+
+Acceptance Criteria:
+
+Given I am in the registration flow, I am prompted to fill out a multi-step profile form.
+
+I can save my progress and come back later to complete my profile.
+
+My completed profile displays all the information I have entered.
+
+As a user, I want to upload multiple photos to a gallery on my profile, so that I can showcase different aspects of my life.
+
+Acceptance Criteria:
+
+Given I am on my profile edit page, I can upload several photos.
+
+The uploaded photos appear in a gallery section on my public profile.
+
+Discover & Filtering
+As a user, I want to use a powerful search and filter tool on the "Discover" page, so that I can find potential matches based on specific criteria like age, location, and relationship intent.
+
+Acceptance Criteria:
+
+Given I am on the Discover page, I see filter options for age, location, and other key details.
+
+When I apply a filter, the grid of profiles updates to show only users who match my criteria.
+
+I can clear the filters to return to the default view.
+
+As a user, I want to view the detailed profile of another person, so that I can make an informed decision before reaching out.
+
+Acceptance Criteria:
+
+When I click on a profile card, I am taken to a page showing all of their detailed information and photos.
+
+Connections & Communication
+As a user, I want to send a "Connection" request to another user, which they must accept before we can communicate.
+
+Acceptance Criteria:
+
+Given I am on a user's profile, I can click the "Add Connection" button.
+
+The other user receives a notification of my request.
+
+I cannot send them a message until they accept my request.
+
+As a user, I want to send and receive private messages with my accepted connections, so that we can communicate safely within the platform.
+
+Acceptance Criteria:
+
+Given I have a mutual connection, the "Send Message" button is active.
+
+I can access an inbox to view all my conversations.
+
+As a user, I want to view a simple "Activity Feed" that shows updates from my connections (e.g., "Anna added a new photo"), so that I can stay engaged with my matches.
+
+Acceptance Criteria:
+
+Given I have connections, I can navigate to a "Feeds" page.
+
+The feed shows a simple, chronological list of recent, significant activities from my connections.

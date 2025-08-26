@@ -1,0 +1,27 @@
+Theme Documentation: Serendipity
+This document outlines the branding, UI/UX philosophy, and feature set for the Serendipity theme, a traditional dating application built on the CodePress platform.
+1. Brand Vision & Identity
+The Serendipity theme is designed to create a feeling of trust, sophistication, and genuine romance. It targets users looking for meaningful, long-term connections.
+Brand Story: "Find your happy accident." The name Serendipity implies finding something wonderful without looking for it, and the brand should feel elegant, classic, and trustworthy.
+Tone & Voice: The language used is encouraging, respectful, and mature. It avoids casual slang and focuses on helping users present their best selves to find a compatible partner.
+Color Palette: "Love & Excitement"
+Ruby Red (#EF4444): The primary color, representing passion, love, and confidence. It is used for major calls-to-action and headlines.
+Blush Pink (#EC4899): A secondary color used for accents, highlights (like profile rings), and secondary buttons. It evokes romance and warmth.
+Slate & Off-White: A clean, modern background and text color scheme that makes the vibrant colors pop and ensures excellent readability.
+Typography:
+Montserrat: A clean, geometric sans-serif font used for its modern yet elegant feel. It is highly readable and conveys a sense of stability and clarity.
+2. Core User Experience & Features
+The user experience is centered around providing users with powerful tools to find compatible matches based on detailed criteria.
+Discover Page:
+Purpose: This is the primary landing page for browsing potential matches.
+Key Feature: A prominent and powerful Search & Filter Bar. Unlike activity-based apps, Serendipity empowers users to explicitly define what they are looking for based on location, age, and relationship intent.
+Layout: A clean grid of profile cards that provide a quick, digestible summary (photo, name, age, location, bio snippet) to encourage clicking through to the full profile.
+Profile Page:
+Purpose: This is the cornerstone of the user experience. It's designed to be an information-rich page where a user can get a comprehensive understanding of a potential partner.
+Layout: A two-column design.
+The left column is for identity and action. It features a large profile photo, name, age, location, and the primary action buttons (Send Message, Add Connection, Send Gift).
+The right column is for depth and detail. It includes sections for a detailed "About Me," structured "Details" (like occupation and relationship goals), and a "Photo Gallery."
+Key Interactions:
+Connections: A mutual "friend" system. Users send connection requests, which must be accepted. This is a more deliberate action than a simple "follow."
+Feeds: A chronological timeline of updates from a user's accepted connections (e.g., "Anna added a new photo"). This fosters a sense of ongoing connection with matches.
+Messages: A standard, private one-on-one messaging system for communicating with connections.
