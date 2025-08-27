@@ -17,16 +17,36 @@ use CodeIgniter\Config\BaseService;
  * method format you should use for your service methods. For more examples,
  * see the core Services file at system/Config/Services.php.
  */
+use App\Libraries\Theme;
+use App\Libraries\ThemeView;
+use CodeIgniter\View\View;
+
 class Services extends BaseService
 {
-    /*
-     * public static function example($getShared = true)
-     * {
-     *     if ($getShared) {
-     *         return static::getSharedInstance('example');
-     *     }
-     *
-     *     return new \CodeIgniter\Example();
-     * }
+    /**
+     * The theme service.
      */
+    public static function theme(bool $getShared = true): Theme
+    {
+        if ($getShared) {
+            return static::getSharedInstance('theme');
+        }
+
+        return new Theme();
+    }
+
+    /**
+     * The View cell renderer.
+     *
+     * @return View
+     */
+    public static function renderer(?string $viewPath = null, ?object $config = null, bool $getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('renderer', $viewPath, $config);
+        }
+
+        // Use our custom ThemeView class instead of the default View class
+        return new ThemeView($config ?? config('View'), $viewPath ?? APPPATH . 'Views/', static::locator(), CI_DEBUG, static::logger());
+    }
 }

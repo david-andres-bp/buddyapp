@@ -7,6 +7,7 @@ use CodeIgniter\HTTP\CLIRequest;
 use CodeIgniter\HTTP\IncomingRequest;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
+use App\Libraries\Theme;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -38,6 +39,13 @@ abstract class BaseController extends Controller
     protected $helpers = [];
 
     /**
+     * The theme service.
+     *
+     * @var Theme
+     */
+    protected $theme;
+
+    /**
      * Be sure to declare properties for any property fetch you initialized.
      * The creation of dynamic property is deprecated in PHP 8.2.
      */
@@ -54,5 +62,6 @@ abstract class BaseController extends Controller
         // Preload any models, libraries, etc, here.
 
         // E.g.: $this->session = service('session');
+        $this->theme = service('theme');
     }
 }

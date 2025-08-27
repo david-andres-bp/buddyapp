@@ -31,6 +31,10 @@ $routes->setTranslateURIDashes(false);
 // route since we don't have to scan directories.
 $routes->get('/', 'Main::index');
 
+// Theme Marketing Pages
+$routes->get('/themes/heartbeat', 'Marketing::heartbeat');
+$routes->get('/themes/serendipity', 'Marketing::serendipity');
+
 /*
  * --------------------------------------------------------------------
  * API Routes
