@@ -29,7 +29,7 @@ class Database extends Config
         'hostname'     => 'localhost',
         'username'     => 'appdev',
         'password'     => 'LKJH!mnbv%5',
-        'database'     => 'scam_detector',
+        'database'     => 'buddyapp',
         'DBDriver'     => 'MySQLi',
         'DBPrefix'     => '',
         'pConnect'     => false,
