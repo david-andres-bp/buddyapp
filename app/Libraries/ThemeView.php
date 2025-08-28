@@ -24,13 +24,13 @@ class ThemeView extends View
         if ($themeViewPath && file_exists($themeViewPath . $view . '.php')) {
             // If the view exists in the theme, render it.
             // The renderer will look in its primary path, so we temporarily set it.
-            $originalPath = $this->config->viewPath;
-            $this->config->viewPath = $themeViewPath;
+            $originalPath = $this->viewPath;
+            $this->viewPath = $themeViewPath;
 
             $output = parent::render($view, $options, $saveData);
 
             // Restore the original path
-            $this->config->viewPath = $originalPath;
+            $this->viewPath = $originalPath;
 
             return $output;
         }
