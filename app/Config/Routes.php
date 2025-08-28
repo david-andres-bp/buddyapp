@@ -60,11 +60,17 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
 });
 
 $routes->group('account', ['namespace' => 'App\Controllers'], function ($routes) {
-    $routes->get('login', 'Login::index');
-    $routes->get('signup', 'Login::signup');
+    // Shield routes
+    $routes->get('login', '\CodeIgniter\Shield\Controllers\LoginController::loginView');
+    $routes->post('login', '\CodeIgniter\Shield\Controllers\LoginController::loginAction');
+    $routes->get('signup', '\CodeIgniter\Shield\Controllers\RegisterController::registerView');
+    $routes->post('signup', '\CodeIgniter\Shield\Controllers\RegisterController::registerAction');
+    $routes->get('logout', '\CodeIgniter\Shield\Controllers\LoginController::logoutAction');
+
+    // Custom account routes
     $routes->get('/', 'Main::index');
-    $routes->get('info', 'Main::myAccount');
-    $routes->get('history', 'Main::scanHistory');
+    $routes->get('info', 'Main::myAccount', ['filter' => 'session']);
+    $routes->get('history', 'Main::scanHistory', ['filter' => 'session']);
 });
 
 
