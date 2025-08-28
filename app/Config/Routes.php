@@ -32,8 +32,8 @@ $routes->setTranslateURIDashes(false);
 $routes->get('/', 'Main::index');
 
 // Theme Marketing Pages
-$routes->get('/themes/heartbeat', 'Marketing::heartbeat');
-$routes->get('/themes/serendipity', 'Marketing::serendipity');
+$routes->get('/apps/heartbeat', 'Marketing::heartbeat');
+$routes->get('/apps/serendipity', 'Marketing::serendipity');
 
 /*
  * --------------------------------------------------------------------
