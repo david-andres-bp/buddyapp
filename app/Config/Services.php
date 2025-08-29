@@ -40,13 +40,13 @@ class Services extends BaseService
      *
      * @return View
      */
-    public static function view(?string $viewPath = null, ?object $config = null, bool $getShared = true)
+    public static function view(?object $config = null, bool $getShared = true)
     {
         if ($getShared) {
-            return static::getSharedInstance('view', $viewPath, $config);
+            return static::getSharedInstance('view', $config);
         }
 
         // Use our custom ThemeView class instead of the default View class
-        return new ThemeView($config ?? config('View'), $viewPath ?? APPPATH . 'Views/', static::locator(), CI_DEBUG, static::logger());
+        return new ThemeView($config ?? config('View'), APPPATH . 'Views/', static::locator(), CI_DEBUG, static::logger());
     }
 }
