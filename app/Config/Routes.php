@@ -90,9 +90,9 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
 
 $routes->group('account', ['namespace' => 'App\Controllers'], function ($routes) {
     // Shield routes
-    $routes->get('login', '\CodeIgniter\Shield\Controllers\LoginController::loginView', ['as' => 'login']);
+    $routes->get('login', '\CodeIgniter\Shield\Controllers\LoginController::loginView', ['as' => 'login', 'filter' => 'theme']);
     $routes->post('login', '\CodeIgniter\Shield\Controllers\LoginController::loginAction');
-    $routes->get('signup', '\CodeIgniter\Shield\Controllers\RegisterController::registerView', ['as' => 'register']);
+    $routes->get('signup', '\CodeIgniter\Shield\Controllers\RegisterController::registerView', ['as' => 'register', 'filter' => 'theme']);
     $routes->post('signup', '\CodeIgniter\Shield\Controllers\RegisterController::registerAction');
     $routes->get('logout', '\CodeIgniter\Shield\Controllers\LoginController::logoutAction', ['as' => 'logout']);
 

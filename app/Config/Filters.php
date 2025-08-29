@@ -35,6 +35,8 @@ class Filters extends BaseFilters
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
         'jwt'           => \App\Filters\JWTFilter::class,
+        'session'       => \CodeIgniter\Shield\Filters\SessionAuth::class,
+        'theme'         => \App\Filters\ThemeFilter::class,
     ];
 
     /**
