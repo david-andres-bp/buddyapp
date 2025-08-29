@@ -90,11 +90,11 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
 
 $routes->group('account', ['namespace' => 'App\Controllers'], function ($routes) {
     // Shield routes
-    $routes->get('login', '\CodeIgniter\Shield\Controllers\LoginController::loginView');
+    $routes->get('login', '\CodeIgniter\Shield\Controllers\LoginController::loginView', ['as' => 'login']);
     $routes->post('login', '\CodeIgniter\Shield\Controllers\LoginController::loginAction');
-    $routes->get('signup', '\CodeIgniter\Shield\Controllers\RegisterController::registerView');
+    $routes->get('signup', '\CodeIgniter\Shield\Controllers\RegisterController::registerView', ['as' => 'register']);
     $routes->post('signup', '\CodeIgniter\Shield\Controllers\RegisterController::registerAction');
-    $routes->get('logout', '\CodeIgniter\Shield\Controllers\LoginController::logoutAction');
+    $routes->get('logout', '\CodeIgniter\Shield\Controllers\LoginController::logoutAction', ['as' => 'logout']);
 
     // Custom account routes
     $routes->get('/', 'Main::index');
