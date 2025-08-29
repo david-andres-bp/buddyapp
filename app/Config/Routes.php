@@ -29,7 +29,7 @@ $routes->setTranslateURIDashes(false);
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/', 'DiscoverController::index');
+$routes->get('/', 'DiscoverController::index', ['filter' => 'session']);
 
 // Theme Marketing Pages
 $routes->get('/apps/heartbeat', 'Marketing::heartbeat');
