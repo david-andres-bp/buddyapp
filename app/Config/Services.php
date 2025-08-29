@@ -36,14 +36,14 @@ class Services extends BaseService
     }
 
     /**
-     * The View cell renderer.
+     * The view renderer.
      *
      * @return View
      */
-    public static function renderer(?string $viewPath = null, ?object $config = null, bool $getShared = true)
+    public static function view(?string $viewPath = null, ?object $config = null, bool $getShared = true)
     {
         if ($getShared) {
-            return static::getSharedInstance('renderer', $viewPath, $config);
+            return static::getSharedInstance('view', $viewPath, $config);
         }
 
         // Use our custom ThemeView class instead of the default View class
