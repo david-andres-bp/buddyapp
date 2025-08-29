@@ -39,7 +39,7 @@
                 </div>
 
                 <div class="text-sm">
-                    <a href="#" class="font-medium text-indigo hover:text-indigo-500">
+                    <a href="<?= route_to('magic-link') ?>" class="font-medium text-indigo hover:text-indigo-500">
                         Forgot your password?
                     </a>
                 </div>

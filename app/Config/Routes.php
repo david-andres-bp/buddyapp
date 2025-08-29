@@ -92,9 +92,16 @@ $routes->group('account', ['namespace' => 'App\Controllers'], function ($routes)
     // Shield routes
     $routes->get('login', '\CodeIgniter\Shield\Controllers\LoginController::loginView', ['as' => 'login', 'filter' => 'theme']);
     $routes->post('login', '\CodeIgniter\Shield\Controllers\LoginController::loginAction');
+    $routes->get('logout', '\CodeIgniter\Shield\Controllers\LoginController::logoutAction', ['as' => 'logout']);
+
+    // Magic Link
+    $routes->get('login/magic-link', '\CodeIgniter\Shield\Controllers\MagicLinkController::loginView', ['as' => 'magic-link']);
+    $routes->post('login/magic-link', '\CodeIgniter\Shield\Controllers\MagicLinkController::loginAction');
+    $routes->get('login/verify-magic-link', '\CodeIgniter\Shield\Controllers\MagicLinkController::verify');
+
+    // Registration
     $routes->get('signup', '\CodeIgniter\Shield\Controllers\RegisterController::registerView', ['as' => 'register', 'filter' => 'theme']);
     $routes->post('signup', '\CodeIgniter\Shield\Controllers\RegisterController::registerAction');
-    $routes->get('logout', '\CodeIgniter\Shield\Controllers\LoginController::logoutAction', ['as' => 'logout']);
 
     // Custom account routes
     $routes->get('/', 'Main::index');
