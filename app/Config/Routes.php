@@ -42,15 +42,22 @@ $routes->get('/profile/(:segment)', 'ProfileController::show/$1', ['as' => 'prof
 
 // --- Theme-Specific Routes ---
 
-// Routes for HeartBeat
-if ($activeTheme === 'heartbeat') {
-    $routes->get('/', 'DiscoverController::index', ['as' => 'home', 'filter' => 'session']);
-}
-
-// Routes for Serendipity
-if ($activeTheme === 'serendipity') {
-    // A real app would have a dedicated discover page here. For now, we redirect to login.
-    $routes->get('/', '\CodeIgniter\Shield\Controllers\LoginController::loginView', ['as' => 'home']);
+// Set the home route based on the active theme.
+switch ($activeTheme) {
+    case 'heartbeat':
+        $routes->get('/', 'DiscoverController::index', ['as' => 'home', 'filter' => 'session']);
+        break;
+    case 'serendipity':
+        // A real app would have a dedicated discover page here. For now, we point to login.
+        $routes->get('/', '\CodeIgniter\Shield\Controllers\LoginController::loginView', ['as' => 'home']);
+        break;
+    case 'connectsphere':
+        $routes->get('/', 'GroupController::index', ['as' => 'home', 'filter' => 'session']);
+        break;
+    default:
+        // Fallback for any other case (null, empty, or unknown theme)
+        $routes->get('/', 'Home::index', ['as' => 'home']);
+        break;
 }
 
 // Routes shared by dating themes (HeartBeat & Serendipity)
@@ -75,9 +82,6 @@ if (in_array($activeTheme, ['heartbeat', 'serendipity'])) {
 
 // Routes for ConnectSphere
 if ($activeTheme === 'connectsphere') {
-    // The "groups" page is the home page for this theme.
-    $routes->get('/', 'GroupController::index', ['as' => 'home', 'filter' => 'session']);
-
     // Groups
     $routes->group('groups', ['filter' => 'session'], function ($routes) {
         $routes->get('/', 'GroupController::index', ['as' => 'groups']);
