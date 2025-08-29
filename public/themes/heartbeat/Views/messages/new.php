@@ -6,7 +6,7 @@
     <h1 class="text-3xl font-bold font-serif text-indigo mb-6">Send a New Message</h1>
 
     <div class="bg-white p-8 rounded-lg shadow-md">
-        <form action="/messages/create" method="post">
+        <form action="<?= site_url('messages/create') ?>" method="post">
             <?= csrf_field() ?>
 
             <!-- Recipient -->

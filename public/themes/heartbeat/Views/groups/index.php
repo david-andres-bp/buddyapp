@@ -5,7 +5,7 @@
 <div class="space-y-8">
     <div class="flex justify-between items-center">
         <h1 class="text-3xl font-bold font-serif text-indigo">Groups</h1>
-        <a href="/groups/new" class="bg-coral text-white font-semibold px-6 py-2 rounded-full hover:bg-coral-dark transition">Create Group</a>
+        <a href="<?= route_to('group-new') ?>" class="bg-coral text-white font-semibold px-6 py-2 rounded-full hover:bg-coral-dark transition">Create Group</a>
     </div>
 
     <div class="bg-white p-6 rounded-lg shadow-md">
@@ -16,7 +16,7 @@
                 <?php foreach ($groups as $group) : ?>
                     <div class="border rounded-lg p-4 flex flex-col">
                         <h3 class="text-xl font-semibold text-indigo">
-                            <a href="/groups/<?= esc($group->slug) ?>" class="hover:underline"><?= esc($group->name) ?></a>
+                            <a href="<?= route_to('group-show', $group->slug) ?>" class="hover:underline"><?= esc($group->name) ?></a>
                         </h3>
                         <p class="text-gray-600 mt-2 flex-grow"><?= esc($group->description) ?></p>
                         <div class="mt-4 text-sm text-gray-500">

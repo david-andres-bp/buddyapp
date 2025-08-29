@@ -26,13 +26,13 @@
     <!-- Header -->
     <header class="bg-indigo text-white shadow-md">
         <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-            <a href="/" class="flex items-center space-x-2">
+            <a href="<?= route_to('home') ?>" class="flex items-center space-x-2">
                 <i class="fas fa-heart text-white text-2xl"></i>
                 <span class="text-3xl font-bold font-serif">HeartBeat</span>
             </a>
             <nav class="hidden md:flex items-center space-x-6">
-                <a href="/account/info" class="hover:text-coral transition">My Account</a>
-                <a href="/account/logout" class="bg-coral text-white font-semibold px-5 py-2 rounded-full hover:bg-coral-dark transition">Logout</a>
+                <a href="<?= site_url('account/info') ?>" class="hover:text-coral transition">My Account</a>
+                <a href="<?= route_to('logout') ?>" class="bg-coral text-white font-semibold px-5 py-2 rounded-full hover:bg-coral-dark transition">Logout</a>
             </nav>
         </div>
     </header>

@@ -29,34 +29,34 @@ $routes->setTranslateURIDashes(false);
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/', 'DiscoverController::index', ['filter' => 'session']);
+$routes->get('/', 'DiscoverController::index', ['as' => 'home', 'filter' => 'session']);
 
 // Theme Marketing Pages
 $routes->get('/apps/heartbeat', 'Marketing::heartbeat');
 $routes->get('/apps/serendipity', 'Marketing::serendipity');
 
 // Profile Page
-$routes->get('/profile/(:segment)', 'ProfileController::show/$1');
+$routes->get('/profile/(:segment)', 'ProfileController::show/$1', ['as' => 'profile']);
 
 // Connections
-$routes->get('/connections', 'ConnectionController::index', ['filter' => 'session']);
+$routes->get('/connections', 'ConnectionController::index', ['as' => 'connections', 'filter' => 'session']);
 $routes->post('/connect/create/(:num)', 'ConnectionController::create/$1', ['filter' => 'session']);
 $routes->post('/connect/accept/(:num)', 'ConnectionController::accept/$1', ['filter' => 'session']);
 $routes->post('/connect/decline/(:num)', 'ConnectionController::decline/$1', ['filter' => 'session']);
 
 // Groups
-$routes->get('/groups', 'GroupController::index', ['filter' => 'session']);
-$routes->get('/groups/new', 'GroupController::new', ['filter' => 'session']);
+$routes->get('/groups', 'GroupController::index', ['as' => 'groups', 'filter' => 'session']);
+$routes->get('/groups/new', 'GroupController::new', ['as' => 'group-new', 'filter' => 'session']);
 $routes->post('/groups/create', 'GroupController::create', ['filter' => 'session']);
-$routes->get('/groups/(:segment)', 'GroupController::show/$1', ['filter' => 'session']);
+$routes->get('/groups/(:segment)', 'GroupController::show/$1', ['as' => 'group-show', 'filter' => 'session']);
 $routes->post('/groups/join/(:num)', 'GroupController::join/$1', ['filter' => 'session']);
 $routes->post('/groups/leave/(:num)', 'GroupController::leave/$1', ['filter' => 'session']);
 
 // Messages
-$routes->get('/messages', 'MessageController::index', ['filter' => 'session']);
-$routes->get('/messages/new', 'MessageController::new', ['filter' => 'session']);
+$routes->get('/messages', 'MessageController::index', ['as' => 'messages', 'filter' => 'session']);
+$routes->get('/messages/new', 'MessageController::new', ['as' => 'message-new', 'filter' => 'session']);
 $routes->post('/messages/create', 'MessageController::create', ['filter' => 'session']);
-$routes->get('/messages/(:num)', 'MessageController::show/$1', ['filter' => 'session']);
+$routes->get('/messages/(:num)', 'MessageController::show/$1', ['as' => 'message-show', 'filter' => 'session']);
 $routes->post('/messages/reply/(:num)', 'MessageController::reply/$1', ['filter' => 'session']);
 
 /*

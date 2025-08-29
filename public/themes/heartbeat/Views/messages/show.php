@@ -4,7 +4,7 @@
 
 <div class="space-y-6">
     <div>
-        <a href="/messages" class="text-indigo hover:underline">&larr; Back to Inbox</a>
+        <a href="<?= route_to('messages') ?>" class="text-indigo hover:underline">&larr; Back to Inbox</a>
         <h1 class="text-3xl font-bold font-serif text-indigo mt-2"><?= esc($thread->subject ?: 'Conversation') ?></h1>
     </div>
 
@@ -31,7 +31,7 @@
 
     <!-- Reply Form -->
     <div class="mt-6 pt-6 border-t">
-        <form action="/messages/reply/<?= $thread->id ?>" method="post">
+        <form action="<?= site_url('messages/reply/' . $thread->id) ?>" method="post">
             <?= csrf_field() ?>
             <h2 class="text-2xl font-semibold mb-2">Send a Reply</h2>
             <textarea name="message" class="w-full p-3 border border-gray-300 rounded-lg" rows="4" placeholder="Type your message..."></textarea>

@@ -24,7 +24,7 @@
         </div>
         <div class="mt-6 space-y-4">
             <?php if (auth()->loggedIn() && auth()->id() !== $user->id) : ?>
-                <form action="/connect/create/<?= $user->id ?>" method="post">
+                <form action="<?= site_url('connect/create/' . $user->id) ?>" method="post">
                     <?= csrf_field() ?>
                     <button type="submit" class="w-full bg-indigo text-white font-semibold px-6 py-3 rounded-full hover:bg-indigo-700 transition">
                         <i class="fas fa-link mr-2"></i> Connect

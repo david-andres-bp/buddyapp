@@ -14,13 +14,13 @@
             <?php if (auth()->loggedIn()): ?>
                 <?php if ($membership): ?>
                     <?php if ($group->creator_id != auth()->id()): ?>
-                        <form action="/groups/leave/<?= $group->id ?>" method="post">
+                        <form action="<?= site_url('groups/leave/' . $group->id) ?>" method="post">
                             <?= csrf_field() ?>
                             <button type="submit" class="bg-gray-500 text-white font-semibold px-6 py-2 rounded-full hover:bg-gray-600 transition">Leave Group</button>
                         </form>
                     <?php endif; ?>
                 <?php else: ?>
-                    <form action="/groups/join/<?= $group->id ?>" method="post">
+                    <form action="<?= site_url('groups/join/' . $group->id) ?>" method="post">
                         <?= csrf_field() ?>
                         <button type="submit" class="bg-coral text-white font-semibold px-6 py-2 rounded-full hover:bg-coral-dark transition">Join Group</button>
                     </form>

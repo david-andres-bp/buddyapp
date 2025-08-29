@@ -22,7 +22,7 @@
                                 <div class="flex space-x-4 overflow-x-auto pb-4">
                                     <?php foreach ($users as $user) : ?>
                                         <div class="flex-shrink-0 w-48 bg-white rounded-lg shadow-md text-center p-4">
-                                            <a href="/profile/<?= esc($user->username) ?>">
+                                            <a href="<?= route_to('profile', $user->username) ?>">
                                                 <img src="https://i.pravatar.cc/150?u=<?= esc($user->username) ?>" alt="<?= esc($user->username) ?>" class="w-24 h-24 rounded-full mx-auto mb-3">
                                                 <h4 class="font-semibold text-indigo"><?= esc($user->username) ?></h4>
                                             </a>

@@ -16,15 +16,17 @@
                             <div class="flex items-center">
                                 <img src="https://i.pravatar.cc/150?u=<?= esc($request->user->username) ?>" alt="<?= esc($request->user->username) ?>" class="w-12 h-12 rounded-full mr-4">
                                 <div>
-                                    <a href="/profile/<?= esc($request->user->username) ?>" class="font-semibold text-indigo hover:underline"><?= esc($request->user->username) ?></a>
+                                    <a href="<?= route_to('profile', $request->user->username) ?>" class="font-semibold text-indigo hover:underline"><?= esc($request->user->username) ?></a>
                                     <p class="text-sm text-gray-500">Wants to connect with you.</p>
                                 </div>
                             </div>
                             <div class="flex space-x-2">
-                                <form action="/connect/accept/<?= $request->id ?>" method="post">
+                                <form action="<?= site_url('connect/accept/' . $request->id) ?>" method="post">
+                                    <?= csrf_field() ?>
                                     <button type="submit" class="bg-green-500 text-white font-semibold px-4 py-2 rounded-full hover:bg-green-600 transition">Accept</button>
                                 </form>
-                                <form action="/connect/decline/<?= $request->id ?>" method="post">
+                                <form action="<?= site_url('connect/decline/' . $request->id) ?>" method="post">
+                                    <?= csrf_field() ?>
                                     <button type="submit" class="bg-red-500 text-white font-semibold px-4 py-2 rounded-full hover:bg-red-600 transition">Decline</button>
                                 </form>
                             </div>
@@ -47,7 +49,7 @@
                         <div class="flex items-center p-3 border rounded-lg">
                             <img src="https://i.pravatar.cc/150?u=<?= esc($conn->friend->username) ?>" alt="<?= esc($conn->friend->username) ?>" class="w-12 h-12 rounded-full mr-4">
                             <div>
-                                <a href="/profile/<?= esc($conn->friend->username) ?>" class="font-semibold text-indigo hover:underline"><?= esc($conn->friend->username) ?></a>
+                                <a href="<?= route_to('profile', $conn->friend->username) ?>" class="font-semibold text-indigo hover:underline"><?= esc($conn->friend->username) ?></a>
                                 <p class="text-sm text-gray-500">Connected</p>
                             </div>
                         </div>
