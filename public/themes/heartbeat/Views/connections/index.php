@@ -21,11 +21,11 @@
                                 </div>
                             </div>
                             <div class="flex space-x-2">
-                                <form action="<?= site_url('connect/accept/' . $request->id) ?>" method="post">
+                                <form action="<?= url_to('connection-accept', $request->id) ?>" method="post">
                                     <?= csrf_field() ?>
                                     <button type="submit" class="bg-green-500 text-white font-semibold px-4 py-2 rounded-full hover:bg-green-600 transition">Accept</button>
                                 </form>
-                                <form action="<?= site_url('connect/decline/' . $request->id) ?>" method="post">
+                                <form action="<?= url_to('connection-decline', $request->id) ?>" method="post">
                                     <?= csrf_field() ?>
                                     <button type="submit" class="bg-red-500 text-white font-semibold px-4 py-2 rounded-full hover:bg-red-600 transition">Decline</button>
                                 </form>

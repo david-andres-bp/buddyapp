@@ -27,49 +27,82 @@ $routes->setTranslateURIDashes(false);
  * --------------------------------------------------------------------
  */
 
+// Get the active theme from the environment file.
+$activeTheme = env('app.theme');
+
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/', 'DiscoverController::index', ['as' => 'home', 'filter' => 'session']);
-
-// Theme Marketing Pages
+// Marketing and common pages that are not theme-dependent
 $routes->get('/apps/heartbeat', 'Marketing::heartbeat');
 $routes->get('/apps/serendipity', 'Marketing::serendipity');
 
-// Profile Page
+// --- Globally Available Routes ---
+// Profile pages are available on all themes.
 $routes->get('/profile/(:segment)', 'ProfileController::show/$1', ['as' => 'profile']);
 
-// Connections
-$routes->get('/connections', 'ConnectionController::index', ['as' => 'connections', 'filter' => 'session']);
-$routes->post('/connect/create/(:num)', 'ConnectionController::create/$1', ['filter' => 'session']);
-$routes->post('/connect/accept/(:num)', 'ConnectionController::accept/$1', ['filter' => 'session']);
-$routes->post('/connect/decline/(:num)', 'ConnectionController::decline/$1', ['filter' => 'session']);
+// --- Theme-Specific Routes ---
 
-// Groups
-$routes->get('/groups', 'GroupController::index', ['as' => 'groups', 'filter' => 'session']);
-$routes->get('/groups/new', 'GroupController::new', ['as' => 'group-new', 'filter' => 'session']);
-$routes->post('/groups/create', 'GroupController::create', ['filter' => 'session']);
-$routes->get('/groups/(:segment)', 'GroupController::show/$1', ['as' => 'group-show', 'filter' => 'session']);
-$routes->post('/groups/join/(:num)', 'GroupController::join/$1', ['filter' => 'session']);
-$routes->post('/groups/leave/(:num)', 'GroupController::leave/$1', ['filter' => 'session']);
+// Routes for HeartBeat
+if ($activeTheme === 'heartbeat') {
+    $routes->get('/', 'DiscoverController::index', ['as' => 'home', 'filter' => 'session']);
+}
 
-// Messages
-$routes->get('/messages', 'MessageController::index', ['as' => 'messages', 'filter' => 'session']);
-$routes->get('/messages/new', 'MessageController::new', ['as' => 'message-new', 'filter' => 'session']);
-$routes->post('/messages/create', 'MessageController::create', ['filter' => 'session']);
-$routes->get('/messages/(:num)', 'MessageController::show/$1', ['as' => 'message-show', 'filter' => 'session']);
-$routes->post('/messages/reply/(:num)', 'MessageController::reply/$1', ['filter' => 'session']);
+// Routes for Serendipity
+if ($activeTheme === 'serendipity') {
+    // A real app would have a dedicated discover page here. For now, we redirect to login.
+    $routes->get('/', '\CodeIgniter\Shield\Controllers\LoginController::loginView', ['as' => 'home']);
+}
+
+// Routes shared by dating themes (HeartBeat & Serendipity)
+if (in_array($activeTheme, ['heartbeat', 'serendipity'])) {
+    // Connections
+    $routes->group('connections', ['filter' => 'session'], function ($routes) {
+        $routes->get('/', 'ConnectionController::index', ['as' => 'connections']);
+        $routes->post('create/(:num)', 'ConnectionController::create/$1', ['as' => 'connection-create']);
+        $routes->post('accept/(:num)', 'ConnectionController::accept/$1', ['as' => 'connection-accept']);
+        $routes->post('decline/(:num)', 'ConnectionController::decline/$1', ['as' => 'connection-decline']);
+    });
+
+    // Messages
+    $routes->group('messages', ['filter' => 'session'], function ($routes) {
+        $routes->get('/', 'MessageController::index', ['as' => 'messages']);
+        $routes->get('new', 'MessageController::new', ['as' => 'message-new']);
+        $routes->post('create', 'MessageController::create', ['as' => 'message-create']);
+        $routes->get('(:num)', 'MessageController::show/$1', ['as' => 'message-show']);
+        $routes->post('reply/(:num)', 'MessageController::reply/$1', ['as' => 'message-reply']);
+    });
+}
+
+// Routes for ConnectSphere
+if ($activeTheme === 'connectsphere') {
+    // The "groups" page is the home page for this theme.
+    $routes->get('/', 'GroupController::index', ['as' => 'home', 'filter' => 'session']);
+
+    // Groups
+    $routes->group('groups', ['filter' => 'session'], function ($routes) {
+        $routes->get('/', 'GroupController::index', ['as' => 'groups']);
+        $routes->get('new', 'GroupController::new', ['as' => 'group-new']);
+        $routes->post('create', 'GroupController::create');
+        $routes->get('(:segment)', 'GroupController::show/$1', ['as' => 'group-show']);
+        $routes->post('join/(:num)', 'GroupController::join/$1');
+        $routes->post('leave/(:num)', 'GroupController::leave/$1');
+    });
+}
 
 /*
  * --------------------------------------------------------------------
  * API Routes
  * --------------------------------------------------------------------
  */
-$routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes) {
+$routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes) use ($activeTheme) {
     // Public routes - no authentication required
     $routes->post('register', 'Auth::register');
     $routes->post('login', 'Auth::login');
     $routes->get('tiers', 'Tiers::index');
-    $routes->post('analyze', 'Analysis::create');
+
+    if ($activeTheme === 'heartbeat') {
+        $routes->post('analyze', 'Analysis::create');
+    }
 
     // Protected routes - require JWT authentication
     $routes->group('', ['filter' => 'jwt'], function ($routes) {
@@ -83,8 +116,10 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
     });
 
     // Session-protected API routes
-    $routes->group('', ['filter' => 'session'], function ($routes) {
-        $routes->post('activities', 'ActivityController::create');
+    $routes->group('', ['filter' => 'session'], function ($routes) use ($activeTheme) {
+        if ($activeTheme === 'heartbeat') {
+            $routes->post('activities', 'ActivityController::create', ['as' => 'api-activities']);
+        }
     });
 });
 
@@ -105,7 +140,7 @@ $routes->group('account', ['namespace' => 'App\Controllers'], function ($routes)
 
     // Custom account routes
     $routes->get('/', 'Main::index');
-    $routes->get('info', 'Main::myAccount', ['filter' => 'session']);
+    $routes->get('info', 'Main::myAccount', ['as' => 'account-info', 'filter' => 'session']);
     $routes->get('history', 'Main::scanHistory', ['filter' => 'session']);
 });
 

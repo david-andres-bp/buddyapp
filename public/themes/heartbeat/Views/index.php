@@ -34,14 +34,14 @@
     <!-- Header -->
     <header class="absolute top-0 left-0 right-0 z-20 py-5">
         <div class="max-w-6xl mx-auto px-4 flex justify-between items-center">
-            <a href="#" class="flex items-center space-x-2">
+            <a href="<?= url_to('register') ?>" class="flex items-center space-x-2">
                 <i class="fas fa-heart text-white text-2xl"></i>
                 <span class="text-3xl font-bold text-white font-serif">HeartBeat</span>
             </a>
             <div class="hidden md:flex items-center space-x-6">
                 <a href="#how-it-works" class="text-white/80 hover:text-white transition">How It Works</a>
                 <a href="#features" class="text-white/80 hover:text-white transition">Why HeartBeat?</a>
-                <a href="#" class="bg-white text-coral font-semibold px-5 py-2 rounded-full hover:bg-slate-100 transition">Start Your Story</a>
+                <a href="<?= url_to('register') ?>" class="bg-white text-coral font-semibold px-5 py-2 rounded-full hover:bg-slate-100 transition">Start Your Story</a>
             </div>
         </div>
     </header>
@@ -59,7 +59,7 @@
         <div class="relative z-10 px-4">
             <h2 class="text-5xl md:text-7xl font-bold leading-tight font-serif">Your Story Starts Here.</h2>
             <p class="mt-4 text-lg md:text-xl max-w-2xl mx-auto text-white/90">A dating app that matches you on life's moments, not just a profile picture. Connect with people who love what you do.</p>
-            <a href="#" class="mt-8 inline-block bg-yellow text-near-black font-bold text-lg px-10 py-4 rounded-full hover:bg-yellow-400 transition transform hover:scale-105">Find Your Adventure</a>
+            <a href="<?= url_to('register') ?>" class="mt-8 inline-block bg-yellow text-near-black font-bold text-lg px-10 py-4 rounded-full hover:bg-yellow-400 transition transform hover:scale-105">Find Your Adventure</a>
         </div>
     </section>
 
@@ -131,7 +131,7 @@
         <div class="max-w-4xl mx-auto px-4 text-center">
             <h3 class="text-4xl font-bold font-serif">Ready to Write Your Next Chapter?</h3>
             <p class="mt-4 text-lg text-white/80 max-w-xl mx-auto">Leave the endless swiping behind. Join a community where connections are built on shared passions.</p>
-            <a href="#" class="mt-8 inline-block bg-coral text-white font-bold text-lg px-10 py-4 rounded-full hover:bg-coral-dark transition transform hover:scale-105">Create Your Free Profile Today</a>
+            <a href="<?= url_to('register') ?>" class="mt-8 inline-block bg-coral text-white font-bold text-lg px-10 py-4 rounded-full hover:bg-coral-dark transition transform hover:scale-105">Create Your Free Profile Today</a>
         </div>
     </section>
 

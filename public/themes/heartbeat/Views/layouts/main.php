@@ -35,7 +35,7 @@
                 <a href="<?= route_to('groups') ?>" class="hover:text-coral transition">Groups</a>
                 <a href="<?= route_to('connections') ?>" class="hover:text-coral transition">Connections</a>
                 <a href="<?= route_to('messages') ?>" class="hover:text-coral transition">Messages</a>
-                <a href="<?= site_url('account/info') ?>" class="hover:text-coral transition">My Account</a>
+                <a href="<?= route_to('account-info') ?>" class="hover:text-coral transition">My Account</a>
                 <a href="<?= route_to('logout') ?>" class="bg-coral text-white font-semibold px-5 py-2 rounded-full hover:bg-coral-dark transition">Logout</a>
             </nav>
         </div>

@@ -13,9 +13,13 @@ class ThemeFilter implements FilterInterface
      */
     public function before(RequestInterface $request, $arguments = null)
     {
-        // For now, we'll hardcode the theme.
-        // In a more complex app, this could be dynamic.
-        service('theme')->setActiveTheme('heartbeat');
+        // Get the active theme from the environment file.
+        $activeTheme = env('app.theme');
+
+        // If a theme is defined, set it as active.
+        if ($activeTheme) {
+            service('theme')->setActiveTheme($activeTheme);
+        }
     }
 
     /**
