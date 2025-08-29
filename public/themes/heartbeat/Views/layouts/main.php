@@ -31,6 +31,10 @@
                 <span class="text-3xl font-bold font-serif">HeartBeat</span>
             </a>
             <nav class="hidden md:flex items-center space-x-6">
+                <a href="<?= route_to('home') ?>" class="hover:text-coral transition">Discover</a>
+                <a href="<?= route_to('groups') ?>" class="hover:text-coral transition">Groups</a>
+                <a href="<?= route_to('connections') ?>" class="hover:text-coral transition">Connections</a>
+                <a href="<?= route_to('messages') ?>" class="hover:text-coral transition">Messages</a>
                 <a href="<?= site_url('account/info') ?>" class="hover:text-coral transition">My Account</a>
                 <a href="<?= route_to('logout') ?>" class="bg-coral text-white font-semibold px-5 py-2 rounded-full hover:bg-coral-dark transition">Logout</a>
             </nav>
@@ -49,5 +53,6 @@
         </div>
     </footer>
 
+    <?= $this->renderSection('scripts') ?>
 </body>
 </html>

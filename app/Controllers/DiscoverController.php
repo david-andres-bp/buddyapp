@@ -39,6 +39,26 @@ class DiscoverController extends BaseController
             $usersByTag[$tag] = $users->whereIn('id', $userIds)->findAll();
         }
 
-        return view('discover', ['usersByTag' => $usersByTag]);
+        // Fetch recent activities
+        $activities = new \App\Models\ActivityModel();
+        $recentActivities = $activities->orderBy('created_at', 'DESC')->findAll(20); // Get latest 20
+
+        // Get user info for recent activities
+        if (!empty($recentActivities)) {
+            $userIds = array_map(fn($a) => $a->user_id, $recentActivities);
+            $activityUsers = $users->whereIn('id', array_unique($userIds))->findAll();
+            $userMap = array_column($activityUsers, null, 'id');
+
+            foreach($recentActivities as $activity) {
+                $activity->user = $userMap[$activity->user_id] ?? null;
+            }
+        }
+
+        $data = [
+            'usersByTag'       => $usersByTag,
+            'recentActivities' => $recentActivities ?? [],
+        ];
+
+        return view('discover', $data);
     }
 }
