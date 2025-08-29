@@ -186,3 +186,18 @@ CREATE TABLE `messages_recipients` (
   CONSTRAINT `messages_recipients_thread_id_foreign` FOREIGN KEY (`thread_id`) REFERENCES `messages_threads` (`id`) ON DELETE CASCADE,
   CONSTRAINT `messages_recipients_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Settings Table
+--
+CREATE TABLE `settings` (
+  `id` int(9) NOT NULL AUTO_INCREMENT,
+  `class` varchar(255) NOT NULL,
+  `key` varchar(255) NOT NULL,
+  `value` text,
+  `type` varchar(31) NOT NULL DEFAULT 'string',
+  `context` varchar(255) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

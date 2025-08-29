@@ -29,11 +29,35 @@ $routes->setTranslateURIDashes(false);
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/', 'Main::index');
+$routes->get('/', 'DiscoverController::index');
 
 // Theme Marketing Pages
 $routes->get('/apps/heartbeat', 'Marketing::heartbeat');
 $routes->get('/apps/serendipity', 'Marketing::serendipity');
+
+// Profile Page
+$routes->get('/profile/(:segment)', 'ProfileController::show/$1');
+
+// Connections
+$routes->get('/connections', 'ConnectionController::index', ['filter' => 'session']);
+$routes->post('/connect/create/(:num)', 'ConnectionController::create/$1', ['filter' => 'session']);
+$routes->post('/connect/accept/(:num)', 'ConnectionController::accept/$1', ['filter' => 'session']);
+$routes->post('/connect/decline/(:num)', 'ConnectionController::decline/$1', ['filter' => 'session']);
+
+// Groups
+$routes->get('/groups', 'GroupController::index', ['filter' => 'session']);
+$routes->get('/groups/new', 'GroupController::new', ['filter' => 'session']);
+$routes->post('/groups/create', 'GroupController::create', ['filter' => 'session']);
+$routes->get('/groups/(:segment)', 'GroupController::show/$1', ['filter' => 'session']);
+$routes->post('/groups/join/(:num)', 'GroupController::join/$1', ['filter' => 'session']);
+$routes->post('/groups/leave/(:num)', 'GroupController::leave/$1', ['filter' => 'session']);
+
+// Messages
+$routes->get('/messages', 'MessageController::index', ['filter' => 'session']);
+$routes->get('/messages/new', 'MessageController::new', ['filter' => 'session']);
+$routes->post('/messages/create', 'MessageController::create', ['filter' => 'session']);
+$routes->get('/messages/(:num)', 'MessageController::show/$1', ['filter' => 'session']);
+$routes->post('/messages/reply/(:num)', 'MessageController::reply/$1', ['filter' => 'session']);
 
 /*
  * --------------------------------------------------------------------
@@ -56,6 +80,11 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
         $routes->get('dashboard', 'Dashboard::index');
         $routes->get('analytics', 'Analytics::index');
         $routes->post('logout', 'Auth::logout');
+    });
+
+    // Session-protected API routes
+    $routes->group('', ['filter' => 'session'], function ($routes) {
+        $routes->post('activities', 'ActivityController::create');
     });
 });
 

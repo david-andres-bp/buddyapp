@@ -9,8 +9,8 @@ class Main extends BaseController
         // Set the active theme
         service('theme')->setActiveTheme('heartbeat');
 
-        // The ThemeView library will handle looking for this view in the theme's folder first.
-        return view('welcome_message');
+        // Load the main discover page for the theme
+        return view('discover');
     }
 
     public function myAccount()
