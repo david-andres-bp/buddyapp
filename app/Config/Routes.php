@@ -123,6 +123,7 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
     $routes->group('', ['filter' => 'session'], function ($routes) use ($activeTheme) {
         if ($activeTheme === 'heartbeat') {
             $routes->post('activities', 'ActivityController::create', ['as' => 'api-activities']);
+            $routes->post('activities/delete/(:num)', 'ActivityController::delete/$1', ['as' => 'api-activity-delete']);
         }
     });
 });

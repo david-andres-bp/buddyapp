@@ -52,6 +52,11 @@
                                 <p class="mt-2 text-gray-700"><?= esc($activity->content) ?></p>
                             </div>
                         </div>
+                        <?php if (auth()->id() === $activity->user_id) : ?>
+                        <div class="mt-4 flex justify-end space-x-4">
+                            <button data-id="<?= $activity->id ?>" class="delete-button text-sm font-semibold text-red-600 hover:text-red-800">Delete</button>
+                        </div>
+                        <?php endif; ?>
                     </div>
                 <?php endforeach; ?>
             <?php endif; ?>
@@ -62,6 +67,7 @@
 <?php $this->section('scripts') ?>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Handle Activity Post form submission
         const form = document.getElementById('activity-form');
         if (form) {
             form.addEventListener('submit', function(e) {
@@ -93,6 +99,48 @@
                 });
             });
         }
+
+        // Handle Delete Activity button clicks
+        const deleteButtons = document.querySelectorAll('.delete-button');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                if (!confirm('Are you sure you want to delete this post?')) {
+                    return;
+                }
+
+                const activityId = this.dataset.id;
+                const url = `/api/activities/delete/${activityId}`;
+
+                const headers = new Headers({
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/json'
+                });
+
+                fetch(url, {
+                    method: 'POST', // Using POST as defined in routes
+                    headers: headers,
+                    body: JSON.stringify({ id: activityId })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => { throw err; });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.message) {
+                        // Find the closest parent activity container and remove it
+                        this.closest('.bg-white.p-6.rounded-lg.shadow-md').remove();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error: ' + (error.messages ? error.messages.error : 'Could not delete the activity.'));
+                });
+            });
+        });
     });
 </script>
 <?php $this->endSection() ?>

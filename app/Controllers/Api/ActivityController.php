@@ -51,6 +51,32 @@ class ActivityController extends ResourceController
     }
 
     /**
+     * Delete the designated resource object from the model
+     *
+     * @return mixed
+     */
+    public function delete($id = null)
+    {
+        $activities = new ActivityModel();
+        $activity = $activities->find($id);
+
+        if ($activity === null) {
+            return $this->failNotFound('Activity not found.');
+        }
+
+        // Check if the user is authorized to delete this activity
+        if ($activity->user_id !== auth()->id()) {
+            return $this->failForbidden('You are not authorized to delete this activity.');
+        }
+
+        if ($activities->delete($id)) {
+            return $this->respondDeleted(['message' => 'Activity deleted successfully.']);
+        }
+
+        return $this->failServerError('Could not delete the activity.');
+    }
+
+    /**
      * Analyzes content and updates the user's personality tags.
      */
     private function updatePersonalityTags(int $userId, string $content): void
