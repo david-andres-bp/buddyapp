@@ -14,8 +14,8 @@
             such as the AI-powered Discover page and the activity feed.
         </p>
         <div class="mt-6 flex justify-center gap-4">
-            <a href="<?= route_to('account-info') ?>" class="text-indigo hover:underline">View Your Account</a>
-            <a href="<?= route_to('logout') ?>" class="text-indigo hover:underline">Logout</a>
+            <a href="<?= site_url(route_to('account-info')) ?>" class="text-indigo hover:underline">View Your Account</a>
+            <a href="<?= site_url(route_to('logout')) ?>" class="text-indigo hover:underline">Logout</a>
         </div>
     </div>
 </div>

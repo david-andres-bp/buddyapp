@@ -36,7 +36,7 @@ abstract class BaseController extends Controller
      *
      * @var list<string>
      */
-    protected $helpers = [];
+    protected $helpers = ['url'];
 
     /**
      * The theme service.
