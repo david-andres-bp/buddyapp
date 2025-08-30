@@ -32,7 +32,9 @@
             </a>
             <nav class="hidden md:flex items-center space-x-6">
                 <a href="<?= site_url(route_to('home')) ?>" class="hover:text-coral transition">Discover</a>
-                <a href="<?= site_url(route_to('groups')) ?>" class="hover:text-coral transition">Groups</a>
+                <?php if ($groupsRoute = route_to('groups')) : ?>
+                    <a href="<?= site_url($groupsRoute) ?>" class="hover:text-coral transition">Groups</a>
+                <?php endif; ?>
                 <a href="<?= site_url(route_to('connections')) ?>" class="hover:text-coral transition">Connections</a>
                 <a href="<?= site_url(route_to('messages')) ?>" class="hover:text-coral transition">Messages</a>
                 <a href="<?= site_url(route_to('account-info')) ?>" class="hover:text-coral transition">My Account</a>
