@@ -1,3 +1,7 @@
+<?= $this->extend('layouts/main') ?>
+
+<?= $this->section('content') ?>
+
 <div class="space-y-8">
     <?= $this->include('partials/activity_composer') ?>
 
@@ -95,3 +99,4 @@
         }
     });
 </script>
+<?= $this->endSection() ?>

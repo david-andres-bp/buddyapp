@@ -59,6 +59,6 @@ class DiscoverController extends BaseController
             'recentActivities' => $recentActivities ?? [],
         ];
 
-        return $this->renderThemeView('discover', $data);
+        return view('discover', $data);
     }
 }

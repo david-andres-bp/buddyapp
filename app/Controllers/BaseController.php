@@ -36,7 +36,7 @@ abstract class BaseController extends Controller
      *
      * @var list<string>
      */
-    protected $helpers = [];
+    protected $helpers = ['url'];
 
     /**
      * The theme service.
@@ -65,13 +65,4 @@ abstract class BaseController extends Controller
         $this->theme = service('theme');
     }
 
-    /**
-     * A helper method to render a view within the theme's main layout.
-     * This bypasses the broken `extend()` functionality.
-     */
-    protected function renderThemeView(string $view, array $data = []): string
-    {
-        $data['content'] = view($view, $data);
-        return view('layouts/main', $data);
-    }
 }

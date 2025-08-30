@@ -23,7 +23,7 @@ class Main extends BaseController
             return redirect()->to('/account/login');
         }
 
-        return $this->renderThemeView('account/info', ['user' => $user]);
+        return view('account/info', ['user' => $user]);
     }
 
     public function scanHistory()
@@ -31,6 +31,6 @@ class Main extends BaseController
         // Set the active theme
         service('theme')->setActiveTheme('heartbeat');
 
-        return $this->renderThemeView('account/history');
+        return view('account/history');
     }
 }

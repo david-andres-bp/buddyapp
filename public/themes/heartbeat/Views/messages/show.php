@@ -1,3 +1,7 @@
+<?= $this->extend('layouts/main') ?>
+
+<?= $this->section('content') ?>
+
 <div class="space-y-6">
     <div>
         <a href="<?= site_url(route_to('messages')) ?>" class="text-indigo hover:underline">&larr; Back to Inbox</a>
@@ -38,3 +42,5 @@
     </div>
 
 </div>
+
+<?= $this->endSection() ?>
