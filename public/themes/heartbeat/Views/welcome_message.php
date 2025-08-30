@@ -1,7 +1,3 @@
-<?= $this->extend('layouts/main') ?>
-
-<?= $this->section('content') ?>
-
 <div class="text-center">
     <h1 class="text-4xl font-bold font-serif text-indigo">Welcome to HeartBeat!</h1>
     <p class="mt-4 text-lg text-gray-600">The Core Engine and Theming System are now active.</p>
@@ -19,5 +15,3 @@
         </div>
     </div>
 </div>
-
-<?= $this->endSection() ?>

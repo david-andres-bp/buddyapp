@@ -60,7 +60,7 @@ class ConnectionController extends BaseController
         }
 
         $connections = new ConnectionModel();
-        $users = new \CodeIgniter\Shield\Models\UserModel();
+        $users       = new \CodeIgniter\Shield\Models\UserModel();
 
         // Get pending requests received
         $pendingReceived = $connections
@@ -70,16 +70,12 @@ class ConnectionController extends BaseController
 
         // Get user info for pending requests
         if (!empty($pendingReceived)) {
-            $initiatorIds = array_map(fn($req) => $req->initiator_user_id, $pendingReceived);
-            $initiators = $users->whereIn('id', $initiatorIds)->findAll();
-            // Add initiator user object to each request
-            foreach($pendingReceived as $request) {
-                foreach($initiators as $initiator) {
-                    if ($request->initiator_user_id == $initiator->id) {
-                        $request->user = $initiator;
-                        break;
-                    }
-                }
+            $initiatorIds = array_map(fn ($req) => $req->initiator_user_id, $pendingReceived);
+            $initiators   = $users->whereIn('id', $initiatorIds)->findAll();
+            $initiatorMap = array_column($initiators, null, 'id');
+
+            foreach ($pendingReceived as $request) {
+                $request->user = $initiatorMap[$request->initiator_user_id] ?? null;
             }
         }
 
@@ -95,25 +91,21 @@ class ConnectionController extends BaseController
         // Get user info for current connections
         if (!empty($currentConnections)) {
             $friendIds = [];
-            foreach($currentConnections as $conn) {
+            foreach ($currentConnections as $conn) {
                 $friendIds[] = ($conn->initiator_user_id == $userId) ? $conn->friend_user_id : $conn->initiator_user_id;
             }
-            $friends = $users->whereIn('id', $friendIds)->findAll();
-            // Add friend user object to each connection
-            foreach($currentConnections as $conn) {
-                foreach($friends as $friend) {
-                    $friendId = ($conn->initiator_user_id == $userId) ? $conn->friend_user_id : $conn->initiator_user_id;
-                    if ($friendId == $friend->id) {
-                        $conn->friend = $friend;
-                        break;
-                    }
-                }
+            $friends   = $users->whereIn('id', array_unique($friendIds))->findAll();
+            $friendMap = array_column($friends, null, 'id');
+
+            foreach ($currentConnections as $conn) {
+                $friendId      = ($conn->initiator_user_id == $userId) ? $conn->friend_user_id : $conn->initiator_user_id;
+                $conn->friend = $friendMap[$friendId] ?? null;
             }
         }
 
         $data = [
-            'pendingReceived' => $pendingReceived,
-            'currentConnections' => $currentConnections,
+            'pendingReceived'    => array_filter($pendingReceived, fn($req) => $req->user !== null),
+            'currentConnections' => array_filter($currentConnections, fn($conn) => $conn->friend !== null),
         ];
 
         return $this->renderThemeView('connections/index', $data);

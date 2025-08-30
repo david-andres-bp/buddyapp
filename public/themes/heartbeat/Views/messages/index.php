@@ -1,7 +1,3 @@
-<?= $this->extend('layouts/main') ?>
-
-<?= $this->section('content') ?>
-
 <div class="space-y-8">
     <div class="flex justify-between items-center">
         <h1 class="text-3xl font-bold font-serif text-indigo">Inbox</h1>
@@ -30,5 +26,3 @@
         <?php endif; ?>
     </div>
 </div>
-
-<?= $this->endSection() ?>
