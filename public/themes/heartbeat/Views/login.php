@@ -16,7 +16,7 @@
             </div>
         <?php endif ?>
 
-        <form class="mt-8 space-y-6" action="<?= route_to('login') ?>" method="post">
+        <form class="mt-8 space-y-6" action="<?= site_url(route_to('login')) ?>" method="post">
             <?= csrf_field() ?>
 
             <div class="rounded-md shadow-sm -space-y-px">
@@ -39,7 +39,7 @@
                 </div>
 
                 <div class="text-sm">
-                    <a href="<?= route_to('magic-link') ?>" class="font-medium text-indigo hover:text-indigo-500">
+                    <a href="<?= site_url(route_to('magic-link')) ?>" class="font-medium text-indigo hover:text-indigo-500">
                         Forgot your password?
                     </a>
                 </div>
@@ -53,7 +53,7 @@
 
             <p class="mt-2 text-center text-sm text-gray-600">
                 Or
-                <a href="<?= route_to('register') ?>" class="font-medium text-indigo hover:text-indigo-500">
+                <a href="<?= site_url(route_to('register')) ?>" class="font-medium text-indigo hover:text-indigo-500">
                     create an account
                 </a>
             </p>

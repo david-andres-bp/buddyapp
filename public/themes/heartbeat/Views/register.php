@@ -20,7 +20,7 @@
             </div>
         <?php endif ?>
 
-        <form class="mt-8 space-y-6" action="<?= route_to('register') ?>" method="post">
+        <form class="mt-8 space-y-6" action="<?= site_url(route_to('register')) ?>" method="post">
             <?= csrf_field() ?>
 
             <div>
@@ -51,7 +51,7 @@
 
             <p class="mt-2 text-center text-sm text-gray-600">
                 Already have an account?
-                <a href="<?= route_to('login') ?>" class="font-medium text-indigo hover:text-indigo-500">
+                <a href="<?= site_url(route_to('login')) ?>" class="font-medium text-indigo hover:text-indigo-500">
                     Sign in
                 </a>
             </p>

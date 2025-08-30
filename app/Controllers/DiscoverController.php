@@ -59,6 +59,8 @@ class DiscoverController extends BaseController
             'recentActivities' => $recentActivities ?? [],
         ];
 
-        return view('discover', $data);
+        // Manually render the layout, as extend() is not working reliably.
+        $data['content'] = view('discover', $data);
+        return view('layouts/main', $data);
     }
 }

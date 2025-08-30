@@ -5,7 +5,7 @@
 <div class="space-y-8">
     <div class="flex justify-between items-center">
         <h1 class="text-3xl font-bold font-serif text-indigo">Inbox</h1>
-        <a href="<?= route_to('message-new') ?>" class="bg-coral text-white font-semibold px-6 py-2 rounded-full hover:bg-coral-dark transition">New Message</a>
+        <a href="<?= site_url(route_to('message-new')) ?>" class="bg-coral text-white font-semibold px-6 py-2 rounded-full hover:bg-coral-dark transition">New Message</a>
     </div>
 
     <div class="bg-white p-6 rounded-lg shadow-md">
@@ -14,7 +14,7 @@
         <?php else : ?>
             <div class="space-y-4">
                 <?php foreach ($threads as $thread) : ?>
-                    <a href="<?= route_to('message-show', $thread->id) ?>" class="block p-4 border rounded-lg hover:bg-gray-50">
+                    <a href="<?= site_url(route_to('message-show', $thread->id)) ?>" class="block p-4 border rounded-lg hover:bg-gray-50">
                         <div class="flex justify-between">
                             <p class="font-semibold text-indigo"><?= esc($thread->subject ?: 'No Subject') ?></p>
                             <!-- Placeholder for last message time -->
