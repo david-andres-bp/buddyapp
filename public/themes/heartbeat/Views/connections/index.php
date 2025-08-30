@@ -16,7 +16,7 @@
                             <div class="flex items-center">
                                 <img src="https://i.pravatar.cc/150?u=<?= esc($request->user->username) ?>" alt="<?= esc($request->user->username) ?>" class="w-12 h-12 rounded-full mr-4">
                                 <div>
-                                    <a href="<?= site_url(route_to('profile', $request->user->username)) ?>" class="font-semibold text-indigo hover:underline"><?= esc($request->user->username) ?></a>
+                                    <a href="<?= route_to('profile', $request->user->username) ?>" class="font-semibold text-indigo hover:underline"><?= esc($request->user->username) ?></a>
                                     <p class="text-sm text-gray-500">Wants to connect with you.</p>
                                 </div>
                             </div>
@@ -49,7 +49,7 @@
                         <div class="flex items-center p-3 border rounded-lg">
                             <img src="https://i.pravatar.cc/150?u=<?= esc($conn->friend->username) ?>" alt="<?= esc($conn->friend->username) ?>" class="w-12 h-12 rounded-full mr-4">
                             <div>
-                                <a href="<?= site_url(route_to('profile', $conn->friend->username)) ?>" class="font-semibold text-indigo hover:underline"><?= esc($conn->friend->username) ?></a>
+                                <a href="<?= route_to('profile', $conn->friend->username) ?>" class="font-semibold text-indigo hover:underline"><?= esc($conn->friend->username) ?></a>
                                 <p class="text-sm text-gray-500">Connected</p>
                             </div>
                         </div>

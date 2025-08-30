@@ -4,7 +4,7 @@
 
 <div class="space-y-6">
     <div>
-        <a href="<?= site_url(route_to('messages')) ?>" class="text-indigo hover:underline">&larr; Back to Inbox</a>
+        <a href="<?= route_to('messages') ?>" class="text-indigo hover:underline">&larr; Back to Inbox</a>
         <h1 class="text-3xl font-bold font-serif text-indigo mt-2"><?= esc($thread->subject ?: 'Conversation') ?></h1>
     </div>
 

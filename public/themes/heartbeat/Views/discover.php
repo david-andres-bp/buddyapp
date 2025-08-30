@@ -22,7 +22,7 @@
                                 <div class="flex space-x-4 overflow-x-auto pb-4">
                                     <?php foreach ($users as $user) : ?>
                                         <div class="flex-shrink-0 w-48 bg-white rounded-lg shadow-md text-center p-4">
-                                            <a href="<?= site_url(route_to('profile', $user->username)) ?>">
+                                            <a href="<?= route_to('profile', $user->username) ?>">
                                                 <img src="https://i.pravatar.cc/150?u=<?= esc($user->username) ?>" alt="<?= esc($user->username) ?>" class="w-24 h-24 rounded-full mx-auto mb-3">
                                                 <h4 class="font-semibold text-indigo"><?= esc($user->username) ?></h4>
                                             </a>
@@ -51,7 +51,7 @@
                         <div class="flex items-start">
                             <img src="https://i.pravatar.cc/150?u=<?= esc($activity->user->username ?? 'user') ?>" alt="<?= esc($activity->user->username ?? 'user') ?>" class="w-12 h-12 rounded-full mr-4">
                             <div>
-                                <a href="<?= site_url(route_to('profile', $activity->user->username ?? 'user')) ?>" class="font-semibold text-indigo hover:underline"><?= esc($activity->user->username ?? 'Unknown User') ?></a>
+                                <a href="<?= route_to('profile', $activity->user->username ?? 'user') ?>" class="font-semibold text-indigo hover:underline"><?= esc($activity->user->username ?? 'Unknown User') ?></a>
                                 <p class="text-sm text-gray-500"><?= date('M j, Y \a\t g:i a', strtotime($activity->created_at)) ?></p>
                                 <p class="mt-2 text-gray-700"><?= esc($activity->content) ?></p>
                             </div>

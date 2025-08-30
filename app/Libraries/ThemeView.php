@@ -8,34 +8,18 @@ use Config\Services;
 class ThemeView extends View
 {
     /**
-     * Overridden render method to implement theme view fallback.
-     *
-     * @param string     $view   The view file to render.
-     * @param array|null $options An array of options.
-     * @param bool|null  $saveData Whether to save data for subsequent calls.
-     *
-     * @return string The rendered view.
+     * Overridden constructor to add our theme's view path to the
+     * CodeIgniter FileLocator.
      */
-    public function render(string $view, ?array $options = null, ?bool $saveData = null): string
+    public function __construct(object $config, ?string $viewPath = null, $loader = null, ?bool $debug = null, ?object $logger = null)
     {
-        $theme = Services::theme();
-        $themeViewPath = $theme->getViewPath();
+        parent::__construct($config, $viewPath, $loader, $debug, $logger);
 
-        if ($themeViewPath && file_exists($themeViewPath . $view . '.php')) {
-            // If the view exists in the theme, render it.
-            // The renderer will look in its primary path, so we temporarily set it.
-            $originalPath = $this->viewPath;
-            $this->viewPath = $themeViewPath;
-
-            $output = parent::render($view, $options, $saveData);
-
-            // Restore the original path
-            $this->viewPath = $originalPath;
-
-            return $output;
+        // If a theme is active, add its Views path to the locator.
+        // This makes it so the system can find views in the theme's
+        // directory, which is critical for the extend() method to work.
+        if (service('theme')->getActiveTheme()) {
+            $this->loader->addPath(service('theme')->getViewPath());
         }
-
-        // Otherwise, fall back to the default renderer behavior
-        return parent::render($view, $options, $saveData);
     }
 }
