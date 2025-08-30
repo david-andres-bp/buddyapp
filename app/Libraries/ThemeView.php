@@ -18,18 +18,23 @@ class ThemeView extends View
      */
     public function render(string $view, ?array $options = null, ?bool $saveData = null): string
     {
-        $theme = Services::theme();
+        $theme         = Services::theme();
         $themeViewPath = $theme->getViewPath();
+        $originalPath  = $this->viewPath;
 
         // If a theme is active and the view exists in the theme's path,
-        // set the view path to the theme's directory.
+        // set the view path to the theme's directory for this render call.
         if ($themeViewPath && file_exists($themeViewPath . $view . '.php')) {
             $this->viewPath = $themeViewPath;
         }
 
-        // Now, render the view. If the viewPath was changed, the parent
-        // renderer will now look in the theme's directory. If not, it
-        // will use the default app/Views directory.
-        return parent::render($view, $options, $saveData);
+        // The saveData parameter should default to true, to match the parent
+        // and the behavior of the `view()` helper function.
+        $output = parent::render($view, $options, $saveData ?? true);
+
+        // Restore the original view path
+        $this->viewPath = $originalPath;
+
+        return $output;
     }
 }
