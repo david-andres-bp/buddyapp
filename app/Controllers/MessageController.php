@@ -81,7 +81,7 @@ class MessageController extends BaseController
 
         $data = [
             'thread'   => $thread,
-            'messages' => $threadMessages,
+            'messages' => array_filter($threadMessages, fn($m) => $m->sender !== null),
         ];
 
         return $this->renderThemeView('messages/show', $data);

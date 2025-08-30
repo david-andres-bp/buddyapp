@@ -1,7 +1,3 @@
-<?= $this->extend('layouts/main') ?>
-
-<?= $this->section('content') ?>
-
 <div class="space-y-8">
     <!-- Pending Requests -->
     <div>
@@ -59,5 +55,3 @@
         </div>
     </div>
 </div>
-
-<?= $this->endSection() ?>

@@ -1,7 +1,3 @@
-<?= $this->extend('layouts/main') ?>
-
-<?= $this->section('content') ?>
-
 <div class="max-w-2xl mx-auto">
     <h1 class="text-3xl font-bold font-serif text-indigo mb-6">Send a New Message</h1>
 
@@ -39,5 +35,3 @@
         </form>
     </div>
 </div>
-
-<?= $this->endSection() ?>

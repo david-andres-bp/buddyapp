@@ -1,7 +1,3 @@
-<?= $this->extend('layouts/main') ?>
-
-<?= $this->section('content') ?>
-
 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
     <!-- Profile Sidebar -->
     <div class="md:col-span-1">
@@ -63,5 +59,3 @@
         </div>
     </div>
 </div>
-
-<?= $this->endSection() ?>
