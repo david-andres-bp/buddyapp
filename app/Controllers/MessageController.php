@@ -38,7 +38,7 @@ class MessageController extends BaseController
             $data['threads'] = $threads->whereIn('id', $threadIds)->findAll();
         }
 
-        return view('messages/index', $data);
+        return $this->renderThemeView('messages/index', $data);
     }
 
     /**
@@ -84,7 +84,7 @@ class MessageController extends BaseController
             'messages' => $threadMessages,
         ];
 
-        return view('messages/show', $data);
+        return $this->renderThemeView('messages/show', $data);
     }
 
     /**
@@ -161,7 +161,7 @@ class MessageController extends BaseController
             $friends = $users->whereIn('id', $friendIds)->findAll();
         }
 
-        return view('messages/new', ['connections' => $friends]);
+        return $this->renderThemeView('messages/new', ['connections' => $friends]);
     }
 
     /**

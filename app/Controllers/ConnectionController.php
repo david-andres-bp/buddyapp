@@ -116,7 +116,7 @@ class ConnectionController extends BaseController
             'currentConnections' => $currentConnections,
         ];
 
-        return view('connections/index', $data);
+        return $this->renderThemeView('connections/index', $data);
     }
 
     /**
