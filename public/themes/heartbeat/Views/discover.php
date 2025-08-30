@@ -59,7 +59,7 @@
     </div>
 </div>
 
-<?= $this->section('scripts') ?>
+<?php $this->section('scripts') ?>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const form = document.getElementById('activity-form');
@@ -95,3 +95,4 @@
         }
     });
 </script>
+<?php $this->endSection() ?>
