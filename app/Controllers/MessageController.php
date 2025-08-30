@@ -4,6 +4,9 @@ namespace App\Controllers;
 
 use App\Models\MessagesThreadModel;
 use App\Models\MessagesRecipientModel;
+use App\Models\MessageModel;
+use CodeIgniter\Shield\Models\UserModel;
+use CodeIgniter\Database\RawSql;
 
 class MessageController extends BaseController
 {
@@ -14,31 +17,77 @@ class MessageController extends BaseController
     {
         // Set the active theme
         service('theme')->setActiveTheme('heartbeat');
-
         $userId = auth()->id();
-        if (!$userId) {
-            return redirect()->to('/account/login');
+        if (!$userId) { return redirect()->to('/account/login'); }
+
+        $recipientsModel = new MessagesRecipientModel();
+        $threadsModel = new MessagesThreadModel();
+        $messagesModel = new MessageModel();
+        $usersModel = new UserModel();
+
+        // Get all thread recipient data for the user
+        $userThreads = $recipientsModel->where('user_id', $userId)->findAll();
+        $userThreadIds = array_map(fn($t) => $t->thread_id, $userThreads);
+        $isReadMap = array_column($userThreads, 'is_read', 'thread_id');
+
+        if (empty($userThreadIds)) {
+            return $this->renderThemeView('messages/index', ['threads' => []]);
         }
 
-        $recipients = new MessagesRecipientModel();
-        $threads = new MessagesThreadModel();
+        // Get all thread data
+        $threads = $threadsModel->whereIn('id', $userThreadIds)->findAll();
+        $threadMap = array_column($threads, null, 'id');
 
-        // Find all threads the user is a recipient of
-        $userThreads = $recipients->where('user_id', $userId)->findAll();
+        // Get the last message for each thread
+        $db = db_connect();
+        $subquery = $db->table('messages')->selectMax('id')->whereIn('thread_id', $userThreadIds)->groupBy('thread_id')->getCompiledSelect();
+        $lastMessages = $messagesModel->whereIn('id', new RawSql($subquery))->findAll();
 
-        $threadIds = array_map(fn($t) => $t->thread_id, $userThreads);
-
-        $data = [
-            'threads' => [],
-        ];
-
-        if (!empty($threadIds)) {
-            // TODO: This is a simplified version. A real implementation would
-            // also fetch the other user in the thread and the last message.
-            $data['threads'] = $threads->whereIn('id', $threadIds)->findAll();
+        // Get all recipients for these threads to find the other users
+        $allRecipients = $recipientsModel->whereIn('thread_id', $userThreadIds)->findAll();
+        $otherUserIds = [];
+        $threadRecipientsMap = [];
+        foreach($allRecipients as $recipient) {
+            if ($recipient->user_id !== $userId) {
+                $otherUserIds[] = $recipient->user_id;
+                $threadRecipientsMap[$recipient->thread_id] = $recipient->user_id;
+            }
         }
 
-        return $this->renderThemeView('messages/index', $data);
+        // Get user data for all senders and recipients
+        $senderIds = array_map(fn($m) => $m->sender_id, $lastMessages);
+        $allUserIds = array_unique(array_merge($senderIds, $otherUserIds));
+        $userMap = [];
+        if (!empty($allUserIds)) {
+            $allUsers = $usersModel->whereIn('id', $allUserIds)->findAll();
+            $userMap = array_column($allUsers, null, 'id');
+        }
+
+        // Combine all data
+        foreach ($lastMessages as $message) {
+            $threadId = $message->thread_id;
+            if (isset($threadMap[$threadId])) {
+                $threadMap[$threadId]->last_message = $message;
+                $threadMap[$threadId]->last_message->sender = $userMap[$message->sender_id] ?? null;
+                $otherUserId = $threadRecipientsMap[$threadId] ?? null;
+                if ($otherUserId) {
+                    $threadMap[$threadId]->other_user = $userMap[$otherUserId] ?? null;
+                }
+                $threadMap[$threadId]->is_read = $isReadMap[$threadId] ?? 1;
+            }
+        }
+
+        // Remove threads where we couldn't find a last message (should be rare)
+        $threadMap = array_filter($threadMap, fn($t) => isset($t->last_message));
+
+        // Sort threads by last message time
+        usort($threadMap, function($a, $b) {
+            $timeA = $a->last_message ? strtotime($a->last_message->created_at) : 0;
+            $timeB = $b->last_message ? strtotime($b->last_message->created_at) : 0;
+            return $timeB <=> $timeA;
+        });
+
+        return $this->renderThemeView('messages/index', ['threads' => $threadMap]);
     }
 
     /**
@@ -55,10 +104,15 @@ class MessageController extends BaseController
         }
 
         // Security check: ensure user is a recipient of this thread
-        $recipients = new \App\Models\MessagesRecipientModel();
-        $isRecipient = $recipients->where('thread_id', $threadId)->where('user_id', $userId)->first();
+        $recipientsModel = new \App\Models\MessagesRecipientModel();
+        $isRecipient = $recipientsModel->where('thread_id', $threadId)->where('user_id', $userId)->first();
         if ($isRecipient === null) {
             return redirect()->to('/messages')->with('error', 'You are not authorized to view this message thread.');
+        }
+
+        // Mark the thread as read for the current user
+        if ((int)$isRecipient->is_read === 0) {
+            $recipientsModel->update($isRecipient->id, ['is_read' => 1]);
         }
 
         $threads = new \App\Models\MessagesThreadModel();
@@ -189,7 +243,23 @@ class MessageController extends BaseController
         $subject = $this->request->getPost('subject');
         $messageText = $this->request->getPost('message');
 
-        // TODO: Security check to ensure recipient is a connection.
+        // Security check to ensure recipient is a connection.
+        $connections = new \App\Models\ConnectionModel();
+        $existing = $connections
+            ->groupStart()
+                ->where('initiator_user_id', $userId)
+                ->where('friend_user_id', $recipientId)
+            ->groupEnd()
+            ->orGroupStart()
+                ->where('initiator_user_id', $recipientId)
+                ->where('friend_user_id', $userId)
+            ->groupEnd()
+            ->where('status', 'accepted')
+            ->first();
+
+        if ($existing === null) {
+            return redirect()->back()->with('error', 'You can only send messages to your connections.');
+        }
 
         // Create a new thread
         $threads = new \App\Models\MessagesThreadModel();

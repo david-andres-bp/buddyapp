@@ -27,7 +27,7 @@
                     </button>
                 </form>
 
-                <button onclick="alert('Virtual gift sent!')" class="w-full bg-yellow text-near-black font-semibold px-6 py-3 rounded-full hover:bg-yellow-400 transition">
+                <button onclick="alert('This feature is coming soon!')" class="w-full bg-yellow text-near-black font-semibold px-6 py-3 rounded-full hover:bg-yellow-400 transition">
                     <i class="fas fa-gift mr-2"></i> Send a Gift
                 </button>
             <?php endif; ?>

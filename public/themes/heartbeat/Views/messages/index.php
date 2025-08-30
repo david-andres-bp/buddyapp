@@ -8,17 +8,21 @@
         <?php if (empty($threads)) : ?>
             <p class="text-gray-500">You have no messages.</p>
         <?php else : ?>
-            <div class="space-y-4">
+            <div class="divide-y divide-gray-200">
                 <?php foreach ($threads as $thread) : ?>
-                    <a href="<?= site_url(route_to('message-show', $thread->id)) ?>" class="block p-4 border rounded-lg hover:bg-gray-50">
-                        <div class="flex justify-between">
-                            <p class="font-semibold text-indigo"><?= esc($thread->subject ?: 'No Subject') ?></p>
-                            <!-- Placeholder for last message time -->
-                            <p class="text-sm text-gray-500">2 hours ago</p>
+                    <a href="<?= site_url(route_to('message-show', $thread->id)) ?>" class="block p-4 hover:bg-gray-50 <?= (int)$thread->is_read === 0 ? 'bg-indigo-50' : '' ?>">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="font-semibold text-indigo truncate <?= (int)$thread->is_read === 0 ? 'font-bold' : '' ?>"><?= esc($thread->subject ?: 'No Subject') ?></p>
+                                <p class="text-sm text-gray-500">
+                                    With: <span class="font-medium"><?= esc($thread->other_user->username ?? 'Unknown User') ?></span>
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500 flex-shrink-0 ml-4"><?= date('M j, Y', strtotime($thread->last_message->created_at)) ?></p>
                         </div>
-                        <!-- Placeholder for last message snippet -->
-                        <p class="text-gray-600 mt-1 truncate">
-                            Hey, just checking in to see how you're doing...
+                        <p class="text-gray-600 mt-2 text-sm truncate">
+                            <span class="font-semibold"><?= $thread->last_message->sender_id === auth()->id() ? 'You' : esc($thread->last_message->sender->username ?? 'User') ?>:</span>
+                            <?= esc(strip_tags($thread->last_message->message)) ?>
                         </p>
                     </a>
                 <?php endforeach; ?>

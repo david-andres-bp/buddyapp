@@ -68,6 +68,8 @@ if (in_array($activeTheme, ['heartbeat', 'serendipity'])) {
         $routes->post('create/(:num)', 'ConnectionController::create/$1', ['as' => 'connection-create']);
         $routes->post('accept/(:num)', 'ConnectionController::accept/$1', ['as' => 'connection-accept']);
         $routes->post('decline/(:num)', 'ConnectionController::decline/$1', ['as' => 'connection-decline']);
+        $routes->post('cancel/(:num)', 'ConnectionController::cancel/$1', ['as' => 'connection-cancel']);
+        $routes->post('remove/(:num)', 'ConnectionController::remove/$1', ['as' => 'connection-remove']);
     });
 
     // Messages
@@ -77,6 +79,14 @@ if (in_array($activeTheme, ['heartbeat', 'serendipity'])) {
         $routes->post('create', 'MessageController::create', ['as' => 'message-create']);
         $routes->get('(:num)', 'MessageController::show/$1', ['as' => 'message-show']);
         $routes->post('reply/(:num)', 'MessageController::reply/$1', ['as' => 'message-reply']);
+    });
+}
+
+// Routes for HeartBeat
+if ($activeTheme === 'heartbeat') {
+    // Activities
+    $routes->group('activities', ['filter' => 'session'], function ($routes) {
+        $routes->get('edit/(:num)', 'ActivityController::edit/$1', ['as' => 'activity-edit']);
     });
 }
 
@@ -124,6 +134,7 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
         if ($activeTheme === 'heartbeat') {
             $routes->post('activities', 'ActivityController::create', ['as' => 'api-activities']);
             $routes->post('activities/delete/(:num)', 'ActivityController::delete/$1', ['as' => 'api-activity-delete']);
+            $routes->post('activities/update/(:num)', 'ActivityController::update/$1', ['as' => 'api-activity-update']);
         }
     });
 });
@@ -146,6 +157,8 @@ $routes->group('account', ['namespace' => 'App\Controllers'], function ($routes)
     // Custom account routes
     $routes->get('/', 'Main::index');
     $routes->get('info', 'Main::myAccount', ['as' => 'account-info', 'filter' => 'session']);
+    $routes->post('update-profile', 'Main::updateProfile', ['as' => 'account-update-profile', 'filter' => 'session']);
+    $routes->post('update-bio', 'Main::updateBio', ['as' => 'account-update-bio', 'filter' => 'session']);
     $routes->get('history', 'Main::scanHistory', ['filter' => 'session']);
 });
 

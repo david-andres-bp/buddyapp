@@ -24,10 +24,11 @@ class ActivityController extends ResourceController
 
         // Get the content from the request
         $content = $this->request->getPost('content');
+        $attachment = $this->request->getFile('attachment');
 
         // Validate the content
-        if (empty($content)) {
-            return $this->failValidationErrors('Content is required.');
+        if (empty($content) && !$attachment) {
+            return $this->failValidationErrors('Content or an attachment is required.');
         }
 
         // Prepare the data for the model
@@ -38,6 +39,13 @@ class ActivityController extends ResourceController
             'content'   => esc($content),
         ];
 
+        // Handle file upload
+        if ($attachment && $attachment->isValid() && !$attachment->hasMoved()) {
+            $newName = $attachment->getRandomName();
+            $attachment->move(FCPATH . 'uploads', $newName);
+            $data['attachment_url'] = '/uploads/' . $newName;
+        }
+
         // Save the activity
         $activities = new ActivityModel();
         if ($activities->insert($data) === false) {
@@ -45,7 +53,9 @@ class ActivityController extends ResourceController
         }
 
         // Trigger AI analysis and update user's personality tags
-        $this->updatePersonalityTags($userId, $content);
+        if (!empty($content)) {
+            $this->updatePersonalityTags($userId, $content);
+        }
 
         return $this->respondCreated(['message' => 'Activity posted successfully!']);
     }
@@ -74,6 +84,47 @@ class ActivityController extends ResourceController
         }
 
         return $this->failServerError('Could not delete the activity.');
+    }
+
+    /**
+     * Add or update a model resource, from "posted" properties
+     *
+     * @return mixed
+     */
+    public function update($id = null)
+    {
+        $activities = new ActivityModel();
+        $activity = $activities->find($id);
+
+        if ($activity === null) {
+            return $this->failNotFound('Activity not found.');
+        }
+
+        // Check if the user is authorized to edit this activity
+        if ($activity->user_id !== auth()->id()) {
+            return $this->failForbidden('You are not authorized to edit this activity.');
+        }
+
+        // Get the content from the request
+        $content = $this->request->getPost('content');
+
+        // Validate the content
+        if (empty($content)) {
+            return $this->failValidationErrors('Content is required.');
+        }
+
+        $data = [
+            'content' => esc($content),
+        ];
+
+        if ($activities->update($id, $data) === false) {
+            return $this->failServerError('Could not update the activity.', 500, $activities->errors());
+        }
+
+        // We could potentially re-analyze the content for personality tags here
+        // but for now, we'll skip it to keep the edit lightweight.
+
+        return $this->respondUpdated(['message' => 'Activity updated successfully!']);
     }
 
     /**

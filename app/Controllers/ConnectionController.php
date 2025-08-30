@@ -79,6 +79,23 @@ class ConnectionController extends BaseController
             }
         }
 
+        // Get pending requests sent
+        $pendingSent = $connections
+            ->where('initiator_user_id', $userId)
+            ->where('status', 'pending')
+            ->findAll();
+
+        // Get user info for pending sent requests
+        if (!empty($pendingSent)) {
+            $friendIds = array_map(fn ($req) => $req->friend_user_id, $pendingSent);
+            $friends   = $users->whereIn('id', $friendIds)->findAll();
+            $friendMap = array_column($friends, null, 'id');
+
+            foreach ($pendingSent as $request) {
+                $request->friend = $friendMap[$request->friend_user_id] ?? null;
+            }
+        }
+
         // Get current connections
         $currentConnections = $connections
             ->groupStart()
@@ -105,6 +122,7 @@ class ConnectionController extends BaseController
 
         $data = [
             'pendingReceived'    => array_filter($pendingReceived, fn($req) => $req->user !== null),
+            'pendingSent'        => array_filter($pendingSent, fn($req) => $req->friend !== null),
             'currentConnections' => array_filter($currentConnections, fn($conn) => $conn->friend !== null),
         ];
 
@@ -161,5 +179,57 @@ class ConnectionController extends BaseController
         }
 
         return redirect()->back()->with('message', 'Connection declined.');
+    }
+
+    /**
+     * Cancel a connection request sent by the user.
+     */
+    public function cancel(int $requestId)
+    {
+        $userId = auth()->id();
+        if (!$userId) {
+            return redirect()->to('/account/login');
+        }
+
+        $connections = new ConnectionModel();
+        $request = $connections->find($requestId);
+
+        // Ensure the request exists and was initiated by the current user
+        if ($request === null || $request->initiator_user_id != $userId) {
+            return redirect()->back()->with('error', 'Invalid connection request.');
+        }
+
+        // Cancel by deleting the request
+        if ($connections->delete($requestId) === false) {
+            return redirect()->back()->with('error', 'Could not cancel the connection request.');
+        }
+
+        return redirect()->back()->with('message', 'Connection request cancelled.');
+    }
+
+    /**
+     * Remove a connection.
+     */
+    public function remove(int $requestId)
+    {
+        $userId = auth()->id();
+        if (!$userId) {
+            return redirect()->to('/account/login');
+        }
+
+        $connections = new ConnectionModel();
+        $request = $connections->find($requestId);
+
+        // Ensure the request exists and the current user is part of the connection
+        if ($request === null || ($request->initiator_user_id != $userId && $request->friend_user_id != $userId)) {
+            return redirect()->back()->with('error', 'Invalid connection.');
+        }
+
+        // Remove by deleting the request
+        if ($connections->delete($requestId) === false) {
+            return redirect()->back()->with('error', 'Could not remove the connection.');
+        }
+
+        return redirect()->back()->with('message', 'Connection removed.');
     }
 }

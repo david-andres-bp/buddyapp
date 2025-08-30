@@ -50,10 +50,16 @@
                                 <a href="<?= site_url(route_to('profile', $activity->user->username ?? 'user')) ?>" class="font-semibold text-indigo hover:underline"><?= esc($activity->user->username ?? 'Unknown User') ?></a>
                                 <p class="text-sm text-gray-500"><?= date('M j, Y \a\t g:i a', strtotime($activity->created_at)) ?></p>
                                 <p class="mt-2 text-gray-700"><?= esc($activity->content) ?></p>
+                                <?php if (!empty($activity->attachment_url)) : ?>
+                                    <div class="mt-4">
+                                        <img src="<?= site_url($activity->attachment_url) ?>" alt="Activity attachment" class="rounded-lg max-w-full h-auto">
+                                    </div>
+                                <?php endif; ?>
                             </div>
                         </div>
                         <?php if (auth()->id() === $activity->user_id) : ?>
                         <div class="mt-4 flex justify-end space-x-4">
+                            <a href="<?= site_url('activities/edit/' . $activity->id) ?>" class="text-sm font-semibold text-gray-600 hover:text-gray-800">Edit</a>
                             <button data-id="<?= $activity->id ?>" class="delete-button text-sm font-semibold text-red-600 hover:text-red-800">Delete</button>
                         </div>
                         <?php endif; ?>
