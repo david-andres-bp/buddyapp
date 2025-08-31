@@ -1,71 +1,90 @@
 <div class="space-y-8">
     <?= $this->include('partials/activity_composer') ?>
 
-    <div>
-        <h2 class="text-2xl font-bold font-serif text-indigo mb-4">Discover People</h2>
-
-        <?php if (empty($usersByTag)) : ?>
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <p class="text-gray-500">No users to discover right now. Try posting some activities to build the community!</p>
-            </div>
-        <?php else : ?>
-            <div class="space-y-8">
-                <?php foreach ($usersByTag as $tag => $users) : ?>
-                    <?php if (!empty($users)) : ?>
-                        <div>
-                            <h3 class="text-xl font-semibold text-gray-800 mb-3"><?= esc(ucfirst($tag)) ?></h3>
-                            <div class="relative">
-                                <div class="flex space-x-4 overflow-x-auto pb-4">
-                                    <?php foreach ($users as $user) : ?>
-                                        <div class="flex-shrink-0 w-48 bg-white rounded-lg shadow-md text-center p-4">
-                                            <a href="<?= site_url(route_to('profile', $user->username)) ?>">
-                                                <img src="https://i.pravatar.cc/150?u=<?= esc($user->username) ?>" alt="<?= esc($user->username) ?>" class="w-24 h-24 rounded-full mx-auto mb-3">
-                                                <h4 class="font-semibold text-indigo"><?= esc($user->username) ?></h4>
-                                            </a>
-                                        </div>
-                                    <?php endforeach; ?>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endif; ?>
-                <?php endforeach; ?>
-            </div>
-        <?php endif; ?>
+    <!-- Tab Navigation -->
+    <div class="border-b border-gray-200">
+        <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+            <button class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-indigo-500 text-indigo-600" data-tab="activities">
+                Recent Activities
+            </button>
+            <button class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="people">
+                Discover People
+            </button>
+        </nav>
     </div>
 
-    <!-- Recent Activities Feed -->
-    <div class="mt-8">
-        <h2 class="text-2xl font-bold font-serif text-indigo mb-4">Recent Activity</h2>
-        <div class="space-y-6">
-            <?php if (empty($recentActivities)) : ?>
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <p class="text-gray-500">No activities yet. Be the first to post!</p>
-                </div>
-            <?php else : ?>
-                <?php foreach ($recentActivities as $activity) : ?>
-                    <div class="bg-white p-6 rounded-lg shadow-md">
-                        <div class="flex items-start">
-                            <img src="https://i.pravatar.cc/150?u=<?= esc($activity->user->username ?? 'user') ?>" alt="<?= esc($activity->user->username ?? 'user') ?>" class="w-12 h-12 rounded-full mr-4">
-                            <div>
-                                <a href="<?= site_url(route_to('profile', $activity->user->username ?? 'user')) ?>" class="font-semibold text-indigo hover:underline"><?= esc($activity->user->username ?? 'Unknown User') ?></a>
-                                <p class="text-sm text-gray-500"><?= date('M j, Y \a\t g:i a', strtotime($activity->created_at)) ?></p>
-                                <p class="mt-2 text-gray-700"><?= esc($activity->content) ?></p>
-                                <?php if (!empty($activity->attachment_url)) : ?>
-                                    <div class="mt-4">
-                                        <img src="<?= site_url($activity->attachment_url) ?>" alt="Activity attachment" class="rounded-lg max-w-full h-auto">
+    <!-- Tab Content -->
+    <div>
+        <!-- Activities Tab Pane -->
+        <div id="activities-tab" class="tab-pane">
+            <div class="mt-8">
+                <h2 class="text-2xl font-bold font-serif text-indigo mb-4">Recent Activity</h2>
+                <div class="space-y-6">
+                    <?php if (empty($recentActivities)) : ?>
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <p class="text-gray-500">No activities from you or your connections yet. Post something or connect with people!</p>
+                        </div>
+                    <?php else : ?>
+                        <?php foreach ($recentActivities as $activity) : ?>
+                            <div class="bg-white p-6 rounded-lg shadow-md">
+                                <div class="flex items-start">
+                                    <img src="https://i.pravatar.cc/150?u=<?= esc($activity->user->username ?? 'user') ?>" alt="<?= esc($activity->user->username ?? 'user') ?>" class="w-12 h-12 rounded-full mr-4">
+                                    <div>
+                                        <a href="<?= site_url(route_to('profile', $activity->user->username ?? 'user')) ?>" class="font-semibold text-indigo hover:underline"><?= esc($activity->user->username ?? 'Unknown User') ?></a>
+                                        <p class="text-sm text-gray-500"><?= date('M j, Y \a\t g:i a', strtotime($activity->created_at)) ?></p>
+                                        <p class="mt-2 text-gray-700"><?= esc($activity->content) ?></p>
+                                        <?php if (!empty($activity->attachment_url)) : ?>
+                                            <div class="mt-4">
+                                                <img src="<?= site_url($activity->attachment_url) ?>" alt="Activity attachment" class="rounded-lg max-w-full h-auto">
+                                            </div>
+                                        <?php endif; ?>
                                     </div>
+                                </div>
+                                <?php if (auth()->id() == $activity->user_id) : ?>
+                                <div class="mt-4 flex justify-end space-x-4">
+                                    <button data-id="<?= $activity->id ?>" class="edit-button text-sm font-semibold text-gray-600 hover:text-gray-800">Edit</button>
+                                    <button data-id="<?= $activity->id ?>" class="delete-button text-sm font-semibold text-red-600 hover:text-red-800">Delete</button>
+                                </div>
                                 <?php endif; ?>
                             </div>
-                        </div>
-                        <?php if (auth()->id() == $activity->user_id) : ?>
-                        <div class="mt-4 flex justify-end space-x-4">
-                            <button data-id="<?= $activity->id ?>" class="edit-button text-sm font-semibold text-gray-600 hover:text-gray-800">Edit</button>
-                            <button data-id="<?= $activity->id ?>" class="delete-button text-sm font-semibold text-red-600 hover:text-red-800">Delete</button>
-                        </div>
-                        <?php endif; ?>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+
+        <!-- People Tab Pane -->
+        <div id="people-tab" class="tab-pane hidden">
+            <div class="mt-8">
+                <h2 class="text-2xl font-bold font-serif text-indigo mb-4">Discover People</h2>
+                <?php if (empty($usersByTag)) : ?>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <p class="text-gray-500">No users to discover right now. Try posting some activities to build the community!</p>
                     </div>
-                <?php endforeach; ?>
-            <?php endif; ?>
+                <?php else : ?>
+                    <div class="space-y-8">
+                        <?php foreach ($usersByTag as $tag => $users) : ?>
+                            <?php if (!empty($users)) : ?>
+                                <div>
+                                    <h3 class="text-xl font-semibold text-gray-800 mb-3"><?= esc(ucfirst($tag)) ?></h3>
+                                    <div class="relative">
+                                        <div class="flex space-x-4 overflow-x-auto pb-4">
+                                            <?php foreach ($users as $user) : ?>
+                                                <div class="flex-shrink-0 w-48 bg-white rounded-lg shadow-md text-center p-4">
+                                                    <a href="<?= site_url(route_to('profile', $user->username)) ?>">
+                                                        <img src="https://i.pravatar.cc/150?u=<?= esc($user->username) ?>" alt="<?= esc($user->username) ?>" class="w-24 h-24 rounded-full mx-auto mb-3">
+                                                        <h4 class="font-semibold text-indigo"><?= esc($user->username) ?></h4>
+                                                    </a>
+                                                </div>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
 </div>
@@ -73,19 +92,43 @@
 <?php $this->section('scripts') ?>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Tab switching logic
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabPanes = document.querySelectorAll('.tab-pane');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Deactivate all tabs
+                tabButtons.forEach(btn => {
+                    btn.classList.remove('border-indigo-500', 'text-indigo-600');
+                    btn.classList.add('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+                });
+                // Hide all panes
+                tabPanes.forEach(pane => {
+                    pane.classList.add('hidden');
+                });
+
+                // Activate the clicked tab
+                button.classList.add('border-indigo-500', 'text-indigo-600');
+                button.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+
+                // Show the corresponding pane
+                const tabId = button.dataset.tab;
+                const activePane = document.getElementById(tabId + '-tab');
+                if (activePane) {
+                    activePane.classList.remove('hidden');
+                }
+            });
+        });
+
         // Handle Activity Post form submission
         const form = document.getElementById('activity-form');
         if (form) {
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
-
                 const formData = new FormData(form);
                 const action = form.getAttribute('action');
-
-                const headers = new Headers({
-                    'X-Requested-With': 'XMLHttpRequest'
-                });
-
+                const headers = new Headers({ 'X-Requested-With': 'XMLHttpRequest' });
                 fetch(action, {
                     method: 'POST',
                     body: formData,
@@ -133,7 +176,6 @@
                         <button data-id="${activityId}" class="save-edit-button text-sm font-semibold text-green-600 hover:text-green-800">Save</button>
                     `;
                     postContainer.dataset.originalContent = originalContent;
-                    postContainer.dataset.originalButtons = buttonContainer.innerHTML; // Save original buttons
                 }
 
                 // Handle Save
@@ -184,7 +226,7 @@
                     newP.innerHTML = postContainer.dataset.originalContent;
                     textarea.replaceWith(newP);
 
-                    const activityId = postContainer.querySelector('.delete-button, .edit-button').dataset.id;
+                    const activityId = postContainer.querySelector('.delete-button, .edit-button')?.dataset.id || button.closest('[data-id]')?.dataset.id;
                      button.parentElement.innerHTML = `
                         <button data-id="${activityId}" class="edit-button text-sm font-semibold text-gray-600 hover:text-gray-800">Edit</button>
                         <button data-id="${activityId}" class="delete-button text-sm font-semibold text-red-600 hover:text-red-800">Delete</button>

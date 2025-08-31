@@ -39,9 +39,36 @@ class DiscoverController extends BaseController
             $usersByTag[$tag] = $users->whereIn('id', $userIds)->findAll();
         }
 
-        // Fetch recent activities
+        // Fetch recent activities from the user and their connections
         $activities = new \App\Models\ActivityModel();
-        $recentActivities = $activities->orderBy('created_at', 'DESC')->findAll(20); // Get latest 20
+        $userId = auth()->id();
+        $connectionIds = [];
+
+        if ($userId) {
+            $connections = new \App\Models\ConnectionModel();
+            $userConnections = $connections
+                ->groupStart()
+                    ->where('initiator_user_id', $userId)
+                    ->orWhere('friend_user_id', $userId)
+                ->groupEnd()
+                ->where('status', 'accepted')
+                ->findAll();
+
+            foreach ($userConnections as $conn) {
+                $connectionIds[] = ($conn->initiator_user_id == $userId) ? $conn->friend_user_id : $conn->initiator_user_id;
+            }
+        }
+
+        // Combine user's own ID with their connections' IDs
+        $feedUserIds = array_unique(array_merge([$userId], $connectionIds));
+
+        $recentActivities = [];
+        if (!empty($feedUserIds)) {
+            $recentActivities = $activities
+                ->whereIn('user_id', $feedUserIds)
+                ->orderBy('created_at', 'DESC')
+                ->findAll(20);
+        }
 
         // Get user info for recent activities
         if (!empty($recentActivities)) {
