@@ -57,7 +57,7 @@
                                 <?php endif; ?>
                             </div>
                         </div>
-                        <?php if (auth()->id() === $activity->user_id) : ?>
+                        <?php if (auth()->id() == $activity->user_id) : ?>
                         <div class="mt-4 flex justify-end space-x-4">
                             <a href="<?= site_url('activities/edit/' . $activity->id) ?>" class="text-sm font-semibold text-gray-600 hover:text-gray-800">Edit</a>
                             <button data-id="<?= $activity->id ?>" class="delete-button text-sm font-semibold text-red-600 hover:text-red-800">Delete</button>
