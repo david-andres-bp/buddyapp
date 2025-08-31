@@ -151,7 +151,7 @@
                     formData.append('content', newContent);
                     formData.append(csrfName, csrfValue);
 
-                    fetch(`/api/activities/update/${activityId}`, {
+                    fetch(`${baseUrl}/api/activities/update/${activityId}`, {
                         method: 'POST',
                         body: formData,
                         headers: { 'X-Requested-With': 'XMLHttpRequest' }
@@ -197,7 +197,7 @@
                     if (!confirm('Are you sure you want to delete this post?')) return;
 
                     const activityId = button.dataset.id;
-                    const url = `/api/activities/delete/${activityId}`;
+                    const url = `${baseUrl}/api/activities/delete/${activityId}`;
                     fetch(url, {
                         method: 'POST',
                         headers: { 'X-Requested-With': 'XMLHttpRequest', 'Content-Type': 'application/json' },

@@ -20,6 +20,9 @@
         .bg-yellow { background-color: #FFD166; }
         .text-near-black { color: #212529; }
     </style>
+    <script>
+        const baseUrl = '<?= site_url() ?>';
+    </script>
 </head>
 <body class="text-near-black">
 
