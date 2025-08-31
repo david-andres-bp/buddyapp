@@ -59,7 +59,7 @@
                         </div>
                         <?php if (auth()->id() == $activity->user_id) : ?>
                         <div class="mt-4 flex justify-end space-x-4">
-                            <a href="<?= site_url('activities/edit/' . $activity->id) ?>" class="text-sm font-semibold text-gray-600 hover:text-gray-800">Edit</a>
+                            <button data-id="<?= $activity->id ?>" class="edit-button text-sm font-semibold text-gray-600 hover:text-gray-800">Edit</button>
                             <button data-id="<?= $activity->id ?>" class="delete-button text-sm font-semibold text-red-600 hover:text-red-800">Delete</button>
                         </div>
                         <?php endif; ?>
@@ -106,47 +106,110 @@
             });
         }
 
-        // Handle Delete Activity button clicks
-        const deleteButtons = document.querySelectorAll('.delete-button');
-        deleteButtons.forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
+        // Use event delegation for dynamically added buttons
+        const activityFeed = document.querySelector('.space-y-6');
+        if(activityFeed) {
+            activityFeed.addEventListener('click', function(e) {
+                const button = e.target;
 
-                if (!confirm('Are you sure you want to delete this post?')) {
-                    return;
+                // Handle Edit
+                if (button.classList.contains('edit-button')) {
+                    e.preventDefault();
+                    const postContainer = button.closest('.bg-white.p-6.rounded-lg.shadow-md');
+                    const contentP = postContainer.querySelector('p.mt-2.text-gray-700');
+                    if (!contentP) return;
+
+                    const originalContent = contentP.innerHTML;
+                    const textarea = document.createElement('textarea');
+                    textarea.className = 'w-full p-2 border border-gray-300 rounded';
+                    textarea.rows = 4;
+                    textarea.value = contentP.innerText;
+                    contentP.replaceWith(textarea);
+
+                    const buttonContainer = button.parentElement;
+                    const activityId = button.dataset.id;
+                    buttonContainer.innerHTML = `
+                        <button class="cancel-edit-button text-sm font-semibold text-gray-600 hover:text-gray-800">Cancel</button>
+                        <button data-id="${activityId}" class="save-edit-button text-sm font-semibold text-green-600 hover:text-green-800">Save</button>
+                    `;
+                    postContainer.dataset.originalContent = originalContent;
+                    postContainer.dataset.originalButtons = buttonContainer.innerHTML; // Save original buttons
                 }
 
-                const activityId = this.dataset.id;
-                const url = `/api/activities/delete/${activityId}`;
+                // Handle Save
+                if (button.classList.contains('save-edit-button')) {
+                    e.preventDefault();
+                    const activityId = button.dataset.id;
+                    const postContainer = button.closest('.bg-white.p-6.rounded-lg.shadow-md');
+                    const textarea = postContainer.querySelector('textarea');
+                    const newContent = textarea.value;
+                    const formData = new FormData();
+                    formData.append('content', newContent);
 
-                const headers = new Headers({
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Content-Type': 'application/json'
-                });
+                    fetch(`/api/activities/update/${activityId}`, {
+                        method: 'POST',
+                        body: formData,
+                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.message) {
+                            const newP = document.createElement('p');
+                            newP.className = 'mt-2 text-gray-700';
+                            newP.innerText = newContent;
+                            textarea.replaceWith(newP);
+                            button.parentElement.innerHTML = `
+                                <button data-id="${activityId}" class="edit-button text-sm font-semibold text-gray-600 hover:text-gray-800">Edit</button>
+                                <button data-id="${activityId}" class="delete-button text-sm font-semibold text-red-600 hover:text-red-800">Delete</button>
+                            `;
+                        } else {
+                            alert('Error: ' + (data.messages ? data.messages.error : 'Could not update post.'));
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                }
 
-                fetch(url, {
-                    method: 'POST', // Using POST as defined in routes
-                    headers: headers,
-                    body: JSON.stringify({ id: activityId })
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        return response.json().then(err => { throw err; });
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.message) {
-                        // Find the closest parent activity container and remove it
-                        this.closest('.bg-white.p-6.rounded-lg.shadow-md').remove();
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Error: ' + (error.messages ? error.messages.error : 'Could not delete the activity.'));
-                });
+                // Handle Cancel
+                if (button.classList.contains('cancel-edit-button')) {
+                    e.preventDefault();
+                    const postContainer = button.closest('.bg-white.p-6.rounded-lg.shadow-md');
+                    const textarea = postContainer.querySelector('textarea');
+                    const newP = document.createElement('p');
+                    newP.className = 'mt-2 text-gray-700';
+                    newP.innerHTML = postContainer.dataset.originalContent;
+                    textarea.replaceWith(newP);
+
+                    const activityId = postContainer.querySelector('.delete-button, .edit-button').dataset.id;
+                     button.parentElement.innerHTML = `
+                        <button data-id="${activityId}" class="edit-button text-sm font-semibold text-gray-600 hover:text-gray-800">Edit</button>
+                        <button data-id="${activityId}" class="delete-button text-sm font-semibold text-red-600 hover:text-red-800">Delete</button>
+                    `;
+                }
+
+                // Handle Delete
+                if (button.classList.contains('delete-button')) {
+                    e.preventDefault();
+                    if (!confirm('Are you sure you want to delete this post?')) return;
+
+                    const activityId = button.dataset.id;
+                    const url = `/api/activities/delete/${activityId}`;
+                    fetch(url, {
+                        method: 'POST',
+                        headers: { 'X-Requested-With': 'XMLHttpRequest', 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id: activityId })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.message) {
+                            button.closest('.bg-white.p-6.rounded-lg.shadow-md').remove();
+                        } else {
+                             alert('Error: ' + (data.messages ? data.messages.error : 'Could not delete the activity.'));
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                }
             });
-        });
+        }
     });
 </script>
 <?php $this->endSection() ?>
