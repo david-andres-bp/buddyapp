@@ -51,9 +51,6 @@ class ConnectionController extends BaseController
      */
     public function index()
     {
-        // Set the active theme
-        service('theme')->setActiveTheme('heartbeat');
-
         $userId = auth()->id();
         if (!$userId) {
             return redirect()->to('/account/login');

@@ -48,8 +48,7 @@ switch ($activeTheme) {
         $routes->get('/', 'DiscoverController::index', ['as' => 'home', 'filter' => 'session']);
         break;
     case 'serendipity':
-        // A real app would have a dedicated discover page here. For now, we point to login.
-        $routes->get('/', '\CodeIgniter\Shield\Controllers\LoginController::loginView', ['as' => 'home']);
+        $routes->get('/', 'DiscoverController::index', ['as' => 'home', 'filter' => 'session']);
         break;
     case 'connectsphere':
         $routes->get('/', 'GroupController::index', ['as' => 'home', 'filter' => 'session']);

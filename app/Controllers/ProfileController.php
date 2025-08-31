@@ -10,35 +10,34 @@ class ProfileController extends BaseController
 {
     public function show(string $username)
     {
-        // Set the active theme
-        service('theme')->setActiveTheme('heartbeat');
-
         // Find the user by username
-        $users = new UserModel();
-        $user = $users->where('username', $username)->first();
+        $userModel = new UserModel();
+        $user = $userModel->where('username', $username)->first();
 
         if ($user === null) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
-        // Fetch user's activities
-        $activities = new ActivityModel();
-        $userActivities = $activities
-            ->where('user_id', $user->id)
-            ->orderBy('created_at', 'DESC')
-            ->findAll();
+        // Fetch all meta data for the user
+        $metaModel = new UserMetaModel();
+        $metaData = $metaModel->where('user_id', $user->id)->findAll();
 
-        // Fetch user's personality tags
-        $meta = new UserMetaModel();
-        $tagsData = $meta->where('user_id', $user->id)->where('meta_key', 'personality_tags')->first();
-        $tags = $tagsData ? json_decode($tagsData->meta_value, true) : [];
+        // Organize meta data into a simple key-value object
+        $user->meta = new \stdClass();
+        foreach ($metaData as $meta) {
+            $user->meta->{$meta->meta_key} = $meta->meta_value;
+        }
+
+        // The controller for the 'heartbeat' theme was fetching activities.
+        // The Serendipity theme does not use this concept, so we pass
+        // only the user data.
 
         $data = [
-            'user'       => $user,
-            'activities' => $userActivities,
-            'tags'       => $tags,
+            'user' => $user,
         ];
 
-        return view('profile', $data);
+        // Use the theme-aware renderer to load the view within the main layout.
+        // The ThemeView library will look for 'profile/show.php'.
+        return $this->renderThemeView('profile/show', $data);
     }
 }

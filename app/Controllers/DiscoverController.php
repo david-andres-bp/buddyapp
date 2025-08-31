@@ -9,56 +9,46 @@ class DiscoverController extends BaseController
 {
     public function index()
     {
-        // Set the active theme
-        service('theme')->setActiveTheme('heartbeat');
+        $userModel = new UserModel();
+        $metaModel = new UserMetaModel();
 
-        $users = new UserModel();
-        $meta = new UserMetaModel();
+        // Get current page from query string, default to 1
+        $page = $this->request->getVar('page') ?? 1;
+        $perPage = 12; // Number of users per page
 
-        // Define the tags we want to feature on the Discover page
-        $featuredTags = ['adventurous', 'creative', 'foodie', 'sporty', 'intellectual'];
-        $usersByTag = [];
+        // Get all users with pagination
+        $users = $userModel->paginate($perPage);
 
-        foreach ($featuredTags as $tag) {
-            // Find users with this tag.
-            // NOTE: This LIKE query is not efficient for large datasets due to the JSON storage.
-            // A normalized schema would be better.
-            $userMetas = $meta
-                ->where('meta_key', 'personality_tags')
-                ->like('meta_value', '"' . $tag . '"')
-                ->findAll(10); // Limit to 10 users per tag for performance
+        // Get the pager
+        $pager = $userModel->pager;
 
-            if (empty($userMetas)) {
-                $usersByTag[$tag] = [];
-                continue;
+        // Eager load meta data for the paginated users
+        if (!empty($users)) {
+            $userIds = array_column($users, 'id');
+            $metaData = $metaModel->whereIn('user_id', $userIds)->findAll();
+
+            // Create a map of user_id => meta fields
+            $metaMap = [];
+            foreach ($metaData as $meta) {
+                if (!isset($metaMap[$meta->user_id])) {
+                    $metaMap[$meta->user_id] = [];
+                }
+                $metaMap[$meta->user_id][$meta->meta_key] = $meta->meta_value;
             }
 
-            $userIds = array_map(fn($m) => $m->user_id, $userMetas);
-
-            // Fetch the user objects for these IDs
-            $usersByTag[$tag] = $users->whereIn('id', $userIds)->findAll();
-        }
-
-        // Fetch recent activities
-        $activities = new \App\Models\ActivityModel();
-        $recentActivities = $activities->orderBy('created_at', 'DESC')->findAll(20); // Get latest 20
-
-        // Get user info for recent activities
-        if (!empty($recentActivities)) {
-            $userIds = array_map(fn($a) => $a->user_id, $recentActivities);
-            $activityUsers = $users->whereIn('id', array_unique($userIds))->findAll();
-            $userMap = array_column($activityUsers, null, 'id');
-
-            foreach($recentActivities as $activity) {
-                $activity->user = $userMap[$activity->user_id] ?? null;
+            // Attach meta data to each user object
+            foreach ($users as $user) {
+                $user->meta = (object) ($metaMap[$user->id] ?? []);
             }
         }
 
         $data = [
-            'usersByTag'       => $usersByTag,
-            'recentActivities' => $recentActivities ?? [],
+            'users' => $users,
+            'pager' => $pager,
         ];
 
+        // The view name is 'discover'. The ThemeView library will find
+        // 'discover.php' in the active theme's folder.
         return $this->renderThemeView('discover', $data);
     }
 }

@@ -12,8 +12,6 @@ class MessageController extends BaseController
      */
     public function index()
     {
-        // Set the active theme
-        service('theme')->setActiveTheme('heartbeat');
 
         $userId = auth()->id();
         if (!$userId) {
@@ -46,8 +44,6 @@ class MessageController extends BaseController
      */
     public function show(int $threadId)
     {
-        // Set the active theme
-        service('theme')->setActiveTheme('heartbeat');
 
         $userId = auth()->id();
         if (!$userId) {
@@ -132,8 +128,6 @@ class MessageController extends BaseController
      */
     public function new()
     {
-        // Set the active theme
-        service('theme')->setActiveTheme('heartbeat');
 
         $userId = auth()->id();
         if (!$userId) {

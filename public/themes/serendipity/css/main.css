@@ -1,0 +1,71 @@
+:root {
+    --ruby-red: #EF4444;
+    --ruby-red-dark: #DC2626;
+    --blush-pink: #EC4899;
+    --pink-light: #FCE7F3;
+    --slate-800: #1e293b;
+    --slate-700: #334155;
+    --slate-600: #475569;
+    --off-white: #FFFBFB;
+    --white: #FFFFFF;
+    --font-sans: 'Montserrat', sans-serif;
+    --font-serif: 'Playfair Display', serif;
+}
+
+body {
+    font-family: var(--font-sans);
+    background-color: var(--off-white);
+    color: var(--slate-800);
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-serif);
+    color: var(--ruby-red);
+}
+
+a {
+    color: var(--blush-pink);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    text-align: center;
+    transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.btn-primary {
+    background-color: var(--ruby-red);
+    color: var(--white);
+}
+
+.btn-primary:hover {
+    background-color: var(--ruby-red-dark);
+    text-decoration: none;
+    transform: scale(1.05);
+}
+
+.btn-secondary {
+    background-color: var(--blush-pink);
+    color: var(--white);
+}
+
+.btn-secondary:hover {
+    background-color: #D946EF; /* A slightly darker pink */
+    text-decoration: none;
+}
