@@ -143,8 +143,13 @@
                     const postContainer = button.closest('.bg-white.p-6.rounded-lg.shadow-md');
                     const textarea = postContainer.querySelector('textarea');
                     const newContent = textarea.value;
+
+                    const csrfName = document.querySelector('#activity-form input[name^="csrf_"]').name;
+                    const csrfValue = document.querySelector('#activity-form input[name^="csrf_"]').value;
+
                     const formData = new FormData();
                     formData.append('content', newContent);
+                    formData.append(csrfName, csrfValue);
 
                     fetch(`/api/activities/update/${activityId}`, {
                         method: 'POST',
