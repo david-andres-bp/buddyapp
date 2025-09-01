@@ -6,31 +6,26 @@ class Main extends BaseController
 {
     public function index()
     {
-        // Set the active theme
-        service('theme')->setActiveTheme('heartbeat');
-
-        // Load the main discover page for the theme
+        // The global 'theme' filter handles setting the active theme.
+        // This method now correctly assumes the theme is set and renders
+        // the appropriate discover page for that theme.
         return view('discover');
     }
 
     public function myAccount()
     {
-        // Set the active theme
-        service('theme')->setActiveTheme('heartbeat');
-
         $user = auth()->user();
         if (!$user) {
             return redirect()->to('/account/login');
         }
 
-        return $this->renderThemeView('account/info', ['user' => $user]);
+        return view('account/info', ['user' => $user]);
     }
 
     public function scanHistory()
     {
-        // Set the active theme
-        service('theme')->setActiveTheme('heartbeat');
-
-        return $this->renderThemeView('account/history');
+        // This is a placeholder for a feature that might not be used
+        // in the Serendipity theme, but we provide a view for it.
+        return view('account/history');
     }
 }
