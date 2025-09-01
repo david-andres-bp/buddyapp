@@ -1,3 +1,7 @@
+<?= $this->extend('layouts/main') ?>
+
+<?= $this->section('content') ?>
+
 <h1 class="text-4xl font-serif text-slate-900 mb-6">Discover Your Match</h1>
 
 <!-- Search and Filter Bar -->
@@ -47,3 +51,5 @@
 <div class="mt-8">
     <?= $pager->links() ?>
 </div>
+
+<?= $this->endSection() ?>

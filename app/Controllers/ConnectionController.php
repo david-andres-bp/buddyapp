@@ -105,7 +105,7 @@ class ConnectionController extends BaseController
             'currentConnections' => array_filter($currentConnections, fn($conn) => $conn->friend !== null),
         ];
 
-        return $this->renderThemeView('connections/index', $data);
+        return view('connections/index', $data);
     }
 
     /**

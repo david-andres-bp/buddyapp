@@ -1,3 +1,7 @@
+<?= $this->extend('layouts/main') ?>
+
+<?= $this->section('content') ?>
+
 <h1 class="text-4xl font-serif text-slate-900 mb-6"><?= esc($thread->subject) ?></h1>
 
 <div class="bg-white p-6 rounded-lg shadow-md">
@@ -36,3 +40,5 @@
         </div>
     </form>
 </div>
+
+<?= $this->endSection() ?>

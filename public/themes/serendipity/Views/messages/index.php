@@ -1,3 +1,7 @@
+<?= $this->extend('layouts/main') ?>
+
+<?= $this->section('content') ?>
+
 <div class="flex justify-between items-center mb-6">
     <h1 class="text-4xl font-serif text-slate-900">My Messages</h1>
     <a href="<?= site_url(route_to('message-new')) ?>" class="btn btn-primary">New Message</a>
@@ -23,3 +27,5 @@
         <p class="text-slate-500">You have no messages yet.</p>
     <?php endif; ?>
 </div>
+
+<?= $this->endSection() ?>

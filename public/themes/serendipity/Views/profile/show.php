@@ -1,3 +1,7 @@
+<?= $this->extend('layouts/main') ?>
+
+<?= $this->section('content') ?>
+
 <div class="grid md:grid-cols-3 gap-8">
     <!-- Left Column: Identity and Actions -->
     <div class="md:col-span-1 space-y-6">
@@ -72,8 +76,11 @@
     </div>
 </div>
 
-<!-- Lightbox2 for gallery, if you add it via CDN -->
+</div>
+
+<?= $this->endSection() ?>
+
 <?= $this->section('scripts') ?>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox-plus-jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" integrity="sha512-ZKX+BvQihRJPA8CROKBhDNvoc2aDMOdAlcm7TUQY+35XYtrd3yh95QOOhsPDQY99L4WJY_oDHUGcOFnmUKBPA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js" integrity="sha512-k2GFCTbp9rQU412BStrcD/rlwv1BO0chMBUUtlkMLdwBxMGKlQchCZKRYEx5OFU7AqtdIt9wDYhtZkQ4APLZ9w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <?= $this->endSection() ?>

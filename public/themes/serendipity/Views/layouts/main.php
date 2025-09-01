@@ -35,7 +35,7 @@
 
     <!-- Main Content -->
     <main class="container py-8">
-        <?= $content ?? '' ?>
+        <?= $this->renderSection('content') ?>
     </main>
 
     <!-- Footer -->

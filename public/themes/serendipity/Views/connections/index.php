@@ -1,3 +1,7 @@
+<?= $this->extend('layouts/main') ?>
+
+<?= $this->section('content') ?>
+
 <h1 class="text-4xl font-serif text-slate-900 mb-6">My Connections</h1>
 
 <!-- Pending Connection Requests -->
@@ -52,3 +56,5 @@
         <p class="text-slate-500">You haven't made any connections yet. Go discover some people!</p>
     <?php endif; ?>
 </div>
+
+<?= $this->endSection() ?>

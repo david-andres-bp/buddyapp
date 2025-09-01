@@ -53,6 +53,6 @@ class DiscoverController extends BaseController
 
         // The view name is 'discover'. The ThemeView library will find
         // 'discover.php' in the active theme's folder.
-        return $this->renderThemeView('discover', $data);
+        return view('discover', $data);
     }
 }

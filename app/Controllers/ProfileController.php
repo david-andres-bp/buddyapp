@@ -38,6 +38,6 @@ class ProfileController extends BaseController
 
         // Use the theme-aware renderer to load the view within the main layout.
         // The ThemeView library will look for 'profile/show.php'.
-        return $this->renderThemeView('profile/show', $data);
+        return view('profile/show', $data);
     }
 }
