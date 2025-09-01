@@ -20,6 +20,14 @@ class ThemeView extends View
     {
         $theme         = Services::theme();
         $themeViewPath = $theme->getViewPath();
+
+        // --- DEBUGGING: Throw an exception to reveal the path ---
+        if ($themeViewPath) {
+            $fullPath = $themeViewPath . $view . '.php';
+            throw new \RuntimeException("DEBUG: Checking for file at: " . $fullPath . " | File exists: " . (file_exists($fullPath) ? 'Yes' : 'No'));
+        }
+        // --- END DEBUGGING ---
+
         $originalPath  = $this->viewPath;
 
         // If a theme is active and the view exists in the theme's path,
