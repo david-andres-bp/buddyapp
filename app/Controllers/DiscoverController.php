@@ -9,10 +9,6 @@ class DiscoverController extends BaseController
 {
     public function index()
     {
-        if (! auth()->loggedIn()) {
-            return redirect()->to(route_to('login'));
-        }
-
         $userModel = new UserModel();
         $metaModel = new UserMetaModel();
 

@@ -48,7 +48,7 @@ switch ($activeTheme) {
         $routes->get('/', 'DiscoverController::index', ['as' => 'home', 'filter' => 'session']);
         break;
     case 'serendipity':
-        $routes->get('/', 'DiscoverController::index', ['as' => 'home']);
+        $routes->get('/', 'DiscoverController::index', ['as' => 'home', 'filter' => 'session']);
         break;
     case 'connectsphere':
         $routes->get('/', 'GroupController::index', ['as' => 'home', 'filter' => 'session']);
