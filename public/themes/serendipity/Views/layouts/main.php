@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="<?= service('theme')->asset('css/main.css') ?>">
 
 </head>
-<body class="bg-off-white text-slate-800">
+<body class="bg-off-white text-slate-800 flex flex-col min-h-screen">
 
     <!-- Header -->
     <header class="bg-white shadow-md">
@@ -25,22 +25,23 @@
                 Serendipity
             </a>
             <nav class="hidden md:flex items-center space-x-6">
-                <a href="<?= site_url(route_to('home')) ?>" class="text-slate-700 hover:text-ruby transition font-medium">Discover</a>
-                <a href="<?= site_url(route_to('connections')) ?>" class="text-slate-700 hover:text-ruby transition font-medium">Connections</a>
-                <a href="<?= site_url(route_to('messages')) ?>" class="text-slate-700 hover:text-ruby transition font-medium">Messages</a>
-                <a href="<?= site_url(route_to('account-info')) ?>" class="text-slate-700 hover:text-ruby transition font-medium">My Account</a>
+                <?php $current_path = uri_string() === '/' ? '' : uri_string(); ?>
+                <a href="<?= site_url(route_to('home')) ?>" class="<?= ($current_path === '' || $current_path === 'discover') ? 'active' : '' ?> text-slate-700 hover:text-ruby transition font-medium">Discover</a>
+                <a href="<?= site_url(route_to('connections')) ?>" class="<?= str_starts_with($current_path, 'connections') ? 'active' : '' ?> text-slate-700 hover:text-ruby transition font-medium">Connections</a>
+                <a href="<?= site_url(route_to('messages')) ?>" class="<?= str_starts_with($current_path, 'messages') ? 'active' : '' ?> text-slate-700 hover:text-ruby transition font-medium">Messages</a>
+                <a href="<?= site_url(route_to('account-info')) ?>" class="<?= str_starts_with($current_path, 'account') ? 'active' : '' ?> text-slate-700 hover:text-ruby transition font-medium">My Account</a>
                 <a href="<?= site_url(route_to('logout')) ?>" class="btn btn-primary">Logout</a>
             </nav>
         </div>
     </header>
 
     <!-- Main Content -->
-    <main class="container py-8">
+    <main class="container py-8 flex-grow">
         <?= $this->renderSection('content') ?>
     </main>
 
     <!-- Footer -->
-    <footer class="bg-white py-8 mt-12 border-t border-slate-200">
+    <footer class="bg-white py-8 border-t border-slate-200">
         <div class="container text-center text-gray-500">
             <p>&copy; <?= date('Y') ?> Serendipity. All Rights Reserved.</p>
             <div class="mt-4 flex justify-center space-x-6">
