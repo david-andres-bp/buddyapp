@@ -51,7 +51,7 @@ switch ($activeTheme) {
         $routes->get('/', 'DiscoverController::index', ['as' => 'home', 'filter' => 'session']);
         break;
     case 'connectsphere':
-        $routes->get('/', 'FeedController::index', ['as' => 'home', 'filter' => 'session']);
+        $routes->get('/', 'GroupController::index', ['as' => 'home', 'filter' => 'session']);
         break;
     default:
         // Fallback for any other case (null, empty, or unknown theme)
@@ -85,13 +85,13 @@ if (in_array($activeTheme, ['heartbeat', 'serendipity'])) {
 // Routes for ConnectSphere
 if ($activeTheme === 'connectsphere') {
     // Posts
-    $routes->post('posts/create', 'PostController::create', ['as' => 'post-create', 'filter' => 'session']);
-    $routes->post('posts/like/(:num)', 'PostController::like/$1', ['as' => 'post-like', 'filter' => 'session']);
-    $routes->post('posts/comment/(:num)', 'PostController::comment/$1', ['as' => 'post-comment', 'filter' => 'session']);
+    $routes->post('posts/create', 'FeedController::post', ['as' => 'post-create', 'filter' => 'session']);
+    $routes->post('posts/like/(:num)', 'FeedController::like/$1', ['as' => 'post-like', 'filter' => 'session']);
+    $routes->post('posts/comment/(:num)', 'FeedController::comment/$1', ['as' => 'post-comment', 'filter' => 'session']);
 
     // Follow/Unfollow
-    $routes->post('follow/(:num)', 'FollowerController::follow/$1', ['as' => 'follow', 'filter' => 'session']);
-    $routes->post('unfollow/(:num)', 'FollowerController::unfollow/$1', ['as' => 'unfollow', 'filter' => 'session']);
+    $routes->post('follow/(:num)', 'ConnectionController::follow/$1', ['as' => 'follow', 'filter' => 'session']);
+    $routes->post('unfollow/(:num)', 'ConnectionController::unfollow/$1', ['as' => 'unfollow', 'filter' => 'session']);
 
     // Notifications
     $routes->get('notifications', 'NotificationController::index', ['as' => 'notifications', 'filter' => 'session']);
