@@ -2,9 +2,10 @@
 
 namespace App\Controllers;
 
-use App\Models\ActivityModel;
 use App\Models\UserMetaModel;
 use App\Models\PostModel;
+use App\Models\LikeModel;
+use App\Models\FollowerModel;
 use CodeIgniter\Shield\Models\UserModel;
 
 class ProfileController extends BaseController
@@ -34,36 +35,35 @@ class ProfileController extends BaseController
         $activeTheme = env('app.theme');
 
         if ($activeTheme === 'connectsphere') {
-            $activityModel = new ActivityModel();
+            $postModel = new PostModel();
+            $followerModel = new FollowerModel();
+            $likeModel = new LikeModel();
+
             // Fetch the user's posts
-            $posts = $activityModel->where('component', 'posts')
-                                   ->where('user_id', $user->id)
-                                   ->orderBy('created_at', 'DESC')
-                                   ->findAll();
+            $posts = $postModel->where('user_id', $user->id)
+                               ->orderBy('created_at', 'DESC')
+                               ->findAll();
             $data['posts'] = $posts;
 
             // Check if the current user is following this user
-            $connectionModel = new ConnectionModel();
             $isFollowing = false;
             if (auth()->loggedIn()) {
-                $isFollowing = $connectionModel->where('initiator_user_id', auth()->id())
-                                               ->where('friend_user_id', $user->id)
+                $isFollowing = $followerModel->where('follower_id', auth()->id())
+                                               ->where('followed_id', $user->id)
                                                ->countAllResults() > 0;
             }
             $data['isFollowing'] = $isFollowing;
 
             // Get follower/following counts
-            $followersCount = $connectionModel->where('friend_user_id', $user->id)->where('status', 'accepted')->countAllResults();
-            $followingCount = $connectionModel->where('initiator_user_id', $user->id)->where('status', 'accepted')->countAllResults();
+            $followersCount = $followerModel->where('followed_id', $user->id)->countAllResults();
+            $followingCount = $followerModel->where('follower_id', $user->id)->countAllResults();
             $data['followersCount'] = $followersCount;
             $data['followingCount'] = $followingCount;
 
             // Fetch liked posts
-            $likedPostIds = $activityModel->where('component', 'likes')
-                                           ->where('user_id', $user->id)
-                                           ->findColumn('content');
+            $likedPostIds = $likeModel->where('user_id', $user->id)->findColumn('post_id');
             if (!empty($likedPostIds)) {
-                $data['liked_posts'] = $activityModel->whereIn('id', $likedPostIds)->findAll();
+                $data['liked_posts'] = $postModel->whereIn('id', $likedPostIds)->findAll();
             } else {
                 $data['liked_posts'] = [];
             }
@@ -71,36 +71,5 @@ class ProfileController extends BaseController
 
         // The ThemeView library will look for 'profile.php' in the theme's Views folder.
         return view('profile', $data);
-    }
-
-    public function pin(int $pinnedUserId)
-    {
-        $userId = auth()->id();
-        if (!$userId) {
-            return redirect()->to(route_to('login'));
-        }
-
-        $pinnedProfileModel = new \App\Models\PinnedProfileModel();
-        $pinnedProfileModel->insert([
-            'user_id' => $userId,
-            'pinned_user_id' => $pinnedUserId,
-        ]);
-
-        return redirect()->back()->with('message', 'Profile pinned.');
-    }
-
-    public function unpin(int $pinnedUserId)
-    {
-        $userId = auth()->id();
-        if (!$userId) {
-            return redirect()->to(route_to('login'));
-        }
-
-        $pinnedProfileModel = new \App\Models\PinnedProfileModel();
-        $pinnedProfileModel->where('user_id', $userId)
-                           ->where('pinned_user_id', $pinnedUserId)
-                           ->delete();
-
-        return redirect()->back()->with('message', 'Profile unpinned.');
     }
 }

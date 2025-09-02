@@ -84,28 +84,14 @@ if (in_array($activeTheme, ['heartbeat', 'serendipity'])) {
 
 // Routes for ConnectSphere
 if ($activeTheme === 'connectsphere') {
-    // Groups
-    $routes->group('groups', ['filter' => 'session'], function ($routes) {
-        $routes->get('/', 'GroupController::index', ['as' => 'groups']);
-        $routes->get('new', 'GroupController::new', ['as' => 'group-new']);
-        $routes->post('create', 'GroupController::create');
-        $routes->get('(:segment)', 'GroupController::show/$1', ['as' => 'group-show']);
-        $routes->post('join/(:num)', 'GroupController::join/$1');
-        $routes->post('leave/(:num)', 'GroupController::leave/$1');
-    });
-
     // Posts
-    $routes->post('posts/create', 'FeedController::post', ['as' => 'post-create', 'filter' => 'session']);
+    $routes->post('posts/create', 'PostController::create', ['as' => 'post-create', 'filter' => 'session']);
+    $routes->post('posts/like/(:num)', 'PostController::like/$1', ['as' => 'post-like', 'filter' => 'session']);
+    $routes->post('posts/comment/(:num)', 'PostController::comment/$1', ['as' => 'post-comment', 'filter' => 'session']);
 
     // Follow/Unfollow
-    $routes->post('follow/(:num)', 'ConnectionController::follow/$1', ['as' => 'follow', 'filter' => 'session']);
-    $routes->post('unfollow/(:num)', 'ConnectionController::unfollow/$1', ['as' => 'unfollow', 'filter' => 'session']);
-
-    // Pin/Unpin
-    $routes->post('pin/(:num)', 'ProfileController::pin/$1', ['as' => 'pin-profile', 'filter' => 'session']);
-    $routes->post('unpin/(:num)', 'ProfileController::unpin/$1', ['as' => 'unpin-profile', 'filter' => 'session']);
-    $routes->post('posts/like/(:num)', 'FeedController::like/$1', ['as' => 'post-like', 'filter' => 'session']);
-    $routes->post('posts/comment/(:num)', 'FeedController::comment/$1', ['as' => 'post-comment', 'filter' => 'session']);
+    $routes->post('follow/(:num)', 'FollowerController::follow/$1', ['as' => 'follow', 'filter' => 'session']);
+    $routes->post('unfollow/(:num)', 'FollowerController::unfollow/$1', ['as' => 'unfollow', 'filter' => 'session']);
 
     // Notifications
     $routes->get('notifications', 'NotificationController::index', ['as' => 'notifications', 'filter' => 'session']);
@@ -174,5 +160,3 @@ $routes->group('account', ['namespace' => 'App\Controllers'], function ($routes)
     $routes->get('info', 'Main::myAccount', ['as' => 'account-info', 'filter' => 'session']);
     $routes->get('history', 'Main::scanHistory', ['filter' => 'session']);
 });
-
-

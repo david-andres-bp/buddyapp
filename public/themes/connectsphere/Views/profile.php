@@ -26,7 +26,7 @@
             <div class="mt-2">
                 <h1 class="text-2xl font-bold"><?= esc($user->username) ?></h1>
                 <p class="text-slate-500">@<?= esc($user->username) ?></p>
-                <p class="mt-2 text-slate-700"><?= esc($user->bio) ?></p>
+                <p class="mt-2 text-slate-700"><?= esc($user->bio ?? '') ?></p>
                  <div class="flex space-x-4 mt-2 text-slate-500 text-sm">
                     <span><span class="font-bold text-slate-800"><?= $followingCount ?></span> Following</span>
                     <span><span class="font-bold text-slate-800"><?= $followersCount ?></span> Followers</span>
@@ -55,8 +55,8 @@
                             <div class="flex items-center space-x-3">
                                 <img src="https://placehold.co/48x48/1E293B/FFFFFF?text=<?= substr($user->username, 0, 2) ?>" alt="<?= esc($user->username) ?>" class="w-12 h-12 rounded-full">
                                 <div>
-                                    <p class="font-bold"><?= esc($user->username) ?> <span class="font-normal text-slate-500">@<?= esc($user->username) ?> · <?= esc(CodeIgniter\I18n\Time::parse($post->created_at)->humanize()) ?></span></p>
-                                    <p><?= esc($post->content) ?></p>
+                                    <p class="font-bold"><?= esc($user->username) ?> <span class="font-normal text-slate-500">@<?= esc($user->username) ?> · <?= esc(CodeIgniter\I18n\Time::parse($post['created_at'])->humanize()) ?></span></p>
+                                    <p><?= esc($post['content']) ?></p>
                                 </div>
                             </div>
                             <div class="flex justify-around items-center mt-4 pt-3 border-t text-slate-500">
@@ -77,8 +77,8 @@
                             <div class="flex items-center space-x-3">
                                 <img src="https://placehold.co/48x48/1E293B/FFFFFF?text=<?= substr($user->username, 0, 2) ?>" alt="<?= esc($user->username) ?>" class="w-12 h-12 rounded-full">
                                 <div>
-                                    <p class="font-bold"><?= esc($user->username) ?> <span class="font-normal text-slate-500">@<?= esc($user->username) ?> · <?= esc(CodeIgniter\I18n\Time::parse($post->created_at)->humanize()) ?></span></p>
-                                    <p><?= esc($post->content) ?></p>
+                                    <p class="font-bold"><?= esc($user->username) ?> <span class="font-normal text-slate-500">@<?= esc($user->username) ?> · <?= esc(CodeIgniter\I18n\Time::parse($post['created_at'])->humanize()) ?></span></p>
+                                    <p><?= esc($post['content']) ?></p>
                                 </div>
                             </div>
                         </div>

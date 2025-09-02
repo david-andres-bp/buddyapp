@@ -4,6 +4,10 @@ namespace App\Controllers;
 
 use App\Models\ConnectionModel;
 use App\Models\ActivityModel;
+use App\Models\PostModel;
+use App\Models\LikeModel;
+use App\Models\CommentModel;
+use App\Models\FollowerModel;
 use CodeIgniter\Shield\Models\UserModel;
 
 class FeedController extends BaseController
@@ -24,77 +28,48 @@ class FeedController extends BaseController
         return $this->datingFeed($userId);
     }
 
-    public function post()
-    {
-        if (!auth()->loggedIn()) {
-            return redirect()->to(route_to('login'));
-        }
-
-        $content = $this->request->getPost('content');
-        if (empty($content)) {
-            return redirect()->back()->with('error', 'Post content cannot be empty.');
-        }
-
-        $activityModel = new ActivityModel();
-        $activityModel->insert([
-            'user_id'   => auth()->id(),
-            'component' => 'posts',
-            'type'      => 'new_post',
-            'content'   => $content,
-        ]);
-
-        return redirect()->back()->with('message', 'Post created successfully.');
-    }
-
     protected function connectsphereFeed(int $userId)
     {
         $userModel = new UserModel();
         $currentUser = $userModel->find($userId);
 
         // Get the list of users that the current user follows
-        $connectionModel = new ConnectionModel();
-        $connections = $connectionModel
-            ->where('initiator_user_id', $userId)
-            ->orWhere('friend_user_id', $userId)
-            ->where('status', 'accepted')
-            ->findAll();
-
-        $followedUserIds = [];
-        foreach ($connections as $conn) {
-            $followedUserIds[] = ($conn->initiator_user_id == $userId) ? $conn->friend_user_id : $conn->initiator_user_id;
-        }
+        $followerModel = new FollowerModel();
+        $followedUsers = $followerModel->where('follower_id', $userId)->findAll();
+        $followedUserIds = array_column($followedUsers, 'followed_id');
 
         // Add the current user's ID to the list, so they see their own posts
         $followedUserIds[] = $userId;
 
         // Get all the posts from the followed users
-        $activityModel = new ActivityModel();
-        $posts = $activityModel->where('component', 'posts')
-                               ->whereIn('user_id', $followedUserIds)
-                               ->orderBy('created_at', 'DESC')
-                               ->findAll();
+        $postModel = new PostModel();
+        $posts = $postModel->whereIn('user_id', $followedUserIds)
+                           ->orderBy('created_at', 'DESC')
+                           ->findAll();
 
         // Get user information, like counts, and comment counts for each post
+        $likeModel = new LikeModel();
+        $commentModel = new CommentModel();
         foreach ($posts as &$post) {
-            $user = $userModel->find($post->user_id);
-            $post->user = $user;
-            $post->like_count = $activityModel->where('component', 'likes')->where('content', $post->id)->countAllResults();
-            $post->is_liked_by_user = $activityModel->where('component', 'likes')->where('content', $post->id)->where('user_id', $userId)->countAllResults() > 0;
-            $post->comment_count = $activityModel->where('component', 'comments')->where('item_id', $post->id)->countAllResults();
+            $user = $userModel->find($post['user_id']);
+            $post['user'] = $user;
+            $post['like_count'] = $likeModel->where('post_id', $post['id'])->countAllResults();
+            $post['is_liked_by_user'] = $likeModel->where('post_id', $post['id'])->where('user_id', $userId)->countAllResults() > 0;
+            $post['comment_count'] = $commentModel->where('post_id', $post['id'])->countAllResults();
         }
 
         // Get follower/following counts
-        $followersCount = $connectionModel->where('friend_user_id', $userId)->where('status', 'accepted')->countAllResults();
-        $followingCount = $connectionModel->where('initiator_user_id', $userId)->where('status', 'accepted')->countAllResults();
+        $followersCount = $followerModel->where('followed_id', $userId)->countAllResults();
+        $followingCount = $followerModel->where('follower_id', $userId)->countAllResults();
 
         // Get "Who to Follow" suggestions
         $suggestions = []; // This would need a more complex query to be accurate
 
         // Get trending topics
-        $allPosts = $activityModel->where('component', 'posts')->findAll();
+        $allPosts = $postModel->findAll();
         $hashtags = [];
         foreach ($allPosts as $post) {
-            preg_match_all('/#(\w+)/', $post->content, $matches);
+            preg_match_all('/#(\w+)/', $post['content'], $matches);
             if (!empty($matches[1])) {
                 $hashtags = array_merge($hashtags, $matches[1]);
             }
@@ -114,58 +89,6 @@ class FeedController extends BaseController
 
         // Pass the posts to the view
         return view('home', $data);
-    }
-
-    public function like(int $activityId)
-    {
-        if (!auth()->loggedIn()) {
-            return redirect()->to(route_to('login'));
-        }
-
-        $activityModel = new ActivityModel();
-        $like = $activityModel->where('component', 'likes')
-                              ->where('type', 'new_like')
-                              ->where('content', $activityId)
-                              ->where('user_id', auth()->id())
-                              ->first();
-
-        if ($like) {
-            // Unlike
-            $activityModel->delete($like->id);
-        } else {
-            // Like
-            $activityModel->insert([
-                'user_id'   => auth()->id(),
-                'component' => 'likes',
-                'type'      => 'new_like',
-                'content'   => $activityId,
-            ]);
-        }
-
-        return redirect()->back();
-    }
-
-    public function comment(int $activityId)
-    {
-        if (!auth()->loggedIn()) {
-            return redirect()->to(route_to('login'));
-        }
-
-        $content = $this->request->getPost('content');
-        if (empty($content)) {
-            return redirect()->back()->with('error', 'Comment cannot be empty.');
-        }
-
-        $activityModel = new ActivityModel();
-        $activityModel->insert([
-            'user_id'   => auth()->id(),
-            'component' => 'comments',
-            'type'      => 'new_comment',
-            'content'   => $content,
-            'item_id'   => $activityId,
-        ]);
-
-        return redirect()->back()->with('message', 'Comment posted.');
     }
 
     protected function datingFeed(int $userId)

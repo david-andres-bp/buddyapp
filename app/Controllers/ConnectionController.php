@@ -196,49 +196,4 @@ class ConnectionController extends BaseController
 
         return redirect()->back()->with('message', 'Connection declined.');
     }
-
-    public function follow(int $followedId)
-    {
-        $followerId = auth()->id();
-        if (!$followerId) {
-            return redirect()->to(route_to('login'));
-        }
-
-        if ($followerId === $followedId) {
-            return redirect()->back()->with('error', 'You cannot follow yourself.');
-        }
-
-        $connectionModel = new ConnectionModel();
-        $connectionModel->insert([
-            'initiator_user_id' => $followerId,
-            'friend_user_id'    => $followedId,
-            'status'            => 'accepted',
-        ]);
-
-        // Create a notification activity
-        $activityModel = new \App\Models\ActivityModel();
-        $activityModel->insert([
-            'user_id'   => $followedId,
-            'component' => 'notifications',
-            'type'      => 'new_follower',
-            'content'   => $followerId,
-        ]);
-
-        return redirect()->back()->with('message', 'You are now following this user.');
-    }
-
-    public function unfollow(int $followedId)
-    {
-        $followerId = auth()->id();
-        if (!$followerId) {
-            return redirect()->to(route_to('login'));
-        }
-
-        $connectionModel = new ConnectionModel();
-        $connectionModel->where('initiator_user_id', $followerId)
-                        ->where('friend_user_id', $followedId)
-                        ->delete();
-
-        return redirect()->back()->with('message', 'You have unfollowed this user.');
-    }
 }
