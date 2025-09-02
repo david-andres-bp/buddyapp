@@ -5,7 +5,7 @@
 <?= $this->section('content') ?>
 <div class="max-w-2xl mx-auto">
     <h1 class="text-2xl font-bold mb-4">New Message</h1>
-    <form action="<?= site_url('message-create') ?>" method="post">
+    <form action="<?= url_to('message-create') ?>" method="post">
         <?= csrf_field() ?>
         <div class="space-y-4">
             <div>
