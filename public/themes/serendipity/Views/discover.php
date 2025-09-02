@@ -49,7 +49,7 @@
 
 <!-- Pagination -->
 <div class="mt-8">
-    <?= $pager->appends(request()->getGet())->links() ?>
+    <?= $pager->only(array_keys(request()->getGet()))->links() ?>
 </div>
 
 <?= $this->endSection() ?>
