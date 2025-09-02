@@ -61,6 +61,9 @@ switch ($activeTheme) {
 
 // Routes shared by dating themes (HeartBeat & Serendipity)
 if (in_array($activeTheme, ['heartbeat', 'serendipity'])) {
+    // Feed
+    $routes->get('feed', 'FeedController::index', ['as' => 'feed', 'filter' => 'session']);
+
     // Connections
     $routes->group('connections', ['filter' => 'session'], function ($routes) {
         $routes->get('/', 'ConnectionController::index', ['as' => 'connections']);

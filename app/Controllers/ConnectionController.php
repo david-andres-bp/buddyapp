@@ -131,6 +131,43 @@ class ConnectionController extends BaseController
             return redirect()->back()->with('error', 'Could not accept the connection request.');
         }
 
+        // Log this activity for both users
+        $activity = new \App\Models\ActivityModel();
+        $users    = new \CodeIgniter\Shield\Models\UserModel();
+
+        $initiator = $users->find($request->initiator_user_id);
+        $friend    = $users->find($request->friend_user_id);
+
+        if ($initiator && $friend) {
+            // Activity for the user who accepted the request
+            $activity->insert([
+                'user_id'   => $friend->id,
+                'component' => 'connections',
+                'type'      => 'new_connection',
+                'content'   => sprintf(
+                    '<a href="%s">%s</a> is now connected with <a href="%s">%s</a>.',
+                    site_url('profile/' . $friend->username),
+                    $friend->username,
+                    site_url('profile/' . $initiator->username),
+                    $initiator->username
+                ),
+            ]);
+
+            // Activity for the user who sent the request
+            $activity->insert([
+                'user_id'   => $initiator->id,
+                'component' => 'connections',
+                'type'      => 'new_connection',
+                'content'   => sprintf(
+                    '<a href="%s">%s</a> is now connected with <a href="%s">%s</a>.',
+                    site_url('profile/' . $initiator->username),
+                    $initiator->username,
+                    site_url('profile/' . $friend->username),
+                    $friend->username
+                ),
+            ]);
+        }
+
         return redirect()->back()->with('message', 'Connection accepted!');
     }
 

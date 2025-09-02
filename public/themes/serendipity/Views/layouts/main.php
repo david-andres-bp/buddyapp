@@ -27,6 +27,7 @@
             <nav class="hidden md:flex items-center space-x-6">
                 <?php $current_path = uri_string() === '/' ? '' : uri_string(); ?>
                 <a href="<?= site_url(route_to('home')) ?>" class="<?= ($current_path === '' || $current_path === 'discover') ? 'active' : '' ?> text-slate-700 hover:text-ruby transition font-medium">Discover</a>
+                <a href="<?= site_url(route_to('feed')) ?>" class="<?= str_starts_with($current_path, 'feed') ? 'active' : '' ?> text-slate-700 hover:text-ruby transition font-medium">Feed</a>
                 <a href="<?= site_url(route_to('connections')) ?>" class="<?= str_starts_with($current_path, 'connections') ? 'active' : '' ?> text-slate-700 hover:text-ruby transition font-medium">Connections</a>
                 <a href="<?= site_url(route_to('messages')) ?>" class="<?= str_starts_with($current_path, 'messages') ? 'active' : '' ?> text-slate-700 hover:text-ruby transition font-medium">Messages</a>
                 <a href="<?= site_url(route_to('account-info')) ?>" class="<?= str_starts_with($current_path, 'account') ? 'active' : '' ?> text-slate-700 hover:text-ruby transition font-medium">My Account</a>

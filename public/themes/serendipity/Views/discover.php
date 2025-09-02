@@ -9,15 +9,15 @@
     <form action="<?= site_url(route_to('home')) ?>" method="get" class="grid md:grid-cols-4 gap-4 items-end">
         <div>
             <label for="location" class="block text-sm font-medium text-slate-700">Location</label>
-            <input type="text" name="location" id="location" placeholder="e.g., New York" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-pink focus:ring-pink sm:text-sm">
+            <input type="text" name="location" id="location" value="<?= esc($filters['location'] ?? '', 'attr') ?>" placeholder="e.g., New York" class="mt-1 block w-full">
         </div>
         <div>
             <label for="age_min" class="block text-sm font-medium text-slate-700">Min Age</label>
-            <input type="number" name="age_min" id="age_min" min="18" placeholder="18" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-pink focus:ring-pink sm:text-sm">
+            <input type="number" name="age_min" id="age_min" value="<?= esc($filters['age_min'] ?? '', 'attr') ?>" min="18" placeholder="18" class="mt-1 block w-full">
         </div>
         <div>
             <label for="age_max" class="block text-sm font-medium text-slate-700">Max Age</label>
-            <input type="number" name="age_max" id="age_max" min="18" placeholder="99" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-pink focus:ring-pink sm:text-sm">
+            <input type="number" name="age_max" id="age_max" value="<?= esc($filters['age_max'] ?? '', 'attr') ?>" min="18" placeholder="99" class="mt-1 block w-full">
         </div>
         <div>
             <button type="submit" class="w-full btn btn-primary py-2">Search</button>
@@ -49,7 +49,7 @@
 
 <!-- Pagination -->
 <div class="mt-8">
-    <?= $pager->links() ?>
+    <?= $pager->appends(request()->getGet())->links() ?>
 </div>
 
 <?= $this->endSection() ?>
