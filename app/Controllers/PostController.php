@@ -37,4 +37,55 @@ class PostController extends BaseController
         // Redirect back to the homepage with a success message
         return redirect()->to(route_to('home'))->with('message', 'Post created successfully.');
     }
+
+    public function like(int $postId)
+    {
+        $userId = auth()->id();
+        if (!$userId) {
+            return redirect()->to(route_to('login'));
+        }
+
+        $likeModel = new \App\Models\LikeModel();
+
+        $existingLike = $likeModel->where('user_id', $userId)
+                                  ->where('post_id', $postId)
+                                  ->first();
+
+        if ($existingLike) {
+            // Unlike the post
+            $likeModel->where('user_id', $userId)
+                      ->where('post_id', $postId)
+                      ->delete();
+        } else {
+            // Like the post
+            $likeModel->insert([
+                'user_id' => $userId,
+                'post_id' => $postId,
+            ]);
+        }
+
+        return redirect()->back();
+    }
+
+    public function comment(int $postId)
+    {
+        $userId = auth()->id();
+        if (!$userId) {
+            return redirect()->to(route_to('login'));
+        }
+
+        $content = $this->request->getPost('content');
+        if (empty($content)) {
+            return redirect()->back()->with('error', 'Comment cannot be empty.');
+        }
+
+        $commentModel = new \App\Models\CommentModel();
+        $commentModel->insert([
+            'post_id' => $postId,
+            'user_id' => $userId,
+            'content' => $content,
+        ]);
+
+        return redirect()->back()->with('message', 'Comment posted.');
+    }
 }

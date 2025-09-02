@@ -11,10 +11,6 @@ class ConnectionController extends BaseController
      */
     public function create(int $friendUserId)
     {
-        if (env('app.theme') === 'connectsphere') {
-            return redirect()->to(route_to('home'));
-        }
-
         $userId = auth()->id();
         if (!$userId) {
             return redirect()->to('/account/login')->with('error', 'You must be logged in to connect with users.');
@@ -55,10 +51,6 @@ class ConnectionController extends BaseController
      */
     public function index()
     {
-        if (env('app.theme') === 'connectsphere') {
-            return redirect()->to(route_to('home'));
-        }
-
         $userId = auth()->id();
         if (!$userId) {
             return redirect()->to('/account/login');
@@ -121,10 +113,6 @@ class ConnectionController extends BaseController
      */
     public function accept(int $requestId)
     {
-        if (env('app.theme') === 'connectsphere') {
-            return redirect()->to(route_to('home'));
-        }
-
         $userId = auth()->id();
         if (!$userId) {
             return redirect()->to('/account/login');
@@ -188,10 +176,6 @@ class ConnectionController extends BaseController
      */
     public function decline(int $requestId)
     {
-        if (env('app.theme') === 'connectsphere') {
-            return redirect()->to(route_to('home'));
-        }
-
         $userId = auth()->id();
         if (!$userId) {
             return redirect()->to('/account/login');
@@ -211,61 +195,5 @@ class ConnectionController extends BaseController
         }
 
         return redirect()->back()->with('message', 'Connection declined.');
-    }
-
-    public function follow(int $followedId)
-    {
-        $followerId = auth()->id();
-        if (!$followerId) {
-            return redirect()->to(route_to('login'));
-        }
-
-        if ($followerId === $followedId) {
-            return redirect()->back()->with('error', 'You cannot follow yourself.');
-        }
-
-        $db = \Config\Database::connect();
-        $builder = $db->table('followers');
-
-        // Check if already following
-        $builder->where('follower_id', $followerId);
-        $builder->where('followed_id', $followedId);
-        if ($builder->countAllResults() > 0) {
-            return redirect()->back()->with('error', 'You are already following this user.');
-        }
-
-        // Create the follow relationship
-        $builder->insert([
-            'follower_id' => $followerId,
-            'followed_id' => $followedId,
-        ]);
-
-        // Create a notification
-        $notificationModel = new \App\Models\NotificationModel();
-        $notificationModel->insert([
-            'user_id' => $followedId,
-            'type'    => 'new_follower',
-            'data'    => json_encode(['follower_id' => $followerId]),
-        ]);
-
-        return redirect()->back()->with('message', 'You are now following this user.');
-    }
-
-    public function unfollow(int $followedId)
-    {
-        $followerId = auth()->id();
-        if (!$followerId) {
-            return redirect()->to(route_to('login'));
-        }
-
-        $db = \Config\Database::connect();
-        $builder = $db->table('followers');
-
-        // Delete the follow relationship
-        $builder->where('follower_id', $followerId);
-        $builder->where('followed_id', $followedId);
-        $builder->delete();
-
-        return redirect()->back()->with('message', 'You have unfollowed this user.');
     }
 }

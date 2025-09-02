@@ -46,10 +46,15 @@ class FeedController extends BaseController
                            ->orderBy('created_at', 'DESC')
                            ->findAll();
 
-        // Get user information for each post
+        // Get user information, like counts, and comment counts for each post
+        $likeModel = new \App\Models\LikeModel();
+        $commentModel = new \App\Models\CommentModel();
         foreach ($posts as &$post) {
             $user = $userModel->find($post['user_id']);
             $post['user'] = $user;
+            $post['like_count'] = $likeModel->where('post_id', $post['id'])->countAllResults();
+            $post['is_liked_by_user'] = $likeModel->where('post_id', $post['id'])->where('user_id', $userId)->countAllResults() > 0;
+            $post['comment_count'] = $commentModel->where('post_id', $post['id'])->countAllResults();
         }
 
         // Get follower/following counts

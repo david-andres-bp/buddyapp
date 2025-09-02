@@ -6,8 +6,9 @@
 <div class="flex h-screen">
     <!-- Left Pane: Thread List -->
     <div class="w-1/3 bg-white border-r">
-        <div class="p-5 border-b">
+        <div class="p-5 border-b flex justify-between items-center">
             <h1 class="text-xl font-bold">Messages</h1>
+            <a href="<?= url_to('cs-message-new') ?>" class="bg-sky-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-sky-600">New Message</a>
         </div>
         <div>
             <?php if (!empty($threads)) : ?>

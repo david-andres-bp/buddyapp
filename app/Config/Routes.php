@@ -96,10 +96,12 @@ if ($activeTheme === 'connectsphere') {
 
     // Posts
     $routes->post('posts/create', 'PostController::create', ['as' => 'post-create', 'filter' => 'session']);
+    $routes->post('posts/like/(:num)', 'PostController::like/$1', ['as' => 'post-like', 'filter' => 'session']);
+    $routes->post('posts/comment/(:num)', 'PostController::comment/$1', ['as' => 'post-comment', 'filter' => 'session']);
 
     // Follow/Unfollow
-    $routes->post('follow/(:num)', 'ConnectionController::follow/$1', ['as' => 'follow', 'filter' => 'session']);
-    $routes->post('unfollow/(:num)', 'ConnectionController::unfollow/$1', ['as' => 'unfollow', 'filter' => 'session']);
+    $routes->post('follow/(:num)', 'ConnectSphere\ConnectionController::follow/$1', ['as' => 'follow', 'filter' => 'session']);
+    $routes->post('unfollow/(:num)', 'ConnectSphere\ConnectionController::unfollow/$1', ['as' => 'unfollow', 'filter' => 'session']);
 
     // Pin/Unpin
     $routes->post('pin/(:num)', 'ProfileController::pin/$1', ['as' => 'pin-profile', 'filter' => 'session']);

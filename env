@@ -26,7 +26,7 @@ app.baseURL = 'http://localhost:8090/buddyapp/public/'
 # app.forceGlobalSecureRequests = false
 # app.CSPEnabled = false
 
-app.theme = serendipity
+app.theme = connectsphere
 
 #--------------------------------------------------------------------
 # DATABASE

@@ -34,8 +34,8 @@ class ProfileController extends BaseController
         $activeTheme = env('app.theme');
 
         if ($activeTheme === 'connectsphere') {
-            // Fetch the user's posts
             $postModel = new PostModel();
+            // Fetch the user's posts
             $posts = $postModel->where('user_id', $user->id)
                                ->orderBy('created_at', 'DESC')
                                ->findAll();
@@ -67,6 +67,19 @@ class ProfileController extends BaseController
             $followingCount = $db->table('followers')->where('follower_id', $user->id)->countAllResults();
             $data['followersCount'] = $followersCount;
             $data['followingCount'] = $followingCount;
+
+            // Fetch liked posts
+            $likeModel = new \App\Models\LikeModel();
+            $likedPostIds = $likeModel->where('user_id', $user->id)->findColumn('post_id');
+            if (!empty($likedPostIds)) {
+                $data['liked_posts'] = $postModel->whereIn('id', $likedPostIds)->findAll();
+            } else {
+                $data['liked_posts'] = [];
+            }
+
+            // Fetch media
+            $mediaModel = new \App\Models\MediaModel();
+            $data['media'] = $mediaModel->where('user_id', $user->id)->findAll();
         }
 
         // The ThemeView library will look for 'profile.php' in the theme's Views folder.

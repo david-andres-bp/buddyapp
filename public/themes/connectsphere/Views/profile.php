@@ -81,19 +81,36 @@
                     </div>
                 <?php endif; ?>
             </div>
-            <div x-show="activeTab === 'likes'">
-                <div class="bg-white p-5 rounded-b-lg shadow-sm">
-                    <p class="text-center text-slate-500 py-10"><?= esc($user->username) ?> hasn't liked any posts yet.</p>
-                </div>
+                    <div x-show="activeTab === 'likes'" class="space-y-6">
+                        <?php if (!empty($liked_posts)) : ?>
+                            <?php foreach ($liked_posts as $post) : ?>
+                                <div class="bg-white p-5 rounded-b-lg shadow-sm">
+                                    <div class="flex items-center space-x-3">
+                                        <img src="https://placehold.co/48x48/1E293B/FFFFFF?text=<?= substr($user->username, 0, 2) ?>" alt="<?= esc($user->username) ?>" class="w-12 h-12 rounded-full">
+                                        <div>
+                                            <p class="font-bold"><?= esc($user->username) ?> <span class="font-normal text-slate-500">@<?= esc($user->username) ?> · <?= esc(CodeIgniter\I18n\Time::parse($post['created_at'])->humanize()) ?></span></p>
+                                            <p><?= esc($post['content']) ?></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else : ?>
+                            <div class="bg-white p-5 rounded-b-lg shadow-sm text-center">
+                                <p class="text-slate-500 py-10"><?= esc($user->username) ?> hasn't liked any posts yet.</p>
+                            </div>
+                        <?php endif; ?>
             </div>
              <div x-show="activeTab === 'media'">
                 <div class="bg-white p-5 rounded-b-lg shadow-sm">
-                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                        <img src="https://placehold.co/400x400/94A3B8/FFFFFF?text=Media" class="rounded-lg aspect-square object-cover">
-                        <img src="https://placehold.co/400x400/94A3B8/FFFFFF?text=Media" class="rounded-lg aspect-square object-cover">
-                        <img src="https://placehold.co/400x400/94A3B8/FFFFFF?text=Media" class="rounded-lg aspect-square object-cover">
-                        <img src="https://placehold.co/400x400/94A3B8/FFFFFF?text=Media" class="rounded-lg aspect-square object-cover">
-                    </div>
+                    <?php if (!empty($media)) : ?>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                            <?php foreach ($media as $item) : ?>
+                                <img src="<?= site_url('uploads/' . $item['file_name']) ?>" class="rounded-lg aspect-square object-cover">
+                            <?php endforeach; ?>
+                        </div>
+                    <?php else : ?>
+                        <p class="text-center text-slate-500 py-10"><?= esc($user->username) ?> hasn't posted any media yet.</p>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

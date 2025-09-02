@@ -17,28 +17,7 @@ class MessageController extends BaseController
         }
 
         $userId = auth()->id();
-
-        $participantModel = new ThreadParticipantModel();
-        $threadModel = new ThreadModel();
-        $messageModel = new MessageModel();
-        $userModel = new UserModel();
-
-        $threads = $participantModel
-            ->select('threads.*')
-            ->join('threads', 'threads.id = thread_participants.thread_id')
-            ->where('thread_participants.user_id', $userId)
-            ->findAll();
-
-        foreach ($threads as &$thread) {
-            // Get participants
-            $participants = $participantModel->where('thread_id', $thread['id'])->findAll();
-            $participantIds = array_column($participants, 'user_id');
-            $otherParticipantIds = array_diff($participantIds, [$userId]);
-            $thread['participants'] = $userModel->whereIn('id', $otherParticipantIds)->findAll();
-
-            // Get last message
-            $thread['last_message'] = $messageModel->where('thread_id', $thread['id'])->orderBy('created_at', 'DESC')->first();
-        }
+        $threads = $this->getUserThreads($userId);
 
         return view('messages/index', ['threads' => $threads]);
     }
@@ -76,27 +55,52 @@ class MessageController extends BaseController
             }
         }
 
-        // Fetch all threads for the left pane
-        $allThreads = $participantModel
+        $data = [
+            'thread'   => $thread,
+            'messages' => array_filter($messages, fn($m) => $m['sender'] !== null),
+            'threads' => $this->getUserThreads($userId),
+        ];
+
+        return view('messages/show', $data);
+    }
+
+    private function getUserThreads(int $userId): array
+    {
+        $participantModel = new ThreadParticipantModel();
+        $threadModel = new ThreadModel();
+        $messageModel = new MessageModel();
+        $userModel = new UserModel();
+
+        $threads = $participantModel
             ->select('threads.*')
             ->join('threads', 'threads.id = thread_participants.thread_id')
             ->where('thread_participants.user_id', $userId)
             ->findAll();
 
-        foreach ($allThreads as &$t) {
-            $participants = $participantModel->where('thread_id', $t['id'])->findAll();
+        foreach ($threads as &$thread) {
+            // Get participants
+            $participants = $participantModel->where('thread_id', $thread['id'])->findAll();
             $participantIds = array_column($participants, 'user_id');
             $otherParticipantIds = array_diff($participantIds, [$userId]);
-            $t['participants'] = $userModel->whereIn('id', $otherParticipantIds)->findAll();
+            $thread['participants'] = $userModel->whereIn('id', $otherParticipantIds)->findAll();
+
+            // Get last message
+            $thread['last_message'] = $messageModel->where('thread_id', $thread['id'])->orderBy('created_at', 'DESC')->first();
         }
 
-        $data = [
-            'thread'   => $thread,
-            'messages' => array_filter($messages, fn($m) => $m['sender'] !== null),
-            'threads' => $allThreads,
-        ];
+        return $threads;
+    }
 
-        return view('messages/show', $data);
+    public function new()
+    {
+        if (!auth()->loggedIn()) {
+            return redirect()->to(route_to('login'));
+        }
+
+        $userModel = new UserModel();
+        $users = $userModel->findAll();
+
+        return view('messages/new', ['users' => $users]);
     }
 
     public function create()

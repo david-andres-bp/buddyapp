@@ -30,20 +30,7 @@
         <div class="bg-white p-5 rounded-lg shadow-sm">
             <h3 class="font-bold mb-4">Pinned Profiles</h3>
             <ul class="space-y-4">
-                <li class="flex items-center space-x-3 cursor-pointer group">
-                    <img src="https://placehold.co/40x40/FBBF24/FFFFFF?text=LS" alt="Laura" class="w-10 h-10 rounded-full">
-                    <div>
-                        <p class="font-semibold group-hover:text-sky-500">Laura Smith</p>
-                        <p class="text-sm text-slate-500">@lauras</p>
-                    </div>
-                </li>
-                <li class="flex items-center space-x-3 cursor-pointer group">
-                    <img src="https://placehold.co/40x40/34D399/FFFFFF?text=CW" alt="Chris" class="w-10 h-10 rounded-full">
-                    <div>
-                        <p class="font-semibold group-hover:text-sky-500">Chris Williams</p>
-                        <p class="text-sm text-slate-500">@chrisw</p>
-                    </div>
-                </li>
+                <!-- Pinned profiles would be dynamic here -->
             </ul>
         </div>
     </aside>
@@ -85,35 +72,14 @@
         <div class="bg-white p-5 rounded-lg shadow-sm mb-6">
             <h3 class="font-bold mb-4">Who to Follow</h3>
             <ul class="space-y-4">
-               <li class="flex items-center justify-between">
-                    <div class="flex items-center space-x-3">
-                        <img src="https://placehold.co/40x40/F472B6/FFFFFF?text=BR" alt="Ben" class="w-10 h-10 rounded-full">
-                        <div>
-                            <p class="font-semibold">Ben Rivera</p>
-                            <p class="text-sm text-slate-500">@benr</p>
-                        </div>
-                    </div>
-                    <button class="bg-slate-800 text-white text-sm font-semibold px-4 py-1.5 rounded-full hover:bg-slate-900">Follow</button>
-               </li>
-               <li class="flex items-center justify-between">
-                    <div class="flex items-center space-x-3">
-                        <img src="https://placehold.co/40x40/A78BFA/FFFFFF?text=OM" alt="Olivia" class="w-10 h-10 rounded-full">
-                        <div>
-                            <p class="font-semibold">Olivia Martinez</p>
-                            <p class="text-sm text-slate-500">@oliviam</p>
-                        </div>
-                    </div>
-                    <button class="bg-slate-800 text-white text-sm font-semibold px-4 py-1.5 rounded-full hover:bg-slate-900">Follow</button>
-               </li>
+               <!-- Who to follow would be dynamic here -->
             </ul>
         </div>
         <!-- Trending -->
         <div class="bg-white p-5 rounded-lg shadow-sm">
              <h3 class="font-bold mb-4">Trending Topics</h3>
              <ul class="space-y-2">
-                <li class="text-slate-600 hover:text-sky-500"><a href="#"><span class="font-bold">#PHP</span> <span class="text-sm text-slate-400">15.2k Posts</span></a></li>
-                <li class="text-slate-600 hover:text-sky-500"><a href="#"><span class="font-bold">#CodeIgniter4</span> <span class="text-sm text-slate-400">8.9k Posts</span></a></li>
-                <li class="text-slate-600 hover:text-sky-500"><a href="#"><span class="font-bold">#WebDevelopment</span> <span class="text-sm text-slate-400">45.7k Posts</span></a></li>
+                <!-- Trending topics would be dynamic here -->
              </ul>
         </div>
     </aside>
