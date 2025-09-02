@@ -215,6 +215,15 @@ class ConnectionController extends BaseController
             'status'            => 'accepted',
         ]);
 
+        // Create a notification activity
+        $activityModel = new \App\Models\ActivityModel();
+        $activityModel->insert([
+            'user_id'   => $followedId,
+            'component' => 'notifications',
+            'type'      => 'new_follower',
+            'content'   => $followerId,
+        ]);
+
         return redirect()->back()->with('message', 'You are now following this user.');
     }
 

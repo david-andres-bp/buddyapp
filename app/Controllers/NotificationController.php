@@ -2,7 +2,6 @@
 
 namespace App\Controllers;
 
-use App\Models\NotificationModel;
 use CodeIgniter\Shield\Models\UserModel;
 
 class NotificationController extends BaseController
@@ -20,24 +19,24 @@ class NotificationController extends BaseController
         $currentUser = $userModel->find($userId);
 
         // Fetch all notifications for the user
-        $notificationModel = new NotificationModel();
-        $notifications = $notificationModel->where('user_id', $userId)
-                                           ->orderBy('created_at', 'DESC')
-                                           ->findAll();
+        $activityModel = new \App\Models\ActivityModel();
+        $notifications = $activityModel->where('component', 'notifications')
+                                       ->where('user_id', $userId)
+                                       ->orderBy('created_at', 'DESC')
+                                       ->findAll();
 
         // Get user information for each notification
         foreach ($notifications as &$notification) {
-            $data = json_decode($notification['data']);
-            if (isset($data->follower_id)) {
-                $follower = $userModel->find($data->follower_id);
-                $notification['follower'] = $follower;
+            if ($notification->type === 'new_follower') {
+                $follower = $userModel->find($notification->content);
+                $notification->follower = $follower;
             }
         }
 
         // Get follower/following counts
-        $db = \Config\Database::connect();
-        $followersCount = $db->table('followers')->where('followed_id', $userId)->countAllResults();
-        $followingCount = $db->table('followers')->where('follower_id', $userId)->countAllResults();
+        $connectionModel = new \App\Models\ConnectionModel();
+        $followersCount = $connectionModel->where('friend_user_id', $userId)->where('status', 'accepted')->countAllResults();
+        $followingCount = $connectionModel->where('initiator_user_id', $userId)->where('status', 'accepted')->countAllResults();
 
         $data = [
             'notifications' => $notifications,

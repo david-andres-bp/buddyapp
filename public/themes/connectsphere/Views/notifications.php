@@ -46,13 +46,13 @@
             <div>
                 <?php if (!empty($notifications)) : ?>
                     <?php foreach ($notifications as $notification) : ?>
-                        <?php if ($notification['type'] === 'new_follower') : ?>
+                        <?php if ($notification->type === 'new_follower' && isset($notification->follower)) : ?>
                             <!-- Notification Item: Follow -->
                             <div class="flex items-start space-x-4 p-5 border-b hover:bg-slate-50 cursor-pointer">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-sky-500 mt-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" /></svg>
                                 <div>
-                                    <img src="https://placehold.co/40x40/34D399/FFFFFF?text=<?= substr($notification['follower']->username, 0, 2) ?>" alt="User Avatar" class="w-10 h-10 rounded-full mb-2">
-                                    <p><a href="<?= site_url('profile/' . $notification['follower']->username) ?>" class="font-bold"><?= esc($notification['follower']->username) ?></a> followed you. <span class="text-slate-500 text-sm"><?= esc(CodeIgniter\I18n\Time::parse($notification['created_at'])->humanize()) ?></span></p>
+                                    <img src="https://placehold.co/40x40/34D399/FFFFFF?text=<?= substr($notification->follower->username, 0, 2) ?>" alt="User Avatar" class="w-10 h-10 rounded-full mb-2">
+                                    <p><a href="<?= site_url('profile/' . $notification->follower->username) ?>" class="font-bold"><?= esc($notification->follower->username) ?></a> followed you. <span class="text-slate-500 text-sm"><?= esc(CodeIgniter\I18n\Time::parse($notification->created_at)->humanize()) ?></span></p>
                                 </div>
                             </div>
                         <?php endif; ?>

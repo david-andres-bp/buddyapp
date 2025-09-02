@@ -54,7 +54,7 @@
             <?php endif; ?>
         </div>
         <div class="p-5 bg-white border-t">
-            <form action="<?= url_to('message-reply', $thread->id) ?>" method="post">
+            <form action="<?= site_url('message-reply/' . $thread->id) ?>" method="post">
                 <?= csrf_field() ?>
                 <div class="flex">
                     <input type="text" name="message" class="w-full border-slate-300 rounded-l-lg" placeholder="Type your message...">

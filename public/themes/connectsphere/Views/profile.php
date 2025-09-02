@@ -14,7 +14,7 @@
                 </div>
                 <div class="flex space-x-2">
                     <?php if (auth()->loggedIn() && auth()->id() !== $user->id) : ?>
-                        <form action="<?= $isFollowing ? url_to('unfollow', $user->id) : url_to('follow', $user->id) ?>" method="post" class="inline">
+                        <form action="<?= $isFollowing ? site_url('unfollow/' . $user->id) : site_url('follow/' . $user->id) ?>" method="post" class="inline">
                             <?= csrf_field() ?>
                             <button type="submit" class="bg-sky-500 text-white font-semibold px-4 py-2 rounded-full hover:bg-sky-600">
                                 <?= $isFollowing ? 'Unfollow' : 'Follow' ?>

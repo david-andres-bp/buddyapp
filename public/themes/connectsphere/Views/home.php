@@ -53,7 +53,7 @@
     <div class="space-y-6">
        <!-- Post Composer -->
         <div class="bg-white p-4 rounded-lg shadow-sm">
-            <form action="<?= route_to('post-create') ?>" method="post">
+            <form action="<?= site_url('post-create') ?>" method="post">
                 <?= csrf_field() ?>
                 <textarea name="content" class="w-full border-0 p-2 text-lg focus:ring-0" placeholder="What's on your mind?"></textarea>
                 <div class="flex justify-between items-center mt-2 pt-2 border-t">
@@ -82,7 +82,7 @@
                         <div class="flex justify-around items-center mt-4 pt-3 border-t text-slate-500">
                             <button @click="open = !open" class="flex items-center space-x-2 hover:text-sky-500"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg> <span><?= $post->comment_count ?></span></button>
                             <button class="flex items-center space-x-2 hover:text-green-500"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h5M5.5 9.5l1.5-1.5a4.243 4.243 0 016 0L16 11M20 20v-5h-5M18.5 14.5l-1.5 1.5a4.243 4.243 0 01-6 0L8 13" /></svg> <span>0</span></button>
-                            <form action="<?= url_to('post-like', $post->id) ?>" method="post" class="inline">
+                            <form action="<?= site_url('post-like/' . $post->id) ?>" method="post" class="inline">
                                 <?= csrf_field() ?>
                                 <button type="submit" class="flex items-center space-x-2 hover:text-pink-500 <?= $post->is_liked_by_user ? 'text-pink-500' : '' ?>">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
@@ -92,7 +92,7 @@
                             <button class="flex items-center space-x-2 hover:text-sky-500"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg></button>
                         </div>
                         <div x-show="open" class="mt-4">
-                            <form action="<?= url_to('post-comment', $post->id) ?>" method="post">
+                            <form action="<?= site_url('post-comment/' . $post->id) ?>" method="post">
                                 <?= csrf_field() ?>
                                 <div class="flex">
                                     <input type="text" name="content" class="w-full border-slate-300 rounded-l-lg" placeholder="Add a comment...">

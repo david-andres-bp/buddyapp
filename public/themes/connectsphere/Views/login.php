@@ -22,7 +22,7 @@
                 </h2>
             </div>
             <div class="bg-white p-8 rounded-xl shadow-lg space-y-6">
-                <form class="space-y-6" action="<?= url_to('login') ?>" method="POST">
+                <form class="space-y-6" action="<?= site_url('login') ?>" method="POST">
                     <?= csrf_field() ?>
                     <div>
                         <label for="email-address" class="sr-only">Email address</label>
