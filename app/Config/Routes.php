@@ -51,7 +51,7 @@ switch ($activeTheme) {
         $routes->get('/', 'DiscoverController::index', ['as' => 'home', 'filter' => 'session']);
         break;
     case 'connectsphere':
-        $routes->get('/', 'GroupController::index', ['as' => 'home', 'filter' => 'session']);
+        $routes->get('/', 'FeedController::index', ['as' => 'home', 'filter' => 'session']);
         break;
     default:
         // Fallback for any other case (null, empty, or unknown theme)
@@ -92,6 +92,29 @@ if ($activeTheme === 'connectsphere') {
         $routes->get('(:segment)', 'GroupController::show/$1', ['as' => 'group-show']);
         $routes->post('join/(:num)', 'GroupController::join/$1');
         $routes->post('leave/(:num)', 'GroupController::leave/$1');
+    });
+
+    // Posts
+    $routes->post('posts/create', 'PostController::create', ['as' => 'post-create', 'filter' => 'session']);
+
+    // Follow/Unfollow
+    $routes->post('follow/(:num)', 'ConnectionController::follow/$1', ['as' => 'follow', 'filter' => 'session']);
+    $routes->post('unfollow/(:num)', 'ConnectionController::unfollow/$1', ['as' => 'unfollow', 'filter' => 'session']);
+
+    // Pin/Unpin
+    $routes->post('pin/(:num)', 'ProfileController::pin/$1', ['as' => 'pin-profile', 'filter' => 'session']);
+    $routes->post('unpin/(:num)', 'ProfileController::unpin/$1', ['as' => 'unpin-profile', 'filter' => 'session']);
+
+    // Notifications
+    $routes->get('notifications', 'NotificationController::index', ['as' => 'notifications', 'filter' => 'session']);
+
+    // Messages
+    $routes->group('messages', ['namespace' => 'App\Controllers\ConnectSphere', 'filter' => 'session'], function ($routes) {
+        $routes->get('/', 'MessageController::index', ['as' => 'cs-messages']);
+        $routes->get('new', 'MessageController::new', ['as' => 'cs-message-new']);
+        $routes->post('create', 'MessageController::create', ['as' => 'cs-message-create']);
+        $routes->get('(:num)', 'MessageController::show/$1', ['as' => 'cs-message-show']);
+        $routes->post('reply/(:num)', 'MessageController::reply/$1', ['as' => 'cs-message-reply']);
     });
 }
 

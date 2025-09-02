@@ -4,20 +4,20 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class MessageModel extends Model
+class ThreadModel extends Model
 {
-    protected $table            = 'messages';
+    protected $table            = 'threads';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['thread_id', 'user_id', 'content'];
+    protected $allowedFields    = ['subject'];
 
     // Dates
     protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
-    protected $updatedField  = null;
+    protected $updatedField  = 'updated_at';
     protected $deletedField  = null;
 }

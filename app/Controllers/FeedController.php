@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\ConnectionModel;
 use App\Models\ActivityModel;
+use App\Models\PostModel;
 use CodeIgniter\Shield\Models\UserModel;
 
 class FeedController extends BaseController
@@ -15,6 +16,90 @@ class FeedController extends BaseController
             return redirect()->to(route_to('login'));
         }
 
+        $activeTheme = env('app.theme');
+
+        if ($activeTheme === 'connectsphere') {
+            return $this->connectsphereFeed($userId);
+        }
+
+        return $this->datingFeed($userId);
+    }
+
+    protected function connectsphereFeed(int $userId)
+    {
+        $userModel = new UserModel();
+        $currentUser = $userModel->find($userId);
+
+        // Get the list of users that the current user follows
+        $db = \Config\Database::connect();
+        $builder = $db->table('followers');
+        $builder->where('follower_id', $userId);
+        $followedUsers = $builder->get()->getResultArray();
+        $followedUserIds = array_column($followedUsers, 'followed_id');
+
+        // Add the current user's ID to the list, so they see their own posts
+        $followedUserIds[] = $userId;
+
+        // Get all the posts from the followed users
+        $postModel = new PostModel();
+        $posts = $postModel->whereIn('user_id', $followedUserIds)
+                           ->orderBy('created_at', 'DESC')
+                           ->findAll();
+
+        // Get user information for each post
+        foreach ($posts as &$post) {
+            $user = $userModel->find($post['user_id']);
+            $post['user'] = $user;
+        }
+
+        // Get follower/following counts
+        $followersCount = $db->table('followers')->where('followed_id', $userId)->countAllResults();
+        $followingCount = $db->table('followers')->where('follower_id', $userId)->countAllResults();
+
+        // Get pinned profiles
+        $pinnedProfileModel = new \App\Models\PinnedProfileModel();
+        $pinnedProfiles = $pinnedProfileModel
+            ->select('users.*')
+            ->join('users', 'users.id = pinned_profiles.pinned_user_id')
+            ->where('pinned_profiles.user_id', $userId)
+            ->findAll();
+
+        // Get "Who to Follow" suggestions
+        $subquery = $db->table('followers')->select('followed_id')->where('follower_id', $userId);
+        $suggestions = $userModel->where('id !=', $userId)
+                                 ->whereNotIn('id', $subquery)
+                                 ->limit(5)
+                                 ->findAll();
+
+        // Get trending topics
+        $allPosts = $postModel->findAll();
+        $hashtags = [];
+        foreach ($allPosts as $post) {
+            preg_match_all('/#(\w+)/', $post['content'], $matches);
+            if (!empty($matches[1])) {
+                $hashtags = array_merge($hashtags, $matches[1]);
+            }
+        }
+        $trending = array_count_values($hashtags);
+        arsort($trending);
+        $trending = array_slice($trending, 0, 5);
+
+        $data = [
+            'posts' => $posts,
+            'currentUser' => $currentUser,
+            'followersCount' => $followersCount,
+            'followingCount' => $followingCount,
+            'pinnedProfiles' => $pinnedProfiles,
+            'suggestions' => $suggestions,
+            'trending' => $trending,
+        ];
+
+        // Pass the posts to the view
+        return view('home', $data);
+    }
+
+    protected function datingFeed(int $userId)
+    {
         $connectionModel = new ConnectionModel();
         $activityModel = new ActivityModel();
         $userModel = new UserModel();
