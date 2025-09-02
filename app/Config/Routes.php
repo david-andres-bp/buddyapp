@@ -95,28 +95,28 @@ if ($activeTheme === 'connectsphere') {
     });
 
     // Posts
-    $routes->post('posts/create', 'PostController::create', ['as' => 'post-create', 'filter' => 'session']);
-    $routes->post('posts/like/(:num)', 'PostController::like/$1', ['as' => 'post-like', 'filter' => 'session']);
-    $routes->post('posts/comment/(:num)', 'PostController::comment/$1', ['as' => 'post-comment', 'filter' => 'session']);
+    $routes->post('posts/create', 'FeedController::post', ['as' => 'post-create', 'filter' => 'session']);
 
     // Follow/Unfollow
-    $routes->post('follow/(:num)', 'ConnectSphere\ConnectionController::follow/$1', ['as' => 'follow', 'filter' => 'session']);
-    $routes->post('unfollow/(:num)', 'ConnectSphere\ConnectionController::unfollow/$1', ['as' => 'unfollow', 'filter' => 'session']);
+    $routes->post('follow/(:num)', 'ConnectionController::follow/$1', ['as' => 'follow', 'filter' => 'session']);
+    $routes->post('unfollow/(:num)', 'ConnectionController::unfollow/$1', ['as' => 'unfollow', 'filter' => 'session']);
 
     // Pin/Unpin
     $routes->post('pin/(:num)', 'ProfileController::pin/$1', ['as' => 'pin-profile', 'filter' => 'session']);
     $routes->post('unpin/(:num)', 'ProfileController::unpin/$1', ['as' => 'unpin-profile', 'filter' => 'session']);
+    $routes->post('posts/like/(:num)', 'FeedController::like/$1', ['as' => 'post-like', 'filter' => 'session']);
+    $routes->post('posts/comment/(:num)', 'FeedController::comment/$1', ['as' => 'post-comment', 'filter' => 'session']);
 
     // Notifications
     $routes->get('notifications', 'NotificationController::index', ['as' => 'notifications', 'filter' => 'session']);
 
     // Messages
-    $routes->group('messages', ['namespace' => 'App\Controllers\ConnectSphere', 'filter' => 'session'], function ($routes) {
-        $routes->get('/', 'MessageController::index', ['as' => 'cs-messages']);
-        $routes->get('new', 'MessageController::new', ['as' => 'cs-message-new']);
-        $routes->post('create', 'MessageController::create', ['as' => 'cs-message-create']);
-        $routes->get('(:num)', 'MessageController::show/$1', ['as' => 'cs-message-show']);
-        $routes->post('reply/(:num)', 'MessageController::reply/$1', ['as' => 'cs-message-reply']);
+    $routes->group('messages', ['filter' => 'session'], function ($routes) {
+        $routes->get('/', 'MessageController::index', ['as' => 'messages']);
+        $routes->get('new', 'MessageController::new', ['as' => 'message-new']);
+        $routes->post('create', 'MessageController::create', ['as' => 'message-create']);
+        $routes->get('(:num)', 'MessageController::show/$1', ['as' => 'message-show']);
+        $routes->post('reply/(:num)', 'MessageController::reply/$1', ['as' => 'message-reply']);
     });
 }
 

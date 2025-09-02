@@ -1,6 +1,6 @@
 <?= $this->extend('layout') ?>
 
-<?= $this->section('title') ?><?= esc($thread['subject']) ?><?= $this->endSection() ?>
+<?= $this->section('title') ?><?= esc($thread->subject) ?><?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
 <div class="flex h-screen">
@@ -13,13 +13,13 @@
             <?php if (!empty($threads)) : ?>
                 <ul>
                     <?php foreach ($threads as $t) : ?>
-                        <li class="p-5 border-b hover:bg-slate-50 cursor-pointer <?= $t['id'] === $thread['id'] ? 'bg-slate-100' : '' ?>">
-                            <a href="<?= site_url('messages/' . $t['id']) ?>">
+                        <li class="p-5 border-b hover:bg-slate-50 cursor-pointer <?= $t->id === $thread->id ? 'bg-slate-100' : '' ?>">
+                            <a href="<?= url_to('message-show', $t->id) ?>">
                                 <p class="font-bold">
                                     <?php
                                     $participantNames = array_map(function ($p) {
                                         return esc($p->username);
-                                    }, $t['participants']);
+                                    }, $t->participants);
                                     echo implode(', ', $participantNames);
                                     ?>
                                 </p>
@@ -36,16 +36,16 @@
     <!-- Right Pane: Chat Window -->
     <div class="w-2/3 bg-slate-100 flex flex-col">
         <div class="p-5 border-b bg-white">
-            <h2 class="text-lg font-bold"><?= esc($thread['subject']) ?></h2>
+            <h2 class="text-lg font-bold"><?= esc($thread->subject) ?></h2>
         </div>
         <div class="flex-grow p-5 overflow-y-auto">
             <?php if (!empty($messages)) : ?>
                 <?php foreach ($messages as $message) : ?>
-                    <div class="flex <?= $message['user_id'] == auth()->id() ? 'justify-end' : 'justify-start' ?> mb-4">
+                    <div class="flex <?= $message->sender_id == auth()->id() ? 'justify-end' : 'justify-start' ?> mb-4">
                         <div class="bg-white rounded-lg p-3 max-w-lg">
-                            <p class="font-bold"><?= esc($message['sender']->username) ?></p>
-                            <p><?= esc($message['content']) ?></p>
-                            <p class="text-xs text-slate-500 mt-1 text-right"><?= esc(CodeIgniter\I18n\Time::parse($message['created_at'])->humanize()) ?></p>
+                            <p class="font-bold"><?= esc($message->sender->username) ?></p>
+                            <p><?= esc($message->message) ?></p>
+                            <p class="text-xs text-slate-500 mt-1 text-right"><?= esc(CodeIgniter\I18n\Time::parse($message->created_at)->humanize()) ?></p>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -54,10 +54,10 @@
             <?php endif; ?>
         </div>
         <div class="p-5 bg-white border-t">
-            <form action="<?= site_url('messages/reply/' . $thread['id']) ?>" method="post">
+            <form action="<?= url_to('message-reply', $thread->id) ?>" method="post">
                 <?= csrf_field() ?>
                 <div class="flex">
-                    <input type="text" name="content" class="w-full border-slate-300 rounded-l-lg" placeholder="Type your message...">
+                    <input type="text" name="message" class="w-full border-slate-300 rounded-l-lg" placeholder="Type your message...">
                     <button type="submit" class="bg-sky-500 text-white font-semibold px-6 py-2 rounded-r-lg hover:bg-sky-600">Send</button>
                 </div>
             </form>

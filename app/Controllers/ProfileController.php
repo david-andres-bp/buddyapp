@@ -34,52 +34,39 @@ class ProfileController extends BaseController
         $activeTheme = env('app.theme');
 
         if ($activeTheme === 'connectsphere') {
-            $postModel = new PostModel();
+            $activityModel = new ActivityModel();
             // Fetch the user's posts
-            $posts = $postModel->where('user_id', $user->id)
-                               ->orderBy('created_at', 'DESC')
-                               ->findAll();
+            $posts = $activityModel->where('component', 'posts')
+                                   ->where('user_id', $user->id)
+                                   ->orderBy('created_at', 'DESC')
+                                   ->findAll();
             $data['posts'] = $posts;
 
             // Check if the current user is following this user
+            $connectionModel = new ConnectionModel();
             $isFollowing = false;
             if (auth()->loggedIn()) {
-                $db = \Config\Database::connect();
-                $builder = $db->table('followers');
-                $builder->where('follower_id', auth()->id());
-                $builder->where('followed_id', $user->id);
-                $isFollowing = $builder->countAllResults() > 0;
+                $isFollowing = $connectionModel->where('initiator_user_id', auth()->id())
+                                               ->where('friend_user_id', $user->id)
+                                               ->countAllResults() > 0;
             }
             $data['isFollowing'] = $isFollowing;
 
-            // Check if the current user has pinned this profile
-            $isPinned = false;
-            if (auth()->loggedIn()) {
-                $pinnedProfileModel = new \App\Models\PinnedProfileModel();
-                $isPinned = $pinnedProfileModel->where('user_id', auth()->id())
-                                               ->where('pinned_user_id', $user->id)
-                                               ->countAllResults() > 0;
-            }
-            $data['isPinned'] = $isPinned;
-
             // Get follower/following counts
-            $followersCount = $db->table('followers')->where('followed_id', $user->id)->countAllResults();
-            $followingCount = $db->table('followers')->where('follower_id', $user->id)->countAllResults();
+            $followersCount = $connectionModel->where('friend_user_id', $user->id)->where('status', 'accepted')->countAllResults();
+            $followingCount = $connectionModel->where('initiator_user_id', $user->id)->where('status', 'accepted')->countAllResults();
             $data['followersCount'] = $followersCount;
             $data['followingCount'] = $followingCount;
 
             // Fetch liked posts
-            $likeModel = new \App\Models\LikeModel();
-            $likedPostIds = $likeModel->where('user_id', $user->id)->findColumn('post_id');
+            $likedPostIds = $activityModel->where('component', 'likes')
+                                           ->where('user_id', $user->id)
+                                           ->findColumn('content');
             if (!empty($likedPostIds)) {
-                $data['liked_posts'] = $postModel->whereIn('id', $likedPostIds)->findAll();
+                $data['liked_posts'] = $activityModel->whereIn('id', $likedPostIds)->findAll();
             } else {
                 $data['liked_posts'] = [];
             }
-
-            // Fetch media
-            $mediaModel = new \App\Models\MediaModel();
-            $data['media'] = $mediaModel->where('user_id', $user->id)->findAll();
         }
 
         // The ThemeView library will look for 'profile.php' in the theme's Views folder.

@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use App\Models\MessagesThreadModel;
 use App\Models\MessagesRecipientModel;
+use App\Models\MessageModel;
+use CodeIgniter\Shield\Models\UserModel;
 
 class MessageController extends BaseController
 {
@@ -12,31 +14,39 @@ class MessageController extends BaseController
      */
     public function index()
     {
-
-        $userId = auth()->id();
-        if (!$userId) {
+        if (!auth()->loggedIn()) {
             return redirect()->to('/account/login');
         }
 
+        $userId = auth()->id();
         $recipients = new MessagesRecipientModel();
         $threads = new MessagesThreadModel();
+        $users = new UserModel();
 
         // Find all threads the user is a recipient of
         $userThreads = $recipients->where('user_id', $userId)->findAll();
-
         $threadIds = array_map(fn($t) => $t->thread_id, $userThreads);
 
-        $data = [
-            'threads' => [],
-        ];
+        $data = ['threads' => []];
 
         if (!empty($threadIds)) {
-            // TODO: This is a simplified version. A real implementation would
-            // also fetch the other user in the thread and the last message.
             $data['threads'] = $threads->whereIn('id', $threadIds)->findAll();
+
+            foreach ($data['threads'] as &$thread) {
+                // Get participants
+                $participants = $recipients->where('thread_id', $thread->id)->findAll();
+                $participantIds = array_column($participants, 'user_id');
+                $otherParticipantIds = array_diff($participantIds, [$userId]);
+                $thread->participants = $users->whereIn('id', $otherParticipantIds)->findAll();
+
+                // Get last message
+                $messageModel = new MessageModel();
+                $thread->last_message = $messageModel->where('thread_id', $thread->id)->orderBy('id', 'DESC')->first();
+            }
         }
 
-        return view('messages/index', $data);
+        $view = env('app.theme') === 'connectsphere' ? 'messages/index' : 'messages/index';
+        return view($view, $data);
     }
 
     /**
@@ -44,25 +54,25 @@ class MessageController extends BaseController
      */
     public function show(int $threadId)
     {
-
-        $userId = auth()->id();
-        if (!$userId) {
+        if (!auth()->loggedIn()) {
             return redirect()->to('/account/login');
         }
 
+        $userId = auth()->id();
+
         // Security check: ensure user is a recipient of this thread
-        $recipients = new \App\Models\MessagesRecipientModel();
+        $recipients = new MessagesRecipientModel();
         $isRecipient = $recipients->where('thread_id', $threadId)->where('user_id', $userId)->first();
         if ($isRecipient === null) {
             return redirect()->to('/messages')->with('error', 'You are not authorized to view this message thread.');
         }
 
-        $threads = new \App\Models\MessagesThreadModel();
-        $messages = new \App\Models\MessageModel();
-        $users = new \CodeIgniter\Shield\Models\UserModel();
+        $threads = new MessagesThreadModel();
+        $messages = new MessageModel();
+        $users = new UserModel();
 
         $thread = $threads->find($threadId);
-        $threadMessages = $messages->where('thread_id', $threadId)->orderBy('created_at', 'ASC')->findAll();
+        $threadMessages = $messages->where('thread_id', $threadId)->orderBy('id', 'ASC')->findAll();
 
         // Get user info for each message
         if (!empty($threadMessages)) {
@@ -80,7 +90,8 @@ class MessageController extends BaseController
             'messages' => array_filter($threadMessages, fn($m) => $m->sender !== null),
         ];
 
-        return view('messages/show', $data);
+        $view = env('app.theme') === 'connectsphere' ? 'messages/show' : 'messages/show';
+        return view($view, $data);
     }
 
     /**
@@ -88,13 +99,14 @@ class MessageController extends BaseController
      */
     public function reply(int $threadId)
     {
-        $userId = auth()->id();
-        if (!$userId) {
+        if (!auth()->loggedIn()) {
             return redirect()->to('/account/login');
         }
 
+        $userId = auth()->id();
+
         // Security check: ensure user is a recipient of this thread
-        $recipients = new \App\Models\MessagesRecipientModel();
+        $recipients = new MessagesRecipientModel();
         $isRecipient = $recipients->where('thread_id', $threadId)->where('user_id', $userId)->first();
         if ($isRecipient === null) {
             return redirect()->to('/messages')->with('error', 'You are not authorized to reply to this message thread.');
@@ -107,7 +119,7 @@ class MessageController extends BaseController
         }
 
         // Save the new message
-        $messages = new \App\Models\MessageModel();
+        $messages = new MessageModel();
         $data = [
             'thread_id' => $threadId,
             'sender_id' => $userId,
@@ -118,8 +130,6 @@ class MessageController extends BaseController
             return redirect()->back()->with('error', 'Could not send the message.');
         }
 
-        // TODO: Mark thread as unread for other recipients
-
         return redirect()->to('/messages/' . $threadId)->with('message', 'Reply sent!');
     }
 
@@ -128,34 +138,15 @@ class MessageController extends BaseController
      */
     public function new()
     {
-
-        $userId = auth()->id();
-        if (!$userId) {
+        if (!auth()->loggedIn()) {
             return redirect()->to('/account/login');
         }
 
-        // Get user's connections to populate the recipient list
-        $connections = new \App\Models\ConnectionModel();
-        $users = new \CodeIgniter\Shield\Models\UserModel();
+        $users = new UserModel();
+        $data = ['users' => $users->findAll()];
 
-        $currentConnections = $connections
-            ->groupStart()
-                ->where('initiator_user_id', $userId)
-                ->orWhere('friend_user_id', $userId)
-            ->groupEnd()
-            ->where('status', 'accepted')
-            ->findAll();
-
-        $friends = [];
-        if (!empty($currentConnections)) {
-            $friendIds = [];
-            foreach($currentConnections as $conn) {
-                $friendIds[] = ($conn->initiator_user_id == $userId) ? $conn->friend_user_id : $conn->initiator_user_id;
-            }
-            $friends = $users->whereIn('id', $friendIds)->findAll();
-        }
-
-        return view('messages/new', ['connections' => $friends]);
+        $view = env('app.theme') === 'connectsphere' ? 'messages/new' : 'messages/new';
+        return view($view, $data);
     }
 
     /**
@@ -163,30 +154,29 @@ class MessageController extends BaseController
      */
     public function create()
     {
-        $userId = auth()->id();
-        if (!$userId) {
+        if (!auth()->loggedIn()) {
             return redirect()->to('/account/login');
         }
 
         // Validate the form data
         $rules = [
             'recipient' => 'required|integer',
-            'subject'   => 'required|max_length[255]',
             'message'   => 'required',
         ];
+        if (env('app.theme') !== 'connectsphere') {
+            $rules['subject'] = 'required|max_length[255]';
+        }
 
         if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
         $recipientId = $this->request->getPost('recipient');
-        $subject = $this->request->getPost('subject');
+        $subject = $this->request->getPost('subject') ?? '';
         $messageText = $this->request->getPost('message');
 
-        // TODO: Security check to ensure recipient is a connection.
-
         // Create a new thread
-        $threads = new \App\Models\MessagesThreadModel();
+        $threads = new MessagesThreadModel();
         $threadId = $threads->insert(['subject' => esc($subject)]);
 
         if ($threadId === false) {
@@ -194,15 +184,15 @@ class MessageController extends BaseController
         }
 
         // Add recipients to the thread
-        $recipients = new \App\Models\MessagesRecipientModel();
-        $recipients->insert(['thread_id' => $threadId, 'user_id' => $userId]);
+        $recipients = new MessagesRecipientModel();
+        $recipients->insert(['thread_id' => $threadId, 'user_id' => auth()->id()]);
         $recipients->insert(['thread_id' => $threadId, 'user_id' => $recipientId]);
 
         // Add the first message
-        $messages = new \App\Models\MessageModel();
+        $messages = new MessageModel();
         $messages->insert([
             'thread_id' => $threadId,
-            'sender_id' => $userId,
+            'sender_id' => auth()->id(),
             'message'   => esc($messageText),
         ]);
 

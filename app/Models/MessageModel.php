@@ -9,15 +9,6 @@ class MessageModel extends Model
     protected $table            = 'messages';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
-    protected $returnType       = 'array';
-    protected $useSoftDeletes   = false;
-    protected $protectFields    = true;
-    protected $allowedFields    = ['thread_id', 'user_id', 'content'];
-
-    // Dates
-    protected $useTimestamps = true;
-    protected $dateFormat    = 'datetime';
-    protected $createdField  = 'created_at';
-    protected $updatedField  = null;
-    protected $deletedField  = null;
+    protected $returnType       = 'object';
+    protected $allowedFields    = ['thread_id', 'sender_id', 'message'];
 }

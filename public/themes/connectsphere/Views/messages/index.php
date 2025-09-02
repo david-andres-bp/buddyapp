@@ -8,23 +8,23 @@
     <div class="w-1/3 bg-white border-r">
         <div class="p-5 border-b flex justify-between items-center">
             <h1 class="text-xl font-bold">Messages</h1>
-            <a href="<?= url_to('cs-message-new') ?>" class="bg-sky-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-sky-600">New Message</a>
+            <a href="<?= url_to('message-new') ?>" class="bg-sky-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-sky-600">New Message</a>
         </div>
         <div>
             <?php if (!empty($threads)) : ?>
                 <ul>
                     <?php foreach ($threads as $thread) : ?>
                         <li class="p-5 border-b hover:bg-slate-50 cursor-pointer">
-                            <a href="<?= site_url('messages/' . $thread['id']) ?>">
+                            <a href="<?= url_to('message-show', $thread->id) ?>">
                                 <p class="font-bold">
                                     <?php
                                     $participantNames = array_map(function ($p) {
                                         return esc($p->username);
-                                    }, $thread['participants']);
+                                    }, $thread->participants);
                                     echo implode(', ', $participantNames);
                                     ?>
                                 </p>
-                                <p class="text-sm text-slate-500 truncate"><?= esc($thread['last_message']['content'] ?? '') ?></p>
+                                <p class="text-sm text-slate-500 truncate"><?= esc($thread->last_message->message ?? '') ?></p>
                             </a>
                         </li>
                     <?php endforeach; ?>
