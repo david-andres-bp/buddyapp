@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Serendipity - Meaningful Connections Await</title>
-    <link href="<?= service('theme')->asset('css/tailwind.min.css') ?>" rel="stylesheet">
-    <link href="<?= service('theme')->asset('css/fontawesome.all.min.css') ?>" rel="stylesheet">
-    <link href="<?= service('theme')->asset('css/google-fonts.css') ?>" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Montserrat', sans-serif; background-color: #FFFBFB; }
         .font-serif { font-family: 'Playfair Display', serif; }
