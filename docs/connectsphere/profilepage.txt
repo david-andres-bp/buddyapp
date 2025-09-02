@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laura Smith (@lauras) - ConnectSphere</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style> 
+        body { font-family: 'Inter', sans-serif; } 
+    </style>
+</head>
+<body class="bg-slate-100">
+    <div id="app" x-data="{ activeTab: 'posts' }">
+        <!-- Header -->
+        <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40">
+            <div class="container mx-auto px-4">
+                <div class="flex justify-between items-center py-3">
+                    <a href="#" class="text-2xl font-bold text-sky-500">ConnectSphere</a>
+                    <div class="w-full max-w-md">
+                        <input type="text" placeholder="Search ConnectSphere" class="w-full bg-slate-200 border border-slate-300 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <a href="#" class="text-slate-600 hover:text-sky-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                        </a>
+                        <a href="#" class="text-slate-600 hover:text-sky-500">
+                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                        </a>
+                         <a href="#" class="text-slate-600 hover:text-sky-500">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                        </a>
+                        <img src="https://placehold.co/40x40/38BDF8/FFFFFF?text=A" alt="User Avatar" class="w-10 h-10 rounded-full cursor-pointer">
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <main class="container mx-auto max-w-4xl py-8">
+            <!-- Profile Header -->
+            <div>
+                <div class="h-48 bg-slate-300 rounded-t-lg bg-cover bg-center" style="background-image: url('https://placehold.co/1200x400/38BDF8/FFFFFF?text=Cover+Photo')"></div>
+                <div class="bg-white p-5 rounded-b-lg shadow-sm">
+                    <div class="flex justify-between items-start">
+                        <div class="relative">
+                            <img src="https://placehold.co/128x128/1E293B/FFFFFF?text=LS" alt="Laura Smith" class="w-32 h-32 rounded-full border-4 border-white -mt-20">
+                        </div>
+                        <div class="flex space-x-2">
+                             <button class="bg-white border-2 border-sky-500 text-sky-500 font-semibold px-4 py-2 rounded-full hover:bg-sky-50 flex items-center space-x-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-3.13L5 18V4z" /></svg>
+                                <span>Pin</span>
+                             </button>
+                             <button class="bg-sky-500 text-white font-semibold px-4 py-2 rounded-full hover:bg-sky-600">Follow</button>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <h1 class="text-2xl font-bold">Laura Smith</h1>
+                        <p class="text-slate-500">@lauras</p>
+                        <p class="mt-2 text-slate-700">Photographer & Web Developer. Capturing moments and building beautiful things. ☕️</p>
+                         <div class="flex space-x-4 mt-2 text-slate-500 text-sm">
+                            <span><span class="font-bold text-slate-800">540</span> Following</span>
+                            <span><span class="font-bold text-slate-800">1,820</span> Followers</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Content -->
+            <div class="mt-6">
+                <!-- Tabs -->
+                <div class="border-b border-slate-300 bg-white rounded-t-lg shadow-sm">
+                    <nav class="-mb-px flex space-x-6 px-5">
+                        <a href="#" @click.prevent="activeTab = 'posts'" :class="{ 'border-sky-500 text-sky-600': activeTab === 'posts', 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300': activeTab !== 'posts' }" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Posts</a>
+                        <a href="#" @click.prevent="activeTab = 'likes'" :class="{ 'border-sky-500 text-sky-600': activeTab === 'likes', 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300': activeTab !== 'likes' }" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Likes</a>
+                        <a href="#" @click.prevent="activeTab = 'media'" :class="{ 'border-sky-500 text-sky-600': activeTab === 'media', 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300': activeTab !== 'media' }" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Media</a>
+                    </nav>
+                </div>
+
+                <!-- Content Area -->
+                <div class="mt-0">
+                    <div x-show="activeTab === 'posts'" class="space-y-6">
+                        <!-- Post Item -->
+                        <div class="bg-white p-5 rounded-b-lg shadow-sm">
+                            <div class="flex items-center space-x-3">
+                                <img src="https://placehold.co/48x48/1E293B/FFFFFF?text=LS" alt="Laura" class="w-12 h-12 rounded-full">
+                                <div>
+                                    <p class="font-bold">Laura Smith <span class="font-normal text-slate-500">@lauras · 2h</span></p>
+                                    <p>Just released my new photography portfolio website! Built with so much love (and lots of coffee). Check it out and let me know what you think! #webdev #photography</p>
+                                </div>
+                            </div>
+                            <img src="https://placehold.co/600x400/CCCCCC/FFFFFF?text=Portfolio+Screenshot" alt="Portfolio" class="mt-3 rounded-lg w-full">
+                            <div class="flex justify-around items-center mt-4 pt-3 border-t text-slate-500">
+                                <button class="flex items-center space-x-2 hover:text-sky-500"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg> <span>15</span></button>
+                                <button class="flex items-center space-x-2 hover:text-green-500"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h5M5.5 9.5l1.5-1.5a4.243 4.243 0 016 0L16 11M20 20v-5h-5M18.5 14.5l-1.5 1.5a4.243 4.243 0 01-6 0L8 13" /></svg> <span>5</span></button>
+                                <button class="flex items-center space-x-2 hover:text-pink-500"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg> <span>128</span></button>
+                                <button class="flex items-center space-x-2 hover:text-sky-500"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div x-show="activeTab === 'likes'">
+                        <div class="bg-white p-5 rounded-b-lg shadow-sm">
+                            <p class="text-center text-slate-500 py-10">Laura hasn't liked any posts yet.</p>
+                        </div>
+                    </div>
+                     <div x-show="activeTab === 'media'">
+                        <div class="bg-white p-5 rounded-b-lg shadow-sm">
+                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                                <img src="https://placehold.co/400x400/94A3B8/FFFFFF?text=Media" class="rounded-lg aspect-square object-cover">
+                                <img src="https://placehold.co/400x400/94A3B8/FFFFFF?text=Media" class="rounded-lg aspect-square object-cover">
+                                <img src="https://placehold.co/400x400/94A3B8/FFFFFF?text=Media" class="rounded-lg aspect-square object-cover">
+                                <img src="https://placehold.co/400x400/94A3B8/FFFFFF?text=Media" class="rounded-lg aspect-square object-cover">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
+

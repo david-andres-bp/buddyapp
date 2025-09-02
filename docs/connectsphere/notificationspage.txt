@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications - ConnectSphere</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .main-grid { display: grid; grid-template-columns: 25% 1fr 25%; gap: 1.5rem; }
+    </style>
+</head>
+<body class="bg-slate-100">
+    <div id="app" x-data="{}" class="min-h-screen">
+        <!-- Header -->
+        <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40">
+            <div class="container mx-auto px-4">
+                <div class="flex justify-between items-center py-3">
+                    <a href="#" class="text-2xl font-bold text-sky-500">ConnectSphere</a>
+                    <div class="w-full max-w-md">
+                        <input type="text" placeholder="Search ConnectSphere" class="w-full bg-slate-200 border border-slate-300 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <a href="#" class="text-slate-600 hover:text-sky-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                        </a>
+                        <a href="#" class="text-sky-500 relative">
+                            <span class="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-white text-xs flex items-center justify-center">3</span>
+                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                        </a>
+                         <a href="#" class="text-slate-600 hover:text-sky-500">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                        </a>
+                        <img src="https://placehold.co/40x40/38BDF8/FFFFFF?text=A" alt="User Avatar" class="w-10 h-10 rounded-full cursor-pointer">
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="container mx-auto px-4 py-6">
+            <div class="main-grid">
+                <!-- Left Column -->
+                <aside>
+                    <!-- User Card -->
+                    <div class="bg-white p-5 rounded-lg shadow-sm mb-6">
+                        <div class="flex items-center space-x-4">
+                            <img src="https://placehold.co/56x56/38BDF8/FFFFFF?text=A" alt="User Avatar" class="w-14 h-14 rounded-full">
+                            <div>
+                                <h2 class="font-bold text-lg">Alex Johnson</h2>
+                                <p class="text-sm text-slate-500">@alexj</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex justify-around text-center text-sm">
+                            <div>
+                                <p class="font-bold">1,256</p>
+                                <p class="text-slate-500">Following</p>
+                            </div>
+                            <div>
+                                <p class="font-bold">2,840</p>
+                                <p class="text-slate-500">Followers</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Pinned Profiles -->
+                    <div class="bg-white p-5 rounded-lg shadow-sm">
+                        <h3 class="font-bold mb-4">Pinned Profiles</h3>
+                        <ul class="space-y-4">
+                            <li class="flex items-center space-x-3 cursor-pointer group">
+                                <img src="https://placehold.co/40x40/FBBF24/FFFFFF?text=LS" alt="Laura" class="w-10 h-10 rounded-full">
+                                <div>
+                                    <p class="font-semibold group-hover:text-sky-500">Laura Smith</p>
+                                    <p class="text-sm text-slate-500">@lauras</p>
+                                </div>
+                            </li>
+                            <li class="flex items-center space-x-3 cursor-pointer group">
+                                <img src="https://placehold.co/40x40/34D399/FFFFFF?text=CW" alt="Chris" class="w-10 h-10 rounded-full">
+                                <div>
+                                    <p class="font-semibold group-hover:text-sky-500">Chris Williams</p>
+                                    <p class="text-sm text-slate-500">@chrisw</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </aside>
+
+                <!-- Center Column (Notifications) -->
+                <div>
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <div class="p-5 border-b">
+                            <h1 class="text-xl font-bold">Notifications</h1>
+                        </div>
+                        
+                        <!-- Notification List -->
+                        <div>
+                            <!-- Notification Item: Follow -->
+                            <div class="flex items-start space-x-4 p-5 border-b hover:bg-slate-50 cursor-pointer">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-sky-500 mt-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" /></svg>
+                                <div>
+                                    <img src="https://placehold.co/40x40/34D399/FFFFFF?text=CW" alt="User Avatar" class="w-10 h-10 rounded-full mb-2">
+                                    <p><span class="font-bold">Chris Williams</span> followed you. <span class="text-slate-500 text-sm">2h ago</span></p>
+                                </div>
+                            </div>
+
+                             <!-- Notification Item: Like -->
+                             <div class="flex items-start space-x-4 p-5 border-b hover:bg-slate-50 cursor-pointer">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-pink-500 mt-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" /></svg>
+                                <div>
+                                    <p><span class="font-bold">Emily Parker</span> and <span class="font-bold">2 others</span> liked your post. <span class="text-slate-500 text-sm">5h ago</span></p>
+                                    <div class="mt-2 text-sm p-3 bg-slate-100 border rounded-md text-slate-600">
+                                        "Excited to start a new project with CodeIgniter 4! The performance is amazing."
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Notification Item: Mention -->
+                            <div class="flex items-start space-x-4 p-5 border-b hover:bg-slate-50 cursor-pointer">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-500 mt-2" viewBox="0 0 20 20" fill="currentColor"><path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" /></svg>
+                                <div>
+                                    <p><span class="font-bold">Laura Smith</span> mentioned you in a comment. <span class="text-slate-500 text-sm">1 day ago</span></p>
+                                    <div class="mt-2 text-sm p-3 bg-slate-100 border rounded-md text-slate-600">
+                                        "Great point! Hey <span class="text-sky-500 font-semibold">@alexj</span>, what are your thoughts on this?"
+                                    </div>
+                                </div>
+                            </div>
+
+                             <!-- Notification Item: Comment -->
+                             <div class="flex items-start space-x-4 p-5 hover:bg-slate-50 cursor-pointer">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-500 mt-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.864 8.864 0 01-4.282-.952L2.093 17.65a.5.5 0 01-.593-.593l1.5-3.66a8.964 8.964 0 01-1-4.4A8 8 0 0110 2c4.418 0 8 3.134 8 8zM7 9a1 1 0 100-2 1 1 0 000 2zm4 0a1 1 0 100-2 1 1 0 000 2zm4 0a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" /></svg>
+                                <div>
+                                    <p><span class="font-bold">Ben Rivera</span> commented on your post. <span class="text-slate-500 text-sm">2 days ago</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <aside>
+                    <!-- Who to Follow -->
+                    <div class="bg-white p-5 rounded-lg shadow-sm mb-6">
+                        <h3 class="font-bold mb-4">Who to Follow</h3>
+                        <ul class="space-y-4">
+                           <li class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <img src="https://placehold.co/40x40/F472B6/FFFFFF?text=BR" alt="Ben" class="w-10 h-10 rounded-full">
+                                    <div>
+                                        <p class="font-semibold">Ben Rivera</p>
+                                        <p class="text-sm text-slate-500">@benr</p>
+                                    </div>
+                                </div>
+                                <button class="bg-slate-800 text-white text-sm font-semibold px-4 py-1.5 rounded-full hover:bg-slate-900">Follow</button>
+                           </li>
+                           <li class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <img src="https://placehold.co/40x40/A78BFA/FFFFFF?text=OM" alt="Olivia" class="w-10 h-10 rounded-full">
+                                    <div>
+                                        <p class="font-semibold">Olivia Martinez</p>
+                                        <p class="text-sm text-slate-500">@oliviam</p>
+                                    </div>
+                                </div>
+                                <button class="bg-slate-800 text-white text-sm font-semibold px-4 py-1.5 rounded-full hover:bg-slate-900">Follow</button>
+                           </li>
+                        </ul>
+                    </div>
+                    <!-- Trending -->
+                    <div class="bg-white p-5 rounded-lg shadow-sm">
+                         <h3 class="font-bold mb-4">Trending Topics</h3>
+                         <ul class="space-y-2">
+                            <li class="text-slate-600 hover:text-sky-500"><a href="#"><span class="font-bold">#PHP</span> <span class="text-sm text-slate-400">15.2k Posts</span></a></li>
+                            <li class="text-slate-600 hover:text-sky-500"><a href="#"><span class="font-bold">#CodeIgniter4</span> <span class="text-sm text-slate-400">8.9k Posts</span></a></li>
+                            <li class="text-slate-600 hover:text-sky-500"><a href="#"><span class="font-bold">#WebDevelopment</span> <span class="text-sm text-slate-400">45.7k Posts</span></a></li>
+                         </ul>
+                    </div>
+                </aside>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
+

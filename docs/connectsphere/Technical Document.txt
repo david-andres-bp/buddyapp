@@ -1,0 +1,44 @@
+Technical & Branding Document: ConnectSphere Theme
+This document outlines the design philosophy, branding, architecture, and required pages for the "ConnectSphere" theme, a lightweight, real-time social media application built on the CodePress platform.
+1. Theme Vision & Philosophy
+"ConnectSphere" transforms the CodePress platform into a fast-paced, content-centric social network, blending the immediacy of Twitter with the capacity for slightly more detailed posts and community interaction found on Facebook. The core vision is to create a dynamic "public square" where information flows freely and users can easily follow topics and personalities.
+Primary Goal: To facilitate a real-time public conversation, prioritizing speed, clarity, and content discovery.
+Core Experience: A chronological, endlessly scrolling feed of posts from followed accounts, supplemented by trending topics and user discovery features.
+Key Differentiator: The "Pinned Profiles" feature, allowing users to create a persistent, custom shortcut to view the feeds of their favorite accounts.
+2. Branding & UI/UX
+The branding is designed to feel modern, clean, efficient, and trustworthy.
+Tone & Voice: Direct, energetic, and informative. The interface should feel like a tool for information, not just entertainment.
+Color Palette:
+Primary/Accent (#38BDF8 - Sky Blue): Used for links, buttons, and active states to draw attention and encourage interaction.
+Dark UI (#1E293B - Slate Gray): Used for the main navigation and sidebars to create a stable, focused frame for the content.
+Background (#F1F5F9 - Light Gray): A soft, neutral background for the main content area to ensure readability and reduce eye strain.
+Text (#0F172A - Near Black): High-contrast, readable text.
+Typography:
+Primary Font: Inter. A clean, modern, and highly readable sans-serif font used for all UI elements, from headlines to body copy.
+UI/UX Principles:
+Information Density: A three-column layout on desktop (User/Navigation | Main Feed | Discovery/Trends) maximizes the use of space.
+Content-First Cards: Posts are displayed in clean, self-contained cards with clear metadata and subtle action icons.
+Mobile-First Collapse: The layout seamlessly collapses to a single, intuitive column on mobile devices.
+Intuitive Actions: "Like," "Comment," and "Share" are immediately accessible but visually unobtrusive.
+3. Core Features & Pages
+This section details the necessary pages and their functions to bring the ConnectSphere theme to life.
+Home Page (Main Feed)
+Displays a chronological feed of posts from followed users.
+Includes the "What's on your mind?" post composer at the top.
+Features the three-column layout:
+Left Column: User profile summary and the vertical "Pinned Profiles" list.
+Center Column: The main activity feed.
+Right Column: "Who to Follow" suggestions and "Trending Topics."
+Profile Page
+Displays a user's public profile, including a cover photo, avatar, bio, and stats (Posts, Following, Followers).
+Features a prominent "Follow/Unfollow" or "Edit Profile" button.
+Includes a tabbed section to view the user's Posts, posts they've Liked, and Media.
+Notifications Page
+Displays a feed of interactions in chronological order (new followers, likes, comments, mentions).
+Uses the main three-column layout for consistency.
+Allows users to filter notifications by type (All, Mentions, etc.).
+Messages Page
+Provides a private, one-on-one messaging interface.
+Features a two-pane layout: a list of conversations on the left and the active chat window on the right.
+Login & Registration Pages
+Clean, simple forms for user authentication and account creation, styled consistently with the ConnectSphere brand.

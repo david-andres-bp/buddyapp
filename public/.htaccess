@@ -8,7 +8,7 @@ Options -Indexes
     RewriteEngine On
 
     # If CodeIgniter is in a subfolder, set RewriteBase properly
-    RewriteBase /buddyapp/
+    RewriteBase /buddyapp/public/
 
     # Redirect Trailing Slashes...
     RewriteCond %{REQUEST_FILENAME} !-d
