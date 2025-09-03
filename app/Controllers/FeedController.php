@@ -55,11 +55,11 @@ class FeedController extends BaseController
                 $post->user = $user;
                 $post->like_count = $activityModel->where('component', 'likes')->where('content', $post->id)->countAllResults();
                 $post->is_liked_by_user = $activityModel->where('component', 'likes')->where('content', $post->id)->where('user_id', $userId)->countAllResults() > 0;
-                $post->comment_count = $activityModel->where('component', 'comments')->like('content', '"post_id":"' . $post->id . '"')->countAllResults();
+                $post->comment_count = $activityModel->where('component', 'comments')->like('content', '"post_id":' . $post->id)->countAllResults();
 
                 // Fetch comments for the post
                 $comments = $activityModel->where('component', 'comments')
-                                           ->like('content', '"post_id":"' . $post->id . '"')
+                                           ->like('content', '"post_id":' . $post->id)
                                            ->orderBy('created_at', 'ASC')
                                            ->findAll();
 
