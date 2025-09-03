@@ -55,7 +55,27 @@ class FeedController extends BaseController
                 $post->user = $user;
                 $post->like_count = $activityModel->where('component', 'likes')->where('content', $post->id)->countAllResults();
                 $post->is_liked_by_user = $activityModel->where('component', 'likes')->where('content', $post->id)->where('user_id', $userId)->countAllResults() > 0;
-                $post->comment_count = $activityModel->where('component', 'comments')->where('content', 'like', '"post_id":"' . $post->id . '"')->countAllResults();
+                $post->comment_count = $activityModel->where('component', 'comments')->like('content', '"post_id":' . $post->id)->countAllResults();
+
+                // Fetch comments for the post
+                $comments = $activityModel->where('component', 'comments')
+                                           ->like('content', '"post_id":' . $post->id)
+                                           ->orderBy('created_at', 'ASC')
+                                           ->findAll();
+
+                $hydratedComments = [];
+                foreach ($comments as $comment) {
+                    $commentUser = $userModel->find($comment->user_id);
+                    if ($commentUser) {
+                        $comment->user = $commentUser;
+                        // Decode the content to get the text
+                        $contentData = json_decode($comment->content);
+                        $comment->text = $contentData->text ?? '';
+                        $hydratedComments[] = $comment;
+                    }
+                }
+                $post->comments = $hydratedComments;
+
                 $hydratedPosts[] = $post;
             }
         }
@@ -207,13 +227,17 @@ class FeedController extends BaseController
         }
 
         $activityModel = new ActivityModel();
-        $activityModel->insert([
+        $data = [
             'user_id'   => auth()->id(),
             'component' => 'comments',
             'type'      => 'new_comment',
             'content'   => json_encode(['post_id' => $activityId, 'text' => $content]),
-        ]);
+        ];
 
-        return redirect()->back()->with('message', 'Comment posted.');
+        if ($activityModel->insert($data) === false) {
+            return redirect()->back()->withInput()->with('errors', $activityModel->errors());
+        }
+
+        return redirect()->to(site_url('/'))->with('message', 'Comment posted.')->with('commented_on', $activityId);
     }
 }

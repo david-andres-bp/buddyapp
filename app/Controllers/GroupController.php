@@ -9,9 +9,6 @@ class GroupController extends BaseController
      */
     public function index()
     {
-        // Set the active theme
-        service('theme')->setActiveTheme('heartbeat');
-
         $groups = new \App\Models\GroupModel();
 
         $data = [
@@ -26,9 +23,6 @@ class GroupController extends BaseController
      */
     public function new()
     {
-        // Set the active theme
-        service('theme')->setActiveTheme('heartbeat');
-
         return view('groups/new');
     }
 
@@ -87,22 +81,20 @@ class GroupController extends BaseController
      */
     public function show(string $slug)
     {
-        // Set the active theme
-        service('theme')->setActiveTheme('heartbeat');
-
-        $groups = new \App\Models\GroupModel();
-        $group = $groups->where('slug', $slug)->first();
+        $groupModel = new \App\Models\GroupModel();
+        $group = $groupModel->where('slug', $slug)->first();
 
         if ($group === null) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
-        // Fetch membership status for the current user
-        $groupMembers = new \App\Models\GroupMemberModel();
-        $userId = auth()->id();
         $membership = null;
-        if ($userId) {
-            $membership = $groupMembers->where('group_id', $group->id)->where('user_id', $userId)->first();
+        if (auth()->loggedIn()) {
+            $groupMemberModel = new \App\Models\GroupMemberModel();
+            $membership = $groupMemberModel
+                ->where('group_id', $group->id)
+                ->where('user_id', auth()->id())
+                ->first();
         }
 
         // TODO: Fetch group members list
