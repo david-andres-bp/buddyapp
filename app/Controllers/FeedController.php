@@ -227,13 +227,17 @@ class FeedController extends BaseController
         }
 
         $activityModel = new ActivityModel();
-        $activityModel->insert([
+        $data = [
             'user_id'   => auth()->id(),
             'component' => 'comments',
             'type'      => 'new_comment',
             'content'   => json_encode(['post_id' => $activityId, 'text' => $content]),
-        ]);
+        ];
 
-        return redirect()->back()->with('message', 'Comment posted.');
+        if ($activityModel->insert($data) === false) {
+            return redirect()->back()->withInput()->with('errors', $activityModel->errors());
+        }
+
+        return redirect()->to(site_url('/'))->with('message', 'Comment posted.');
     }
 }

@@ -85,7 +85,7 @@
                                         <?= csrf_field() ?>
                                         <img src="https://placehold.co/32x32/38BDF8/FFFFFF?text=<?= esc(substr($currentUser->username, 0, 1)) ?>" alt="<?= esc($currentUser->username) ?>" class="w-8 h-8 rounded-full">
                                         <div class="flex-1">
-                                            <textarea name="content" class="w-full border-slate-300 rounded-md text-sm focus:ring-sky-500 focus:border-sky-500" rows="1" placeholder="Write a comment..."></textarea>
+                                            <textarea name="content" class="w-full bg-slate-100 border-slate-200 p-2 rounded-lg text-sm focus:ring-sky-500 focus:border-sky-500 transition" rows="1" placeholder="Write a comment..."></textarea>
                                             <div class="text-right mt-1">
                                                 <button type="submit" class="bg-sky-500 text-white font-semibold px-4 py-1 text-sm rounded-full hover:bg-sky-600 transition">Comment</button>
                                             </div>
