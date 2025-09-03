@@ -48,9 +48,12 @@
 
         <!-- Feed Posts -->
         <div class="space-y-4">
+            <?php
+            $commentedOnId = session()->getFlashdata('commented_on');
+            ?>
             <?php if (!empty($posts)): ?>
                 <?php foreach ($posts as $post): ?>
-                    <div class="bg-white p-4 rounded-lg shadow-sm" x-data="{ commentsOpen: false }">
+                    <div class="bg-white p-4 rounded-lg shadow-sm" x-data="{ commentsOpen: <?= ($commentedOnId == $post->id) ? 'true' : 'false' ?> }">
                         <div class="flex items-start space-x-4">
                             <img src="https://placehold.co/48x48/38BDF8/FFFFFF?text=<?= esc(substr($post->user->username, 0, 1)) ?>" alt="<?= esc($post->user->username) ?>" class="w-12 h-12 rounded-full">
                             <div class="flex-1">

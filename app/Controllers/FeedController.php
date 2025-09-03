@@ -238,6 +238,6 @@ class FeedController extends BaseController
             return redirect()->back()->withInput()->with('errors', $activityModel->errors());
         }
 
-        return redirect()->to(site_url('/'))->with('message', 'Comment posted.');
+        return redirect()->to(site_url('/'))->with('message', 'Comment posted.')->with('commented_on', $activityId);
     }
 }
