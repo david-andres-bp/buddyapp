@@ -9,9 +9,6 @@ class GroupController extends BaseController
      */
     public function index()
     {
-        // Set the active theme
-        service('theme')->setActiveTheme('heartbeat');
-
         $groups = new \App\Models\GroupModel();
 
         $data = [
@@ -26,9 +23,6 @@ class GroupController extends BaseController
      */
     public function new()
     {
-        // Set the active theme
-        service('theme')->setActiveTheme('heartbeat');
-
         return view('groups/new');
     }
 
@@ -87,9 +81,6 @@ class GroupController extends BaseController
      */
     public function show(string $slug)
     {
-        // Set the active theme
-        service('theme')->setActiveTheme('heartbeat');
-
         $groups = new \App\Models\GroupModel();
         $group = $groups->where('slug', $slug)->first();
 

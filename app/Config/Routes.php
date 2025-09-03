@@ -51,7 +51,8 @@ switch ($activeTheme) {
         $routes->get('/', 'DiscoverController::index', ['as' => 'home', 'filter' => 'session']);
         break;
     case 'connectsphere':
-        $routes->get('/', 'GroupController::index', ['as' => 'home', 'filter' => 'session']);
+        $routes->get('/', 'FeedController::index', ['as' => 'home', 'filter' => 'session']);
+        $routes->get('discover', 'DiscoverController::index', ['as' => 'discover', 'filter' => 'session']);
         break;
     default:
         // Fallback for any other case (null, empty, or unknown theme)
