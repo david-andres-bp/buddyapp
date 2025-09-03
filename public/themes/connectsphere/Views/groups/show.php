@@ -40,10 +40,18 @@
 
         <div class="mt-8 border-t border-slate-200 pt-6">
             <h2 class="text-2xl font-bold text-slate-700 mb-4">Members</h2>
-            <p class="text-slate-500">
-                <!-- Member list will go here -->
-                Member list coming soon.
-            </p>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <?php if (!empty($members)): ?>
+                    <?php foreach ($members as $member): ?>
+                        <a href="<?= site_url('profile/' . $member->username) ?>" class="text-center p-2 rounded-lg hover:bg-slate-100">
+                            <img src="https://placehold.co/96x96/38BDF8/FFFFFF?text=<?= esc(substr($member->username, 0, 1)) ?>" alt="<?= esc($member->username) ?>" class="w-24 h-24 rounded-full mx-auto">
+                            <p class="mt-2 font-semibold text-slate-700"><?= esc($member->username) ?></p>
+                        </a>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p class="text-slate-500 col-span-full">This group has no members yet.</p>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
 </div>

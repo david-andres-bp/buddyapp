@@ -97,11 +97,21 @@ class GroupController extends BaseController
                 ->first();
         }
 
-        // TODO: Fetch group members list
+        // Fetch group members list
+        $groupMemberModel = new \App\Models\GroupMemberModel();
+        $members = $groupMemberModel->where('group_id', $group->id)->findAll();
+
+        $memberUsers = [];
+        if (!empty($members)) {
+            $memberUserIds = array_column($members, 'user_id');
+            $userModel = new \CodeIgniter\Shield\Models\UserModel();
+            $memberUsers = $userModel->whereIn('id', $memberUserIds)->findAll();
+        }
 
         $data = [
             'group'      => $group,
             'membership' => $membership,
+            'members'    => $memberUsers,
         ];
 
         return view('groups/show', $data);
