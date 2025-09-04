@@ -102,4 +102,48 @@ class ProfileController extends BaseController
         // The ThemeView library will look for 'profile/show.php'.
         return view('profile/show', $data);
     }
+
+    public function update()
+    {
+        $user = auth()->user();
+        if (!$user) {
+            return redirect()->to('/account/login');
+        }
+
+        // Validate the input
+        $rules = [
+            'bio'           => 'permit_empty|string|max_length[500]',
+            'location'      => 'permit_empty|string|max_length[255]',
+            'profile_photo' => 'permit_empty|valid_url|max_length[255]',
+            'cover_photo'   => 'permit_empty|valid_url|max_length[255]',
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        $metaModel = new UserMetaModel();
+        $metaFields = ['bio', 'location', 'profile_photo', 'cover_photo'];
+
+        foreach ($metaFields as $field) {
+            $value = $this->request->getPost($field);
+
+            // "Upsert" logic: update if exists, insert if not.
+            $existing = $metaModel->where('user_id', $user->id)->where('meta_key', $field)->first();
+
+            if ($existing) {
+                // Update existing meta
+                $metaModel->update($existing->id, ['meta_value' => $value]);
+            } elseif (!empty($value)) {
+                // Insert new meta
+                $metaModel->insert([
+                    'user_id'    => $user->id,
+                    'meta_key'   => $field,
+                    'meta_value' => $value,
+                ]);
+            }
+        }
+
+        return redirect()->to('profile/' . $user->username)->with('message', 'Profile updated successfully!');
+    }
 }

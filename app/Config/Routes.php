@@ -162,5 +162,6 @@ $routes->group('account', ['namespace' => 'App\Controllers'], function ($routes)
     // Custom account routes
     $routes->get('/', 'Main::index');
     $routes->get('info', 'Main::myAccount', ['as' => 'account-info', 'filter' => 'session']);
+    $routes->post('info', 'ProfileController::update', ['as' => 'account-update', 'filter' => 'session']);
     $routes->get('history', 'Main::scanHistory', ['filter' => 'session']);
 });
